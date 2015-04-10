@@ -29,6 +29,7 @@ namespace TerminalDecay5Server
 
         static void RunUniverse(object ob)
         {
+            #region add resoureces from buildings
             Universe u = (Universe) ob;
             foreach (Outpost outpost in u.outposts)
             {
@@ -36,10 +37,42 @@ namespace TerminalDecay5Server
                 {
                     for (int ii = 0; ii < Cmn.Resource.Count; ii++)
                     {
+
+                        //genereate random int less than the number of tiles
+                        //does picked tile have that resource
+                        //remove resource from tile
+                        //here I'll need some logic to know if it's a tile resource or not
+                        //if not on tile, add the index of that tile so it's not picked again and try again
+                        //keep going until resource is removed or every tile checked
+
                         u.players[outpost.OwnerID].Resources[ii] += Cmn.BuildingProduction[i][ii];
+                        
                     }
                 }
             }
+            #endregion
+
+            #region update teh map
+            foreach (MapTile item in u.Maptiles)
+            {
+                // update the values that can change on the map, eg water, bio, so on
+            }
+            #endregion
+
+
+            #region Update Buildings Build Queue
+            foreach (BuildQueueItem item in u.BuildQueue )
+            {
+                //add up fabrication resources
+                
+                //check that the player has enough of each resource for fabrication
+
+                //take away resources from the player
+
+                //take away that fabircation from the first item in teh list
+                
+            }
+            #endregion
         }
 
         private void ListenForClients()
