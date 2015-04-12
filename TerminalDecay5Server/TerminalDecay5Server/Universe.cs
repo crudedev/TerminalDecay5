@@ -9,7 +9,7 @@ namespace TerminalDecay5Server
         public List<Outpost> outposts;
         public List<BuildQueueItem> BuildQueue;
         public List<Player> players;
-        Random r;
+        public Random r;
 
         public void InitUniverse()
         {
@@ -28,9 +28,14 @@ namespace TerminalDecay5Server
             for (int i = 0; i < 625; i++)
             {
                 t = new MapTile();
-                t.Metal = r.Next(20000);
-                t.Organics = r.Next(500);
-                t.Water = r.Next(10000);
+                t.Resources[Cmn.Resource[Cmn.Renum.Metal]] = r.Next(20000);
+                t.Resources[Cmn.Resource[Cmn.Renum.Food]] = r.Next(500);
+                t.Resources[Cmn.Resource[Cmn.Renum.Water]]= r.Next(10000);
+
+                t.MaxResources[Cmn.Resource[Cmn.Renum.Metal]] = t.Resources[Cmn.Resource[Cmn.Renum.Metal]];
+                t.MaxResources[Cmn.Resource[Cmn.Renum.Food]] = t.Resources[Cmn.Resource[Cmn.Renum.Food]];
+                t.MaxResources[Cmn.Resource[Cmn.Renum.Water]]= t.Resources[Cmn.Resource[Cmn.Renum.Water]];
+
                 Maptiles.Add(t);
                 t.X = x;
                 t.Y = y;

@@ -24,13 +24,13 @@ namespace TerminalDecay5Server
             _listenThread = new Thread(new ThreadStart(ListenForClients));
             _listenThread.Start();
             universe.players = new List<Player>();
-            _serverTick = new Timer(RunUniverse,universe, 10000,1000);
+            _serverTick = new Timer(RunUniverse, universe, 10000, 1000);
         }
 
         static void RunUniverse(object ob)
         {
             #region add resoureces from buildings
-            Universe u = (Universe) ob;
+            Universe u = (Universe)ob;
             foreach (Outpost outpost in u.outposts)
             {
                 for (int i = 0; i < Cmn.BuildType.Count; i++)
@@ -38,15 +38,36 @@ namespace TerminalDecay5Server
                     for (int ii = 0; ii < Cmn.Resource.Count; ii++)
                     {
 
-                        //genereate random int less than the number of tiles
-                        //does picked tile have that resource
-                        //remove resource from tile
-                        //here I'll need some logic to know if it's a tile resource or not
-                        //if not on tile, add the index of that tile so it's not picked again and try again
-                        //keep going until resource is removed or every tile checked
+                        bool found = false;
+                        List<int> pickedTiles = new List<int>();
 
-                        u.players[outpost.OwnerID].Resources[ii] += Cmn.BuildingProduction[i][ii];
-                        
+                        while (!found)
+                        {
+                            int pickedTile = (int)(u.r.Next(outpost.Tiles.Count));
+                            if (!pickedTiles.Contains(pickedTile))
+                            {
+                                MapTile m = u.Maptiles[getTileFromPosition(outpost.Tiles[pickedTile])];
+                                if (m.Resources[ii] > Cmn.BuildingProduction[i][ii])
+                                {
+                                    found = true;
+                                    m.Resources[ii] -= Cmn.BuildingProduction[i][ii];
+                                    u.players[outpost.OwnerID].Resources[ii] += Cmn.BuildingProduction[i][ii];
+                                }
+                                else
+                                {
+                                    u.players[outpost.OwnerID].Resources[ii] += m.Resources[ii];
+                                    m.Resources[ii] = 0;
+                                    pickedTiles.Add(pickedTile);
+                                }
+                            }
+
+                            if (pickedTiles.Count == outpost.Tiles.Count)
+                            {
+                                found = true;
+                            }
+
+                        }
+
                     }
                 }
             }
@@ -55,22 +76,36 @@ namespace TerminalDecay5Server
             #region update teh map
             foreach (MapTile item in u.Maptiles)
             {
-                // update the values that can change on the map, eg water, bio, so on
+                item.Resources[Cmn.Resource[Cmn.Renum.Food]] = (long)(item.Resources[Cmn.Resource[Cmn.Renum.Food]] * 1.001);
+                item.Resources[Cmn.Resource[Cmn.Renum.Water]] = (long)(item.Resources[Cmn.Resource[Cmn.Renum.Water]] * 1.001);
+
+                if (item.Resources[Cmn.Resource[Cmn.Renum.Food]] > item.MaxResources[Cmn.Resource[Cmn.Renum.Food]])
+                {
+                    item.Resources[Cmn.Resource[Cmn.Renum.Food]] = item.MaxResources[Cmn.Resource[Cmn.Renum.Food]];
+                }
+
+                if (item.Resources[Cmn.Resource[Cmn.Renum.Water]] > item.MaxResources[Cmn.Resource[Cmn.Renum.Water]])
+                {
+                    item.Resources[Cmn.Resource[Cmn.Renum.Water]] = item.MaxResources[Cmn.Resource[Cmn.Renum.Water]];
+                }
+
             }
             #endregion
 
 
             #region Update Buildings Build Queue
-            foreach (BuildQueueItem item in u.BuildQueue )
+            foreach (BuildQueueItem item in u.BuildQueue)
             {
+
+
                 //add up fabrication resources
-                
+
                 //check that the player has enough of each resource for fabrication
 
                 //take away resources from the player
 
                 //take away that fabircation from the first item in teh list
-                
+
             }
             #endregion
         }
@@ -104,118 +139,118 @@ namespace TerminalDecay5Server
             string transmitionString = "";
 
 
-                bytesRead = 0;
-                 
-                try
-                {
-                    //blocks until a client sends a message
-                    bytesRead = clientStream.Read(message, 0, 4096);
+            bytesRead = 0;
 
-                    //keep reading until the message is done;
-                    while (bytesRead != 0)
+            try
+            {
+                //blocks until a client sends a message
+                bytesRead = clientStream.Read(message, 0, 4096);
+
+                //keep reading until the message is done;
+                while (bytesRead != 0)
+                {
+                    //message has successfully been received
+                    encoder = new ASCIIEncoding();
+
+                    transmitionString += encoder.GetString(message, 0, bytesRead);
+                    if (bytesRead < 4096)
                     {
-                        //message has successfully been received
-                        encoder = new ASCIIEncoding();
-
-                        transmitionString += encoder.GetString(message, 0, bytesRead);
-                        if (bytesRead < 4096)
-                        {
-                            break;
-                        }
-
-                        bytesRead = clientStream.Read(message, 0, 4096);
+                        break;
                     }
+
+                    bytesRead = clientStream.Read(message, 0, 4096);
                 }
-                catch
-                {
-                    //a socket error has occured
-                    return;
-                }
+            }
+            catch
+            {
+                //a socket error has occured
+                return;
+            }
 
-                if (bytesRead == 0)
-                {
-                    //the client has disconnected from the server
-                    return;
-                }
+            if (bytesRead == 0)
+            {
+                //the client has disconnected from the server
+                return;
+            }
 
-                //message has successfully been received
+            //message has successfully been received
 
 
-                transmitionString = transmitionString.Replace(MessageConstants.messageCompleteToken, "");
+            transmitionString = transmitionString.Replace(MessageConstants.messageCompleteToken, "");
 
-                
-                string[] messages;
-                messages = transmitionString.Split(new string[] { MessageConstants.nextMessageToken }, StringSplitOptions.None);
 
-                List<List<string>> Transmitions = new List<List<string>>();
-                
-                foreach (string m in messages)
-                {
-                    List<string> messageList = new List<string>();
-                    messageList.AddRange(m.Split(new string[] { MessageConstants.splitMessageToken }, StringSplitOptions.None));
+            string[] messages;
+            messages = transmitionString.Split(new string[] { MessageConstants.nextMessageToken }, StringSplitOptions.None);
 
-                    Transmitions.Add(messageList);
+            List<List<string>> Transmitions = new List<List<string>>();
 
-                }
-                
+            foreach (string m in messages)
+            {
+                List<string> messageList = new List<string>();
+                messageList.AddRange(m.Split(new string[] { MessageConstants.splitMessageToken }, StringSplitOptions.None));
 
-                if (Transmitions[0][0] == MessageConstants.MessageTypes[0])
-                {
-                    SendResMap(Transmitions, tcpClient);
-                }
+                Transmitions.Add(messageList);
 
-                if (Transmitions[0][0] == MessageConstants.MessageTypes[1])
-                {
-                    CreateAccount(Transmitions, tcpClient);
-                }
+            }
 
-                if (Transmitions[0][0] == MessageConstants.MessageTypes[2])
-                {
-                    Login(Transmitions, tcpClient);
-                }
 
-                if (Transmitions[0][0] == MessageConstants.MessageTypes[3])
-                {
-                    SendBuildMap(Transmitions, tcpClient);
-                }
+            if (Transmitions[0][0] == MessageConstants.MessageTypes[0])
+            {
+                SendResMap(Transmitions, tcpClient);
+            }
 
-                if (Transmitions[0][0] == MessageConstants.MessageTypes[4])
-                {
-                    SendResTile(Transmitions, tcpClient);
-                }
+            if (Transmitions[0][0] == MessageConstants.MessageTypes[1])
+            {
+                CreateAccount(Transmitions, tcpClient);
+            }
 
-                if (Transmitions[0][0] == MessageConstants.MessageTypes[5])
-                {
-                    SendBuildTile(Transmitions, tcpClient);
-                }
+            if (Transmitions[0][0] == MessageConstants.MessageTypes[2])
+            {
+                Login(Transmitions, tcpClient);
+            }
 
-                if (Transmitions[0][0] == MessageConstants.MessageTypes[6])
-                {
-                    SendPlayerResources(Transmitions, tcpClient);
-                }
+            if (Transmitions[0][0] == MessageConstants.MessageTypes[3])
+            {
+                SendBuildMap(Transmitions, tcpClient);
+            }
 
-                if (Transmitions[0][0] == MessageConstants.MessageTypes[7])
-                {
-                    SendBuildList(Transmitions, tcpClient);
-                }
+            if (Transmitions[0][0] == MessageConstants.MessageTypes[4])
+            {
+                SendResTile(Transmitions, tcpClient);
+            }
 
-                if (Transmitions[0][0] == MessageConstants.MessageTypes[8])
-                {
-                    AddToBuildingBuildQueue(Transmitions, tcpClient);
-                }
+            if (Transmitions[0][0] == MessageConstants.MessageTypes[5])
+            {
+                SendBuildTile(Transmitions, tcpClient);
+            }
 
-            
+            if (Transmitions[0][0] == MessageConstants.MessageTypes[6])
+            {
+                SendPlayerResources(Transmitions, tcpClient);
+            }
+
+            if (Transmitions[0][0] == MessageConstants.MessageTypes[7])
+            {
+                SendBuildList(Transmitions, tcpClient);
+            }
+
+            if (Transmitions[0][0] == MessageConstants.MessageTypes[8])
+            {
+                AddToBuildingBuildQueue(Transmitions, tcpClient);
+            }
+
+
 
             tcpClient.Close();
             client = null;
 
         }
-        
+
         private void AddToBuildingBuildQueue(List<List<string>> message, TcpClient tcpClient)
         {
-            for(int i = 0; i < message[1].Count-1;i++)
+            for (int i = 0; i < message[1].Count - 1; i++)
             {
-                if(Convert.ToInt32(message[1][i])>0)
+                if (Convert.ToInt32(message[1][i]) > 0)
                 {
                     BuildQueueItem b = new BuildQueueItem(getPlayer(message[0][1]).PlayerID, getOutpost(message[2][0], message[2][1]).ID, Convert.ToInt32(message[1][i]), i, Cmn.BuildCost[i]);
                     universe.BuildQueue.Add(b);
@@ -247,9 +282,9 @@ namespace TerminalDecay5Server
                 }
                 response += MessageConstants.nextMessageToken;
             }
-            
+
             //add additional details here from build queue
-            
+
             response += MessageConstants.messageCompleteToken;
             NetworkStream clientStream = tcpClient.GetStream();
             ASCIIEncoding encoder = new ASCIIEncoding();
@@ -262,16 +297,16 @@ namespace TerminalDecay5Server
 
         private void SendPlayerResources(List<List<string>> message, TcpClient tcpClient)
         {
-            
+
             Player pl = getPlayer(message[0][1]);
-            if(pl == null)
+            if (pl == null)
             {
                 return;
             }
 
 
             string reply = MessageConstants.MessageTypes[6] + MessageConstants.nextMessageToken;
-            reply += pl.Resources[Cmn.Resource[Cmn.Renum.Food]] + MessageConstants.splitMessageToken + pl.Resources[Cmn.Resource[Cmn.Renum.Metal]] + MessageConstants.splitMessageToken + pl.Resources[Cmn.Resource[Cmn.Renum.Population]] + MessageConstants.splitMessageToken + pl.Resources[Cmn.Resource[Cmn.Renum.Power]] + MessageConstants.splitMessageToken + pl.Resources[Cmn.Resource[Cmn.Renum.Water]]+ MessageConstants.splitMessageToken;
+            reply += pl.Resources[Cmn.Resource[Cmn.Renum.Food]] + MessageConstants.splitMessageToken + pl.Resources[Cmn.Resource[Cmn.Renum.Metal]] + MessageConstants.splitMessageToken + pl.Resources[Cmn.Resource[Cmn.Renum.Population]] + MessageConstants.splitMessageToken + pl.Resources[Cmn.Resource[Cmn.Renum.Power]] + MessageConstants.splitMessageToken + pl.Resources[Cmn.Resource[Cmn.Renum.Water]] + MessageConstants.splitMessageToken;
             reply += MessageConstants.messageCompleteToken;
 
             NetworkStream clientStream = tcpClient.GetStream();
@@ -291,7 +326,7 @@ namespace TerminalDecay5Server
 
             bool auth = false;
 
-            if(getPlayer(message[0][1])!=null);
+            if (getPlayer(message[0][1]) != null) ;
             {
                 auth = true;
             }
@@ -302,7 +337,7 @@ namespace TerminalDecay5Server
 
                 foreach (MapTile m in universe.Maptiles)
                 {
-                    Message = Message + Convert.ToString(m.X) + MessageConstants.splitMessageToken + Convert.ToString(m.Y) + MessageConstants.splitMessageToken + m.Metal + MessageConstants.splitMessageToken + m.Organics + MessageConstants.splitMessageToken + m.Water;
+                    Message = Message + Convert.ToString(m.X) + MessageConstants.splitMessageToken + Convert.ToString(m.Y) + MessageConstants.splitMessageToken + m.Resources[Cmn.Resource[Cmn.Renum.Metal]] + MessageConstants.splitMessageToken + m.Resources[Cmn.Resource[Cmn.Renum.Food]] + MessageConstants.splitMessageToken + m.Resources[Cmn.Resource[Cmn.Renum.Water]];
                     Message = Message + MessageConstants.nextMessageToken;
                 }
 
@@ -485,7 +520,7 @@ namespace TerminalDecay5Server
             //find the tile involved from the message 
             int index = Convert.ToInt32(message[0][2]) * 25 + Convert.ToInt32(message[0][3]);
 
-            string response = MessageConstants.MessageTypes[4] + MessageConstants.nextMessageToken + universe.Maptiles[index].Metal + MessageConstants.splitMessageToken + universe.Maptiles[index].Organics + MessageConstants.splitMessageToken + universe.Maptiles[index].Water + MessageConstants.splitMessageToken;
+            string response = MessageConstants.MessageTypes[4] + MessageConstants.nextMessageToken + universe.Maptiles[index].Resources[Cmn.Resource[Cmn.Renum.Metal]] + MessageConstants.splitMessageToken + universe.Maptiles[index].Resources[Cmn.Resource[Cmn.Renum.Food]] + MessageConstants.splitMessageToken + universe.Maptiles[index].Resources[Cmn.Resource[Cmn.Renum.Water]] + MessageConstants.splitMessageToken;
 
             response += MessageConstants.messageCompleteToken;
 
@@ -502,14 +537,14 @@ namespace TerminalDecay5Server
         {
             string response = MessageConstants.MessageTypes[5] + MessageConstants.nextMessageToken;
             response += SendBuildingsOntile(message);
-                response += MessageConstants.messageCompleteToken;
-                NetworkStream clientStream = tcpClient.GetStream();
-                ASCIIEncoding encoder = new ASCIIEncoding();
+            response += MessageConstants.messageCompleteToken;
+            NetworkStream clientStream = tcpClient.GetStream();
+            ASCIIEncoding encoder = new ASCIIEncoding();
 
-                byte[] buffer = encoder.GetBytes(response);
+            byte[] buffer = encoder.GetBytes(response);
 
-                clientStream.Write(buffer, 0, buffer.Length);
-                clientStream.Flush();
+            clientStream.Write(buffer, 0, buffer.Length);
+            clientStream.Flush();
         }
 
         private string SendBuildingsOntile(List<List<string>> message)
@@ -518,7 +553,7 @@ namespace TerminalDecay5Server
             string response = "";
             bool found = false;
 
-         
+
             Outpost op = getOutpost(message[0][2], message[0][3]);
 
             if (op == null)
@@ -532,14 +567,14 @@ namespace TerminalDecay5Server
             }
 
             return response;
-            
+
 
         }
 
         private Player getPlayer(string s)
         {
-           //long playerid = -1;
-            
+            //long playerid = -1;
+
             foreach (Player p in universe.players)
             {
                 if (p.token == new Guid(s))
@@ -550,7 +585,7 @@ namespace TerminalDecay5Server
             return null;
         }
 
-        private Outpost getOutpost(string x,string y)
+        private Outpost getOutpost(string x, string y)
         {
             foreach (Outpost o in universe.outposts)
             {
@@ -563,6 +598,11 @@ namespace TerminalDecay5Server
                 }
             }
             return null;
+        }
+
+        private static int getTileFromPosition(Position tile)
+        {
+            return tile.Y * 25 + tile.X;
         }
     }
 }

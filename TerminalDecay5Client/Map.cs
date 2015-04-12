@@ -69,9 +69,9 @@ namespace TerminalDecay5Client
                 MapTile m = new MapTile();
                 m.X = Convert.ToInt64(transmition[i][0]);
                 m.Y = Convert.ToInt64(transmition[i][1]);
-                m.Metal = Convert.ToInt64(transmition[i][2]);
-                m.Organics = Convert.ToInt64(transmition[i][3]);
-                m.Water = Convert.ToInt64(transmition[i][4]);
+                m.Resources[Cmn.Resource[Cmn.Renum.Metal]] = Convert.ToInt64(transmition[i][2]);
+                m.Resources[Cmn.Resource[Cmn.Renum.Food]] = Convert.ToInt64(transmition[i][3]);
+                m.Resources[Cmn.Resource[Cmn.Renum.Water]] = Convert.ToInt64(transmition[i][4]);
                 universe.Maptiles.Add(m);
             }
 
@@ -87,9 +87,9 @@ namespace TerminalDecay5Client
             foreach (MapTile m in universe.Maptiles)
             {
 
-                double fr = Convert.ToDouble(m.Metal) / 20000f * 255f;
-                double fg = Convert.ToDouble(m.Organics) / 500 * 255;
-                double fb = Convert.ToDouble(m.Water) / 10000 * 255;
+                double fr = Convert.ToDouble(m.Resources[Cmn.Resource[Cmn.Renum.Metal]]) / 20000f * 255f;
+                double fg = Convert.ToDouble(m.Resources[Cmn.Resource[Cmn.Renum.Food]]) / 500 * 255;
+                double fb = Convert.ToDouble(m.Resources[Cmn.Resource[Cmn.Renum.Water]]) / 10000 * 255;
 
                 int red = Convert.ToInt32(fr);
                 int green = Convert.ToInt32(fg);
