@@ -5,7 +5,7 @@ namespace TerminalDecay5Server
 {
     public class Outpost
     {
-        public Int64 ID;
+        public int ID;
         public int OwnerID;
         public int Upgrade;
         public int Capacity;

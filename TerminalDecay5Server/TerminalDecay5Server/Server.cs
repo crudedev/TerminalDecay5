@@ -96,15 +96,36 @@ namespace TerminalDecay5Server
             #region Update Buildings Build Queue
             foreach (BuildQueueItem item in u.BuildQueue)
             {
+                Outpost o = u.outposts[item.OutpostId];
+                long FabCapacity = o.Buildings[Cmn.BuildType[Cmn.BldTenum.Fabricator]];
 
+                for (int i = 0; i < item.resourcesRemaining.Count; i++)
+                {
+                    long removeValue = 0;
 
-                //add up fabrication resources
+                    if(item.resourcesRemaining[i] > FabCapacity)
+                    {
+                        removeValue = FabCapacity;
+                    }
+                    else
+                    {
+                        removeValue = item.resourcesRemaining[i];
+                    }
 
-                //check that the player has enough of each resource for fabrication
+                    if (u.players[item.PlayerId].Resources[i] > removeValue)
+                    {
+                        item.resourcesRemaining[i] -= removeValue;
+                        u.players[item.PlayerId].Resources[i] -= removeValue;
+                    }
+                    else
+                    {
+                        item.resourcesRemaining[i] -= u.players[item.PlayerId].Resources[i];
+                        u.players[item.PlayerId].Resources[i] = 0;
+                    }
 
-                //take away resources from the player
+                }        
 
-                //take away that fabircation from the first item in teh list
+                //check to see if the building is complete, if it is create it.
 
             }
             #endregion
@@ -248,6 +269,7 @@ namespace TerminalDecay5Server
 
         private void AddToBuildingBuildQueue(List<List<string>> message, TcpClient tcpClient)
         {
+            
             for (int i = 0; i < message[1].Count - 1; i++)
             {
                 if (Convert.ToInt32(message[1][i]) > 0)

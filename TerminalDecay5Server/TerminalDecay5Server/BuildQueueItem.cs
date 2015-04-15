@@ -5,13 +5,13 @@ namespace TerminalDecay5Server
     public class BuildQueueItem
     {
         public List<long> resourcesRemaining;
-        public long PlayerId;
-        public long OutpostId;
+        public int PlayerId;
+        public int OutpostId;
         public int ItemType;
         public long ItemTotal;
         public long Complete;
 
-        public BuildQueueItem(long playerid, long outpostId, long total, int type,List<long> cost )
+        public BuildQueueItem(int playerid, int outpostId, long total, int type,List<long> cost)
         {
             Complete = 0;
             PlayerId = playerid;

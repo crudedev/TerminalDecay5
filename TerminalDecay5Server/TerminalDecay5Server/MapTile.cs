@@ -18,9 +18,11 @@ namespace TerminalDecay5Server
         public MapTile()
         {
             Resources = new List<long>();
+            MaxResources = new List<long>();
             foreach (var r in Cmn.Resource)
             {
                 Resources.Add(0);
+                MaxResources.Add(0);
             }
         }
         
