@@ -28,6 +28,7 @@ namespace TerminalDecay5Client
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            Cmn.Init();
             Timer t = new Timer();
             t.Tick += UpdatePlayerResoureces;
             t.Interval = 5000;
@@ -58,6 +59,7 @@ namespace TerminalDecay5Client
         {
             ServerConnection sc = new ServerConnection();
             sc.ServerRequest(RenderResMap, 0, MessageConstants.splitMessageToken + Convert.ToString(playerToken));
+            showBuildmenu(false);
         }
 
         private void RenderResMap(List<List<string>> transmition)
@@ -111,6 +113,7 @@ namespace TerminalDecay5Client
         {
             ServerConnection sc = new ServerConnection();
             sc.ServerRequest(RenderBuildMap, 3, MessageConstants.splitMessageToken + Convert.ToString(playerToken));
+            showBuildmenu(false);
         }
 
         private void RenderBuildMap(List<List<string>> transmition)

@@ -24,7 +24,7 @@ namespace TerminalDecay5Server
             _listenThread = new Thread(new ThreadStart(ListenForClients));
             _listenThread.Start();
             universe.players = new List<Player>();
-            _serverTick = new Timer(RunUniverse, universe, 10000, 1000);
+            _serverTick = new Timer(RunUniverse, universe, 0, 30000);
         }
 
         static void RunUniverse(object ob)
@@ -93,8 +93,7 @@ namespace TerminalDecay5Server
             #endregion
 
             #region Update Buildings Build Queue
-
-
+            
 
             foreach (BuildQueueItem item in u.BuildQueue)
             {
@@ -106,7 +105,7 @@ namespace TerminalDecay5Server
 
                 for (int i = 0; i < item.resourcesRemaining.Count; i++)
                 {
-                    
+
                     long removeValue = 0;
 
                     if (item.resourcesRemaining[i] > FabCapacity)
@@ -134,23 +133,31 @@ namespace TerminalDecay5Server
 
                     if ((total - completed) - (total - item.resourcesRemaining[i]) > Cmn.BuildCost[item.ItemType][i])
                     {
-                        long mod = (total - item.resourcesRemaining[i]) % Cmn.BuildCost[item.ItemType][i];
-                        long built = (total - item.resourcesRemaining[i]) / Cmn.BuildCost[item.ItemType][i];
+                        float mod = (total - item.resourcesRemaining[i]) % Cmn.BuildCost[item.ItemType][i];
+                        float built = ((total - item.resourcesRemaining[i]) - mod) / Cmn.BuildCost[item.ItemType][i];
 
-                        if (itemCompleted > built - mod)
+                        if (built > 0)
                         {
-                            itemCompleted = built - mod;
-                        }
+                            if (itemCompleted > built)
+                            {
+                                itemCompleted = Convert.ToInt64(built);
 
+                            }
+                        }
                     }
 
                 }
 
-                if(itemCompleted !=99999999999999 )
+                if (itemCompleted != 99999999999999)
                 {
                     long toBuild = itemCompleted - item.Complete;
                     o.Buildings[item.ItemType] += toBuild;
                     item.Complete = itemCompleted;
+
+                    if (item.Complete >= item.ItemTotal)
+                    {
+                        u.BuildQueue.Remove(item);
+                    }
                 }
 
             }
