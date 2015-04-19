@@ -92,18 +92,24 @@ namespace TerminalDecay5Server
             }
             #endregion
 
-
             #region Update Buildings Build Queue
+
+
+
             foreach (BuildQueueItem item in u.BuildQueue)
             {
                 Outpost o = u.outposts[item.OutpostId];
                 long FabCapacity = o.Buildings[Cmn.BuildType[Cmn.BldTenum.Fabricator]];
 
+
+                long itemCompleted = 99999999999999;
+
                 for (int i = 0; i < item.resourcesRemaining.Count; i++)
                 {
+                    
                     long removeValue = 0;
 
-                    if(item.resourcesRemaining[i] > FabCapacity)
+                    if (item.resourcesRemaining[i] > FabCapacity)
                     {
                         removeValue = FabCapacity;
                     }
@@ -123,9 +129,29 @@ namespace TerminalDecay5Server
                         u.players[item.PlayerId].Resources[i] = 0;
                     }
 
-                }        
+                    long total = Cmn.BuildCost[item.ItemType][i] * item.ItemTotal;
+                    long completed = Cmn.BuildCost[item.ItemType][i] * item.Complete;
 
-                //check to see if the building is complete, if it is create it.
+                    if ((total - completed) - (total - item.resourcesRemaining[i]) > Cmn.BuildCost[item.ItemType][i])
+                    {
+                        long mod = (total - item.resourcesRemaining[i]) % Cmn.BuildCost[item.ItemType][i];
+                        long built = (total - item.resourcesRemaining[i]) / Cmn.BuildCost[item.ItemType][i];
+
+                        if (itemCompleted > built - mod)
+                        {
+                            itemCompleted = built - mod;
+                        }
+
+                    }
+
+                }
+
+                if(itemCompleted !=99999999999999 )
+                {
+                    long toBuild = itemCompleted - item.Complete;
+                    o.Buildings[item.ItemType] += toBuild;
+                    item.Complete = itemCompleted;
+                }
 
             }
             #endregion
@@ -269,7 +295,7 @@ namespace TerminalDecay5Server
 
         private void AddToBuildingBuildQueue(List<List<string>> message, TcpClient tcpClient)
         {
-            
+
             for (int i = 0; i < message[1].Count - 1; i++)
             {
                 if (Convert.ToInt32(message[1][i]) > 0)
@@ -584,7 +610,7 @@ namespace TerminalDecay5Server
             }
             else
             {
-                int freeBuild = op.Capacity - (op.Buildings[Cmn.BuildType[Cmn.BldTenum.Farm]] + op.Buildings[Cmn.BuildType[Cmn.BldTenum.Habitat]] + op.Buildings[Cmn.BuildType[Cmn.BldTenum.Mine]] + op.Buildings[Cmn.BuildType[Cmn.BldTenum.SolarPLant]] + op.Buildings[Cmn.BuildType[Cmn.BldTenum.Well]] + op.Buildings[Cmn.BuildType[Cmn.BldTenum.Fabricator]]);
+                long freeBuild = op.Capacity - (op.Buildings[Cmn.BuildType[Cmn.BldTenum.Farm]] + op.Buildings[Cmn.BuildType[Cmn.BldTenum.Habitat]] + op.Buildings[Cmn.BuildType[Cmn.BldTenum.Mine]] + op.Buildings[Cmn.BuildType[Cmn.BldTenum.SolarPLant]] + op.Buildings[Cmn.BuildType[Cmn.BldTenum.Well]] + op.Buildings[Cmn.BuildType[Cmn.BldTenum.Fabricator]]);
                 response += op.OwnerID + MessageConstants.splitMessageToken + freeBuild + MessageConstants.splitMessageToken + op.Buildings[Cmn.BuildType[Cmn.BldTenum.Farm]] + MessageConstants.splitMessageToken + op.Buildings[Cmn.BuildType[Cmn.BldTenum.Habitat]] + MessageConstants.splitMessageToken + op.Buildings[Cmn.BuildType[Cmn.BldTenum.Mine]] + MessageConstants.splitMessageToken + op.Buildings[Cmn.BuildType[Cmn.BldTenum.SolarPLant]] + MessageConstants.splitMessageToken + op.Buildings[Cmn.BuildType[Cmn.BldTenum.Well]] + MessageConstants.splitMessageToken + op.Buildings[Cmn.BuildType[Cmn.BldTenum.Fabricator]] + MessageConstants.nextMessageToken; ;
             }
 

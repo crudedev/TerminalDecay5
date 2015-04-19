@@ -18,6 +18,7 @@ namespace TerminalDecay5Server
             OutpostId = outpostId;
             ItemTotal = total;
             ItemType = type;
+            
 
             resourcesRemaining = new List<long>();
 

@@ -13,7 +13,7 @@ namespace TerminalDecay5Server
 
         public List<Position> Tiles;
 
-        public List<int> Buildings;
+        public List<long> Buildings;
 
         //public int mine;
         //public int well;
@@ -29,7 +29,7 @@ namespace TerminalDecay5Server
 
         public Outpost()
         {
-            Buildings = new List<int>();
+            Buildings = new List<long>();
             foreach (var b in Cmn.BuildType)
             {
                 Buildings.Add(0);
