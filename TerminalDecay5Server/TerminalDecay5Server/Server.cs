@@ -93,7 +93,7 @@ namespace TerminalDecay5Server
             #endregion
 
             #region Update Buildings Build Queue
-            
+
 
             foreach (BuildQueueItem item in u.BuildQueue)
             {
@@ -162,6 +162,8 @@ namespace TerminalDecay5Server
 
             }
             #endregion
+
+
         }
 
         private void ListenForClients()
@@ -265,7 +267,7 @@ namespace TerminalDecay5Server
 
             if (Transmitions[0][0] == MessageConstants.MessageTypes[3])
             {
-                SendBuildMap(Transmitions, tcpClient);
+                SendMainMap(Transmitions, tcpClient);
             }
 
             if (Transmitions[0][0] == MessageConstants.MessageTypes[4])
@@ -476,6 +478,9 @@ namespace TerminalDecay5Server
                 o.Buildings[Cmn.BuildType[Cmn.BldTenum.Well]] = 1;
                 o.Buildings[Cmn.BuildType[Cmn.BldTenum.Fabricator]] = 2;
 
+                o.Defence[Cmn.DefenceType[Cmn.DefTenum.Patrol]] = 5;
+                o.Defence[Cmn.DefenceType[Cmn.DefTenum.Gunner]] = 2;
+                
                 universe.outposts.Add(o);
 
                 string reply = MessageConstants.MessageTypes[1] + MessageConstants.nextMessageToken + "AccountCreated" + MessageConstants.nextMessageToken;
@@ -533,7 +538,7 @@ namespace TerminalDecay5Server
             clientStream.Flush();
         }
 
-        private void SendBuildMap(List<List<string>> message, TcpClient tcpClient)
+        private void SendMainMap(List<List<string>> message, TcpClient tcpClient)
         {
 
             long playerid = getPlayer(message[0][1]).PlayerID;
@@ -553,6 +558,15 @@ namespace TerminalDecay5Server
                     {
                         response += "foe";
                     }
+
+                    long def = 0;
+                    for(int index = 0; index<Cmn.DefenceType.Count;index++)
+                    {
+                        def += o.Defence[index] * Cmn.DefenceAttack[index];
+                    }
+
+                    response += MessageConstants.splitMessageToken + def.ToString();
+                    
 
                     response += MessageConstants.nextMessageToken;
                 }

@@ -17,7 +17,7 @@ namespace TerminalDecay5Server
             MessageTypes.Add(0, "GetMep[]'##]~#]@@'#?%$sdf");
             MessageTypes.Add(1, "CreateAccount'##]@@''~dfs");
             MessageTypes.Add(2, "LoginToAccount'''~##?%$]@");
-            MessageTypes.Add(3, "ViewBuildMap~###]@@?%$ssd");
+            MessageTypes.Add(3, "ViewMainMap~##i#]@@?%$ssd");
             MessageTypes.Add(4, "ViewResTile~###'~## d$ssd");
             MessageTypes.Add(5, "ViewBuildTile~##]@?$sd!!!");
             MessageTypes.Add(6, "SendPlayerRes~##:@123rcvb");

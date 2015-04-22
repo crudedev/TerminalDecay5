@@ -112,11 +112,11 @@ namespace TerminalDecay5Client
         private void button2_Click(object sender, EventArgs e)
         {
             ServerConnection sc = new ServerConnection();
-            sc.ServerRequest(RenderBuildMap, 3, MessageConstants.splitMessageToken + Convert.ToString(playerToken));
+            sc.ServerRequest(RenderMainMap, 3, MessageConstants.splitMessageToken + Convert.ToString(playerToken));
             showBuildmenu(false);
         }
 
-        private void RenderBuildMap(List<List<string>> transmition)
+        private void RenderMainMap(List<List<string>> transmition)
         {
             CurrentView = 1;
             Bitmap MapImage = new Bitmap(MapCanvas.Width, MapCanvas.Height);

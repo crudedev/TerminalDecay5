@@ -48,6 +48,23 @@ namespace TerminalDecay5Server
 
         public static List<List<int>> UnitCost;
 
+        public enum DefTenum
+        {
+            Patrol = 0,
+            Gunner = 1,
+            Turret = 2,
+            Artillery = 3,
+            DroneBase = 4
+        }
+
+        public static Dictionary<DefTenum, int> DefenceType;
+
+        public static List<List<long>> DefenceCost;
+
+        public static List<long> DefenceAttack;
+        public static List<long> DefenceDefence;
+
+
         public static void Init()
         {
             Resource = new Dictionary<Renum, int>
@@ -69,18 +86,28 @@ namespace TerminalDecay5Server
                 {BldTenum.Fabricator, 5}
             };
 
+            DefenceType = new Dictionary<DefTenum, int>
+            {
+                {DefTenum.Patrol,0},
+                {DefTenum.Gunner,1},
+                {DefTenum.Turret,2},
+                {DefTenum.Artillery,3},
+                {DefTenum.DroneBase,4}
+            };
+
             BuildCost = new List<List<long>>();
             BuildingProduction = new List<List<long>>();
+            DefenceCost = new List<List<long>>();
 
             foreach (KeyValuePair<BldTenum, int> build in BuildType)
             {
                 List<long> tbuild = new List<long>();
-                foreach (KeyValuePair<Renum,int> res in Resource)
+                foreach (KeyValuePair<Renum, int> res in Resource)
                 {
-                   tbuild.Add(0);
+                    tbuild.Add(0);
                 }
                 BuildCost.Add(tbuild);
-               
+
             }
 
             foreach (KeyValuePair<BldTenum, int> build in BuildType)
@@ -91,8 +118,21 @@ namespace TerminalDecay5Server
                     tbuild.Add(0);
                 }
                 BuildingProduction.Add(tbuild);
-            } 
-           
+            }
+
+            foreach (KeyValuePair<DefTenum, int> item in DefenceType)
+            {
+                List<long> dcost = new List<long>();
+                foreach (KeyValuePair<Renum, int> res in Resource)
+                {
+                    dcost.Add(0);
+                }
+                DefenceCost.Add(dcost);
+
+                DefenceDefence.Add(0);
+                DefenceAttack.Add(0);
+            }
+
 
             BuildCost[BuildType[BldTenum.Mine]][Resource[Renum.Population]] = 1;
             BuildCost[BuildType[BldTenum.Mine]][Resource[Renum.Metal]] = 2;
@@ -131,7 +171,6 @@ namespace TerminalDecay5Server
             BuildCost[BuildType[BldTenum.Fabricator]][Resource[Renum.Food]] = 30;
 
 
-
             BuildingProduction[BuildType[BldTenum.Mine]][Resource[Renum.Metal]] = 20;
 
             BuildingProduction[BuildType[BldTenum.Well]][Resource[Renum.Water]] = 20;
@@ -141,8 +180,37 @@ namespace TerminalDecay5Server
             BuildingProduction[BuildType[BldTenum.Farm]][Resource[Renum.Food]] = 10;
 
             BuildingProduction[BuildType[BldTenum.SolarPLant]][Resource[Renum.Power]] = 10;
-            
-        }
 
+            DefenceCost[DefenceType[DefTenum.Patrol]][Resource[Renum.Food]] = 1;
+            DefenceCost[DefenceType[DefTenum.Patrol]][Resource[Renum.Metal]] = 1;
+            DefenceCost[DefenceType[DefTenum.Patrol]][Resource[Renum.Population]] = 1;
+            DefenceCost[DefenceType[DefTenum.Patrol]][Resource[Renum.Power]] = 1;
+            DefenceCost[DefenceType[DefTenum.Patrol]][Resource[Renum.Water]] = 1;
+
+            DefenceCost[DefenceType[DefTenum.Gunner]][Resource[Renum.Food]] = 2;
+            DefenceCost[DefenceType[DefTenum.Gunner]][Resource[Renum.Metal]] = 2;
+            DefenceCost[DefenceType[DefTenum.Gunner]][Resource[Renum.Population]] = 2;
+            DefenceCost[DefenceType[DefTenum.Gunner]][Resource[Renum.Power]] = 2;
+            DefenceCost[DefenceType[DefTenum.Gunner]][Resource[Renum.Water]] = 2;
+
+            DefenceCost[DefenceType[DefTenum.Turret]][Resource[Renum.Food]] = 3;
+            DefenceCost[DefenceType[DefTenum.Turret]][Resource[Renum.Metal]] = 3;
+            DefenceCost[DefenceType[DefTenum.Turret]][Resource[Renum.Population]] = 3;
+            DefenceCost[DefenceType[DefTenum.Turret]][Resource[Renum.Power]] = 3;
+            DefenceCost[DefenceType[DefTenum.Turret]][Resource[Renum.Water]] = 3;
+
+            DefenceCost[DefenceType[DefTenum.Artillery]][Resource[Renum.Food]] = 4;
+            DefenceCost[DefenceType[DefTenum.Artillery]][Resource[Renum.Metal]] = 4;
+            DefenceCost[DefenceType[DefTenum.Artillery]][Resource[Renum.Population]] = 4;
+            DefenceCost[DefenceType[DefTenum.Artillery]][Resource[Renum.Power]] = 4;
+            DefenceCost[DefenceType[DefTenum.Artillery]][Resource[Renum.Water]] = 4;
+
+            DefenceCost[DefenceType[DefTenum.DroneBase]][Resource[Renum.Food]] = 5;
+            DefenceCost[DefenceType[DefTenum.DroneBase]][Resource[Renum.Metal]] = 5;
+            DefenceCost[DefenceType[DefTenum.DroneBase]][Resource[Renum.Population]] = 5;
+            DefenceCost[DefenceType[DefTenum.DroneBase]][Resource[Renum.Power]] = 5;
+            DefenceCost[DefenceType[DefTenum.DroneBase]][Resource[Renum.Water]] = 5;
+
+        }
     }
 }

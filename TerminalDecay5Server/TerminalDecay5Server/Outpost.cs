@@ -15,6 +15,8 @@ namespace TerminalDecay5Server
 
         public List<long> Buildings;
 
+        public List<long> Defence;
+
         //public int mine;
         //public int well;
         //public int habitat;
@@ -33,6 +35,12 @@ namespace TerminalDecay5Server
             foreach (var b in Cmn.BuildType)
             {
                 Buildings.Add(0);
+            }
+
+            Defence = new List<long>();
+            foreach (var d in Cmn.DefenceType)
+            {
+                Defence.Add(0);
             }
         }
     }
