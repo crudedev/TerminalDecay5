@@ -480,7 +480,7 @@ namespace TerminalDecay5Server
 
                 o.Defence[Cmn.DefenceType[Cmn.DefTenum.Patrol]] = 5;
                 o.Defence[Cmn.DefenceType[Cmn.DefTenum.Gunner]] = 2;
-                
+
                 universe.outposts.Add(o);
 
                 string reply = MessageConstants.MessageTypes[1] + MessageConstants.nextMessageToken + "AccountCreated" + MessageConstants.nextMessageToken;
@@ -560,13 +560,13 @@ namespace TerminalDecay5Server
                     }
 
                     long def = 0;
-                    for(int index = 0; index<Cmn.DefenceType.Count;index++)
+                    for (int index = 0; index < Cmn.DefenceType.Count; index++)
                     {
-                        def += o.Defence[index] * Cmn.DefenceAttack[index];
+                        def += o.Defence[index] * Cmn.DefenceDefence[index];
                     }
 
                     response += MessageConstants.splitMessageToken + def.ToString();
-                    
+
 
                     response += MessageConstants.nextMessageToken;
                 }

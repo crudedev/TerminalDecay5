@@ -144,7 +144,7 @@ namespace TerminalDecay5Client
 
             foreach (List<string> l in transmition)
             {
-                if (l.Count == 4)
+                if (l.Count == 5)
                 {
                     c = Color.White;
                     if (l[3] == "mine")
@@ -159,6 +159,18 @@ namespace TerminalDecay5Client
 
                     maptile = new Bitmap(26, 26);
                     tilegraph = Graphics.FromImage(maptile);
+                    b = new SolidBrush(c);
+                    tilegraph.FillRectangle(b, 0, 0, 25, 25);
+                    mapgraph.DrawImage(maptile, new Point(Convert.ToInt32(l[0]) * 26, Convert.ToInt32(l[1]) * 26));
+
+                    maptile = new Bitmap(10, 10);
+                    tilegraph = Graphics.FromImage(maptile);
+                    int temp = Convert.ToInt32(transmition[1][4]);
+                    if (temp > 255)
+                    {
+                        temp = 255;
+                    }
+                    c = Color.FromArgb(0, temp, temp);
                     b = new SolidBrush(c);
                     tilegraph.FillRectangle(b, 0, 0, 25, 25);
                     mapgraph.DrawImage(maptile, new Point(Convert.ToInt32(l[0]) * 26, Convert.ToInt32(l[1]) * 26));

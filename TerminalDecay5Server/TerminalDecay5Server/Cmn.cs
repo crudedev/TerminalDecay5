@@ -98,6 +98,8 @@ namespace TerminalDecay5Server
             BuildCost = new List<List<long>>();
             BuildingProduction = new List<List<long>>();
             DefenceCost = new List<List<long>>();
+            DefenceDefence = new List<long>();
+            DefenceAttack = new List<long>();
 
             foreach (KeyValuePair<BldTenum, int> build in BuildType)
             {
@@ -210,6 +212,12 @@ namespace TerminalDecay5Server
             DefenceCost[DefenceType[DefTenum.DroneBase]][Resource[Renum.Population]] = 5;
             DefenceCost[DefenceType[DefTenum.DroneBase]][Resource[Renum.Power]] = 5;
             DefenceCost[DefenceType[DefTenum.DroneBase]][Resource[Renum.Water]] = 5;
+
+            DefenceDefence[DefenceType[DefTenum.Patrol]] = 2;
+            DefenceDefence[DefenceType[DefTenum.Gunner]] = 5;
+            DefenceDefence[DefenceType[DefTenum.Turret]] = 10;
+            DefenceDefence[DefenceType[DefTenum.Artillery]] = 15;
+            DefenceDefence[DefenceType[DefTenum.DroneBase]] = 40;
 
         }
     }
