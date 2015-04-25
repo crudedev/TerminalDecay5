@@ -52,4 +52,3 @@ C:\Users\D\Dropbox\GitHub\TerminalDecay5\TerminalDecay5Server\TerminalDecay5Serv
 C:\Users\D\Dropbox\GitHub\TerminalDecay5\TerminalDecay5Server\TerminalDecay5Server\bin\Debug\TerminalDecay5Server.pdb
 C:\Users\D\Dropbox\GitHub\TerminalDecay5\TerminalDecay5Server\TerminalDecay5Server\obj\Debug\TerminalDecay5Server.exe
 C:\Users\D\Dropbox\GitHub\TerminalDecay5\TerminalDecay5Server\TerminalDecay5Server\obj\Debug\TerminalDecay5Server.pdb
-C:\Users\D\Dropbox\GitHub\TerminalDecay5\TerminalDecay5Server\TerminalDecay5Server\obj\Debug\TerminalDecay5Server.csprojResolveAssemblyReference.cache

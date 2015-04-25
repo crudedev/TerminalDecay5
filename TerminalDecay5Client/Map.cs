@@ -308,6 +308,7 @@ namespace TerminalDecay5Client
 
         private void showBuildmenu(bool show)
         {
+
             lblExtant.Visible = show;
             lblBuild.Visible = show;
             lblFuture.Visible = show;
@@ -349,7 +350,7 @@ namespace TerminalDecay5Client
             lblProductionMine.Visible = show;
             lblProductionSolar.Visible = show;
             lblProductionWell.Visible = show;
-                      
+                     
 
             cmdBuild.Visible = show;
 
@@ -359,6 +360,14 @@ namespace TerminalDecay5Client
 
             LblSidePanel.Visible = !show;
             
+        }
+
+        private void showDefenceMenu(bool show)
+        {
+            showBuildmenu(false);
+
+
+
         }
 
         private void cmdBuild_Click(object sender, EventArgs e)
