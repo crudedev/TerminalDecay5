@@ -87,20 +87,20 @@ namespace TerminalDecay5Client
             this.lblProductionMine = new System.Windows.Forms.Label();
             this.lblProduction = new System.Windows.Forms.Label();
             this.BtnDef = new System.Windows.Forms.Button();
-            this.LblDefenceDroneBase = new System.Windows.Forms.Label();
+            this.lblDefenceDroneBase = new System.Windows.Forms.Label();
             this.lblDefenceArtillery = new System.Windows.Forms.Label();
             this.lblDefenceTurret = new System.Windows.Forms.Label();
             this.lblDefenceGunner = new System.Windows.Forms.Label();
             this.lblDefencePatrol = new System.Windows.Forms.Label();
-            this.label13 = new System.Windows.Forms.Label();
+            this.lblDefPoints = new System.Windows.Forms.Label();
             this.lblCostDroneBase = new System.Windows.Forms.Label();
             this.lblCostArtillery = new System.Windows.Forms.Label();
-            this.lblCostTurrets = new System.Windows.Forms.Label();
+            this.lblCostTurret = new System.Windows.Forms.Label();
             this.lblCostGunner = new System.Windows.Forms.Label();
-            this.lblCostPatrols = new System.Windows.Forms.Label();
-            this.label20 = new System.Windows.Forms.Label();
+            this.lblCostPatrol = new System.Windows.Forms.Label();
+            this.lblDefCost = new System.Windows.Forms.Label();
             this.btnBuildDefence = new System.Windows.Forms.Button();
-            this.label21 = new System.Windows.Forms.Label();
+            this.lblDefBuild = new System.Windows.Forms.Label();
             this.lblDroneBaseBuild = new System.Windows.Forms.Label();
             this.lblArtilleryBuild = new System.Windows.Forms.Label();
             this.lblTurretBuild = new System.Windows.Forms.Label();
@@ -111,8 +111,8 @@ namespace TerminalDecay5Client
             this.label32 = new System.Windows.Forms.Label();
             this.label33 = new System.Windows.Forms.Label();
             this.label34 = new System.Windows.Forms.Label();
-            this.label36 = new System.Windows.Forms.Label();
-            this.label37 = new System.Windows.Forms.Label();
+            this.lblDefFuture = new System.Windows.Forms.Label();
+            this.lblDefExtant = new System.Windows.Forms.Label();
             this.txtDroneBase = new System.Windows.Forms.TextBox();
             this.lblDroneBase = new System.Windows.Forms.Label();
             this.txtArtillery = new System.Windows.Forms.TextBox();
@@ -666,16 +666,17 @@ namespace TerminalDecay5Client
             this.BtnDef.Text = "Show Defence";
             this.BtnDef.UseVisualStyleBackColor = true;
             this.BtnDef.Visible = false;
+            this.BtnDef.Click += new System.EventHandler(this.BtnDef_Click);
             // 
-            // LblDefenceDroneBase
+            // lblDefenceDroneBase
             // 
-            this.LblDefenceDroneBase.AutoSize = true;
-            this.LblDefenceDroneBase.Location = new System.Drawing.Point(1507, 414);
-            this.LblDefenceDroneBase.Name = "LblDefenceDroneBase";
-            this.LblDefenceDroneBase.Size = new System.Drawing.Size(46, 13);
-            this.LblDefenceDroneBase.TabIndex = 98;
-            this.LblDefenceDroneBase.Text = "defence";
-            this.LblDefenceDroneBase.Visible = false;
+            this.lblDefenceDroneBase.AutoSize = true;
+            this.lblDefenceDroneBase.Location = new System.Drawing.Point(1507, 414);
+            this.lblDefenceDroneBase.Name = "lblDefenceDroneBase";
+            this.lblDefenceDroneBase.Size = new System.Drawing.Size(46, 13);
+            this.lblDefenceDroneBase.TabIndex = 98;
+            this.lblDefenceDroneBase.Text = "defence";
+            this.lblDefenceDroneBase.Visible = false;
             // 
             // lblDefenceArtillery
             // 
@@ -717,15 +718,15 @@ namespace TerminalDecay5Client
             this.lblDefencePatrol.Text = "defence";
             this.lblDefencePatrol.Visible = false;
             // 
-            // label13
+            // lblDefPoints
             // 
-            this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(1507, 131);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(80, 13);
-            this.label13.TabIndex = 93;
-            this.label13.Text = "Defence Points";
-            this.label13.Visible = false;
+            this.lblDefPoints.AutoSize = true;
+            this.lblDefPoints.Location = new System.Drawing.Point(1507, 131);
+            this.lblDefPoints.Name = "lblDefPoints";
+            this.lblDefPoints.Size = new System.Drawing.Size(80, 13);
+            this.lblDefPoints.TabIndex = 93;
+            this.lblDefPoints.Text = "Defence Points";
+            this.lblDefPoints.Visible = false;
             // 
             // lblCostDroneBase
             // 
@@ -747,15 +748,15 @@ namespace TerminalDecay5Client
             this.lblCostArtillery.Text = "Cost";
             this.lblCostArtillery.Visible = false;
             // 
-            // lblCostTurrets
+            // lblCostTurret
             // 
-            this.lblCostTurrets.AutoSize = true;
-            this.lblCostTurrets.Location = new System.Drawing.Point(1381, 328);
-            this.lblCostTurrets.Name = "lblCostTurrets";
-            this.lblCostTurrets.Size = new System.Drawing.Size(28, 13);
-            this.lblCostTurrets.TabIndex = 89;
-            this.lblCostTurrets.Text = "Cost";
-            this.lblCostTurrets.Visible = false;
+            this.lblCostTurret.AutoSize = true;
+            this.lblCostTurret.Location = new System.Drawing.Point(1381, 328);
+            this.lblCostTurret.Name = "lblCostTurret";
+            this.lblCostTurret.Size = new System.Drawing.Size(28, 13);
+            this.lblCostTurret.TabIndex = 89;
+            this.lblCostTurret.Text = "Cost";
+            this.lblCostTurret.Visible = false;
             // 
             // lblCostGunner
             // 
@@ -767,25 +768,25 @@ namespace TerminalDecay5Client
             this.lblCostGunner.Text = "Cost";
             this.lblCostGunner.Visible = false;
             // 
-            // lblCostPatrols
+            // lblCostPatrol
             // 
-            this.lblCostPatrols.AutoSize = true;
-            this.lblCostPatrols.Location = new System.Drawing.Point(1381, 237);
-            this.lblCostPatrols.Name = "lblCostPatrols";
-            this.lblCostPatrols.Size = new System.Drawing.Size(28, 13);
-            this.lblCostPatrols.TabIndex = 87;
-            this.lblCostPatrols.Text = "Cost";
-            this.lblCostPatrols.Visible = false;
+            this.lblCostPatrol.AutoSize = true;
+            this.lblCostPatrol.Location = new System.Drawing.Point(1381, 237);
+            this.lblCostPatrol.Name = "lblCostPatrol";
+            this.lblCostPatrol.Size = new System.Drawing.Size(28, 13);
+            this.lblCostPatrol.TabIndex = 87;
+            this.lblCostPatrol.Text = "Cost";
+            this.lblCostPatrol.Visible = false;
             // 
-            // label20
+            // lblDefCost
             // 
-            this.label20.AutoSize = true;
-            this.label20.Location = new System.Drawing.Point(1381, 135);
-            this.label20.Name = "label20";
-            this.label20.Size = new System.Drawing.Size(31, 13);
-            this.label20.TabIndex = 86;
-            this.label20.Text = "Cost:";
-            this.label20.Visible = false;
+            this.lblDefCost.AutoSize = true;
+            this.lblDefCost.Location = new System.Drawing.Point(1381, 135);
+            this.lblDefCost.Name = "lblDefCost";
+            this.lblDefCost.Size = new System.Drawing.Size(31, 13);
+            this.lblDefCost.TabIndex = 86;
+            this.lblDefCost.Text = "Cost:";
+            this.lblDefCost.Visible = false;
             // 
             // btnBuildDefence
             // 
@@ -797,15 +798,15 @@ namespace TerminalDecay5Client
             this.btnBuildDefence.UseVisualStyleBackColor = true;
             this.btnBuildDefence.Visible = false;
             // 
-            // label21
+            // lblDefBuild
             // 
-            this.label21.AutoSize = true;
-            this.label21.Location = new System.Drawing.Point(1667, 131);
-            this.label21.Name = "label21";
-            this.label21.Size = new System.Drawing.Size(30, 13);
-            this.label21.TabIndex = 84;
-            this.label21.Text = "Build";
-            this.label21.Visible = false;
+            this.lblDefBuild.AutoSize = true;
+            this.lblDefBuild.Location = new System.Drawing.Point(1667, 131);
+            this.lblDefBuild.Name = "lblDefBuild";
+            this.lblDefBuild.Size = new System.Drawing.Size(30, 13);
+            this.lblDefBuild.TabIndex = 84;
+            this.lblDefBuild.Text = "Build";
+            this.lblDefBuild.Visible = false;
             // 
             // lblDroneBaseBuild
             // 
@@ -908,25 +909,25 @@ namespace TerminalDecay5Client
             this.label34.Text = "patrol:";
             this.label34.Visible = false;
             // 
-            // label36
+            // lblDefFuture
             // 
-            this.label36.AutoSize = true;
-            this.label36.Location = new System.Drawing.Point(1284, 135);
-            this.label36.Name = "label36";
-            this.label36.Size = new System.Drawing.Size(40, 13);
-            this.label36.TabIndex = 69;
-            this.label36.Text = "Future:";
-            this.label36.Visible = false;
+            this.lblDefFuture.AutoSize = true;
+            this.lblDefFuture.Location = new System.Drawing.Point(1284, 135);
+            this.lblDefFuture.Name = "lblDefFuture";
+            this.lblDefFuture.Size = new System.Drawing.Size(40, 13);
+            this.lblDefFuture.TabIndex = 69;
+            this.lblDefFuture.Text = "Future:";
+            this.lblDefFuture.Visible = false;
             // 
-            // label37
+            // lblDefExtant
             // 
-            this.label37.AutoSize = true;
-            this.label37.Location = new System.Drawing.Point(1206, 135);
-            this.label37.Name = "label37";
-            this.label37.Size = new System.Drawing.Size(43, 13);
-            this.label37.TabIndex = 68;
-            this.label37.Text = " Extant:";
-            this.label37.Visible = false;
+            this.lblDefExtant.AutoSize = true;
+            this.lblDefExtant.Location = new System.Drawing.Point(1206, 135);
+            this.lblDefExtant.Name = "lblDefExtant";
+            this.lblDefExtant.Size = new System.Drawing.Size(43, 13);
+            this.lblDefExtant.TabIndex = 68;
+            this.lblDefExtant.Text = " Extant:";
+            this.lblDefExtant.Visible = false;
             // 
             // txtDroneBase
             // 
@@ -1028,20 +1029,20 @@ namespace TerminalDecay5Client
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1822, 831);
-            this.Controls.Add(this.LblDefenceDroneBase);
+            this.Controls.Add(this.lblDefenceDroneBase);
             this.Controls.Add(this.lblDefenceArtillery);
             this.Controls.Add(this.lblDefenceTurret);
             this.Controls.Add(this.lblDefenceGunner);
             this.Controls.Add(this.lblDefencePatrol);
-            this.Controls.Add(this.label13);
+            this.Controls.Add(this.lblDefPoints);
             this.Controls.Add(this.lblCostDroneBase);
             this.Controls.Add(this.lblCostArtillery);
-            this.Controls.Add(this.lblCostTurrets);
+            this.Controls.Add(this.lblCostTurret);
             this.Controls.Add(this.lblCostGunner);
-            this.Controls.Add(this.lblCostPatrols);
-            this.Controls.Add(this.label20);
+            this.Controls.Add(this.lblCostPatrol);
+            this.Controls.Add(this.lblDefCost);
             this.Controls.Add(this.btnBuildDefence);
-            this.Controls.Add(this.label21);
+            this.Controls.Add(this.lblDefBuild);
             this.Controls.Add(this.lblDroneBaseBuild);
             this.Controls.Add(this.lblArtilleryBuild);
             this.Controls.Add(this.lblTurretBuild);
@@ -1052,8 +1053,8 @@ namespace TerminalDecay5Client
             this.Controls.Add(this.label32);
             this.Controls.Add(this.label33);
             this.Controls.Add(this.label34);
-            this.Controls.Add(this.label36);
-            this.Controls.Add(this.label37);
+            this.Controls.Add(this.lblDefFuture);
+            this.Controls.Add(this.lblDefExtant);
             this.Controls.Add(this.txtDroneBase);
             this.Controls.Add(this.lblDroneBase);
             this.Controls.Add(this.txtArtillery);
@@ -1185,20 +1186,20 @@ namespace TerminalDecay5Client
         private Label lblProductionMine;
         private Label lblProduction;
         private Button BtnDef;
-        private Label LblDefenceDroneBase;
+        private Label lblDefenceDroneBase;
         private Label lblDefenceArtillery;
         private Label lblDefenceTurret;
         private Label lblDefenceGunner;
         private Label lblDefencePatrol;
-        private Label label13;
+        private Label lblDefPoints;
         private Label lblCostDroneBase;
         private Label lblCostArtillery;
-        private Label lblCostTurrets;
+        private Label lblCostTurret;
         private Label lblCostGunner;
-        private Label lblCostPatrols;
-        private Label label20;
+        private Label lblCostPatrol;
+        private Label lblDefCost;
         private Button btnBuildDefence;
-        private Label label21;
+        private Label lblDefBuild;
         private Label lblDroneBaseBuild;
         private Label lblArtilleryBuild;
         private Label lblTurretBuild;
@@ -1209,8 +1210,8 @@ namespace TerminalDecay5Client
         private Label label32;
         private Label label33;
         private Label label34;
-        private Label label36;
-        private Label label37;
+        private Label lblDefFuture;
+        private Label lblDefExtant;
         private TextBox txtDroneBase;
         private Label lblDroneBase;
         private TextBox txtArtillery;

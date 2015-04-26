@@ -23,6 +23,7 @@ namespace TerminalDecay5Server
             MessageTypes.Add(6, "SendPlayerRes~##:@123rcvb");
             MessageTypes.Add(7, "SendBuildList~##:@~@:xcvb");
             MessageTypes.Add(8, "SendBuildRequest~y6s'sye7");
+            MessageTypes.Add(9, "SendDefBuildList~xstfzbyj");
         }
 
     }

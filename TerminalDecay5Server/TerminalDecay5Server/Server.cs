@@ -295,6 +295,11 @@ namespace TerminalDecay5Server
                 AddToBuildingBuildQueue(Transmitions, tcpClient);
             }
 
+            if (Transmitions[0][0] == MessageConstants.MessageTypes[9])
+            {
+                SendDefenceBuildList(Transmitions, tcpClient);
+            }
+
 
 
             tcpClient.Close();
@@ -302,23 +307,76 @@ namespace TerminalDecay5Server
 
         }
 
-        private void AddToBuildingBuildQueue(List<List<string>> message, TcpClient tcpClient)
+        private void SendDefenceBuildList(List<List<string>> Transmitions, TcpClient tcpClient)
+        {
+            string response = MessageConstants.MessageTypes[9] + MessageConstants.nextMessageToken;
+            response += SendDefencesOntile(Transmitions);
+            response += MessageConstants.nextMessageToken;
+
+            foreach (List<long> d in Cmn.DefenceCost)
+            {
+                foreach (long val in d)
+                {
+                    response += val + MessageConstants.splitMessageToken;
+                }
+
+                response += MessageConstants.nextMessageToken;
+            }
+
+            foreach (long prod in Cmn.DefenceAttack)
+            {
+                response += prod + MessageConstants.splitMessageToken;
+            }
+
+            //add additional details here from build queue
+
+            response += MessageConstants.messageCompleteToken;
+            NetworkStream clientStream = tcpClient.GetStream();
+            ASCIIEncoding encoder = new ASCIIEncoding();
+
+            byte[] buffer = encoder.GetBytes(response);
+
+            clientStream.Write(buffer, 0, buffer.Length);
+            clientStream.Flush();
+        }
+
+        private string SendDefencesOntile(List<List<string>> Transmitions)
+        {
+            string response = "";
+            bool found = false;
+
+            Outpost op = getOutpost(Transmitions[0][2], Transmitions[0][3]);
+
+            if (op == null)
+            {
+                response += "-1" + MessageConstants.splitMessageToken;
+            }
+            else
+            {
+                response += op.OwnerID + MessageConstants.splitMessageToken + op.Defence[Cmn.DefenceType[Cmn.DefTenum.Patrol]] + MessageConstants.splitMessageToken + op.Defence[Cmn.DefenceType[Cmn.DefTenum.Gunner]] + MessageConstants.splitMessageToken + op.Defence[Cmn.DefenceType[Cmn.DefTenum.Turret]] + MessageConstants.splitMessageToken + op.Defence[Cmn.DefenceType[Cmn.DefTenum.Artillery]] + MessageConstants.splitMessageToken + op.Defence[Cmn.DefenceType[Cmn.DefTenum.DroneBase]] + MessageConstants.nextMessageToken; ;
+            }
+
+            return response;
+
+        }
+
+        private void AddToBuildingBuildQueue(List<List<string>> Transmitions, TcpClient tcpClient)
         {
 
-            for (int i = 0; i < message[1].Count - 1; i++)
+            for (int i = 0; i < Transmitions[1].Count - 1; i++)
             {
-                if (Convert.ToInt32(message[1][i]) > 0)
+                if (Convert.ToInt32(Transmitions[1][i]) > 0)
                 {
-                    BuildQueueItem b = new BuildQueueItem(getPlayer(message[0][1]).PlayerID, getOutpost(message[2][0], message[2][1]).ID, Convert.ToInt32(message[1][i]), i, Cmn.BuildCost[i]);
+                    BuildQueueItem b = new BuildQueueItem(getPlayer(Transmitions[0][1]).PlayerID, getOutpost(Transmitions[2][0], Transmitions[2][1]).ID, Convert.ToInt32(Transmitions[1][i]), i, Cmn.BuildCost[i]);
                     universe.BuildQueue.Add(b);
                 }
             }
         }
 
-        private void SendBuildList(List<List<string>> message, TcpClient tcpClient)
+        private void SendBuildList(List<List<string>> Transmitions, TcpClient tcpClient)
         {
             string response = MessageConstants.MessageTypes[7] + MessageConstants.nextMessageToken;
-            response += SendBuildingsOntile(message);
+            response += SendBuildingsOntile(Transmitions);
             response += MessageConstants.nextMessageToken;
 
             foreach (List<long> build in Cmn.BuildCost)
@@ -340,7 +398,26 @@ namespace TerminalDecay5Server
                 response += MessageConstants.nextMessageToken;
             }
 
-            //add additional details here from build queue
+            List<long> inProgress = new List<long>();
+            foreach (var item in Cmn.BuildType)
+            {
+                inProgress.Add(0);
+            }
+
+            Player pl = getPlayer(Transmitions[0][1]);
+
+            foreach (var item in universe.BuildQueue)
+            {
+                if (item.PlayerId == pl.PlayerID)
+                {
+                    inProgress[item.ItemType] = item.ItemTotal + item.Complete;
+                }
+            }
+
+            foreach (var item in inProgress)
+            {
+                response += item + MessageConstants.splitMessageToken;
+            }
 
             response += MessageConstants.messageCompleteToken;
             NetworkStream clientStream = tcpClient.GetStream();

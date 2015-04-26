@@ -240,7 +240,7 @@ namespace TerminalDecay5Client
             ServerConnection sc = new ServerConnection();
             sc.ServerRequest(UpdateBuildPanel, 7, MessageConstants.splitMessageToken + Convert.ToString(playerToken) + MessageConstants.splitMessageToken + Convert.ToString(_currentX) + MessageConstants.splitMessageToken + Convert.ToString(_currentY));
             showBuildmenu(true);
-
+            showDefenceMenu(false);
         }
 
         private void UpdateBuildPanel(List<List<string>> transmition)
@@ -252,16 +252,14 @@ namespace TerminalDecay5Client
             LblSolarPlant.Text = "solar plant: " + transmition[1][5];
             lblWell.Text = "well: " + transmition[1][6];
             lblfabricator.Text = "fabricator: " + transmition[1][7];
-
+            
             lblCostFarm.Text = updateBuildPanelCostString(transmition, 3);
             LblCostHabitabt.Text = updateBuildPanelCostString(transmition, 4);
             LblCostMine.Text = updateBuildPanelCostString(transmition, 5);
             lblCostSolarPlant.Text = updateBuildPanelCostString(transmition, 6);
             lblCostWell.Text = updateBuildPanelCostString(transmition, 7);
             lblCostFabricator.Text = updateBuildPanelCostString(transmition, 8);
-
             
-
 
             //draw lblbuildxxxxxx values here when the queue has been built
 
@@ -298,7 +296,12 @@ namespace TerminalDecay5Client
                 nonEmptyValue = -1;
             }
 
-          
+            lblBuildFarm.Text = transmition[15][3];
+            lblBuildHabitat.Text = transmition[15][2];
+            lblBuildMine.Text = transmition[15][0];
+            LblBuildSolarPlant.Text = transmition[15][4];
+            lblBuildWell.Text = transmition[15][1];
+            lblBuildFabricator.Text = transmition[15][5];
         }
 
         private string updateBuildPanelCostString(List<List<string>> transmition,int x)
@@ -308,6 +311,7 @@ namespace TerminalDecay5Client
 
         private void showBuildmenu(bool show)
         {
+           
 
             lblExtant.Visible = show;
             lblBuild.Visible = show;
@@ -364,9 +368,44 @@ namespace TerminalDecay5Client
 
         private void showDefenceMenu(bool show)
         {
-            showBuildmenu(false);
+           
+            lblDefExtant.Visible = show;
+            lblDefBuild.Visible = show;
+            lblDefFuture.Visible = show;
+            lblDefCost.Visible = show;
+            lblDefPoints.Visible = show;
+
+            lblPatrol.Visible = show;
+            lblGunner.Visible = show;
+            lblTurret.Visible = show;
+            lblArtillery.Visible = show;
+            lblDroneBase.Visible = show;
+
+            txtPatrol.Visible = show;
+            txtGunner.Visible = show;
+            txtTurret.Visible = show;
+            txtArtillery.Visible = show;
+            txtDroneBase.Visible = show;
+
+            lblPatrolBuild.Visible = show;
+            lblGunnerBuild.Visible = show;
+            lblTurretBuild.Visible = show;
+            lblArtilleryBuild.Visible = show;
+            lblDroneBaseBuild.Visible = show;
+
+            lblCostPatrol.Visible = show;
+            lblCostGunner.Visible = show;
+            lblCostTurret.Visible = show;
+            lblCostArtillery.Visible = show;
+            lblCostDroneBase.Visible = show;
 
 
+            lblDefencePatrol.Visible = show;
+            lblDefenceGunner.Visible = show;
+            lblDefenceTurret.Visible = show;
+            lblDefenceArtillery.Visible = show;
+            lblDefenceDroneBase.Visible = show;
+                     
 
         }
 
@@ -414,6 +453,67 @@ namespace TerminalDecay5Client
         private void lblBuild_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void BtnDef_Click(object sender, EventArgs e)
+        {
+            //show the build list
+            ServerConnection sc = new ServerConnection();
+            sc.ServerRequest(UpdateBuildDefPanel, 9, MessageConstants.splitMessageToken + Convert.ToString(playerToken) + MessageConstants.splitMessageToken + Convert.ToString(_currentX) + MessageConstants.splitMessageToken + Convert.ToString(_currentY)); ;
+            showDefenceMenu(true);
+            showBuildmenu(false);
+        }
+
+        private void UpdateBuildDefPanel(List<List<string>> transmition)
+        {
+            lblPatrol.Text = "patrol: " + transmition[1][1];
+            lblGunner.Text = "gunner: " + transmition[1][2];
+            lblTurret.Text = "turret: " + transmition[1][3];
+            lblArtillery.Text = "artillery: " + transmition[1][4];
+            lblDroneBase.Text = "drone base: " + transmition[1][5];
+            
+            lblCostPatrol.Text = updateBuildPanelCostString(transmition, 3);
+            lblCostGunner.Text = updateBuildPanelCostString(transmition, 4);
+            lblCostTurret.Text = updateBuildPanelCostString(transmition, 5);
+            lblCostArtillery.Text = updateBuildPanelCostString(transmition, 6);
+            lblCostDroneBase.Text = updateBuildPanelCostString(transmition, 7);
+
+                       
+
+            int nonEmptyValue = -1;
+
+            for (int i = 9; i < 15; i++)
+            {
+
+                foreach (string s in transmition[i])
+                {
+                    nonEmptyValue++;
+                    if (s != "0")
+                    {
+                        switch (nonEmptyValue)
+                        {
+                            case 0:
+                                lblProductionMine.Text = "metal: " + s;
+                                break;
+                            case 1:
+                                lblProductionWell.Text = "water: " + s;
+                                break;
+                            case 2:
+                                lblProductionHabitat.Text = "population: " + s;
+                                break;
+                            case 3:
+                                lblProductionFarm.Text = "food: " + s;
+                                break;
+                            case 4:
+                                lblProductionSolar.Text = "power: " + s;
+                                break;
+                        }
+                    }
+                }
+                nonEmptyValue = -1;
+            }
+
+                    
         }
         
     }
