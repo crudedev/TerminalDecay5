@@ -60,6 +60,7 @@ namespace TerminalDecay5Client
             ServerConnection sc = new ServerConnection();
             sc.ServerRequest(RenderResMap, 0, MessageConstants.splitMessageToken + Convert.ToString(playerToken));
             showBuildmenu(false);
+            showDefenceMenu(false);
         }
 
         private void RenderResMap(List<List<string>> transmition)
@@ -114,6 +115,7 @@ namespace TerminalDecay5Client
             ServerConnection sc = new ServerConnection();
             sc.ServerRequest(RenderMainMap, 3, MessageConstants.splitMessageToken + Convert.ToString(playerToken));
             showBuildmenu(false);
+            showDefenceMenu(false);
         }
 
         private void RenderMainMap(List<List<string>> transmition)
@@ -311,8 +313,6 @@ namespace TerminalDecay5Client
 
         private void showBuildmenu(bool show)
         {
-           
-
             lblExtant.Visible = show;
             lblBuild.Visible = show;
             lblFuture.Visible = show;
@@ -361,6 +361,9 @@ namespace TerminalDecay5Client
             MapCanvas.Visible = !show;
 
             BtnBuild.Visible = !show;
+            btnBuildDefence.Visible = !show;
+
+            BtnDef.Visible = !show;
 
             LblSidePanel.Visible = !show;
             
@@ -405,8 +408,16 @@ namespace TerminalDecay5Client
             lblDefenceTurret.Visible = show;
             lblDefenceArtillery.Visible = show;
             lblDefenceDroneBase.Visible = show;
-                     
 
+            btnBuildDefence.Visible = show;
+
+            MapCanvas.Visible = !show;
+
+            BtnBuild.Visible = !show;
+            btnBuildDefence.Visible = show;
+            BtnDef.Visible = !show;
+
+            LblSidePanel.Visible = !show;
         }
 
         private void cmdBuild_Click(object sender, EventArgs e)
@@ -482,7 +493,7 @@ namespace TerminalDecay5Client
 
             int nonEmptyValue = -1;
 
-            for (int i = 9; i < 15; i++)
+            for (int i = 3; i < 9; i++)
             {
 
                 foreach (string s in transmition[i])
