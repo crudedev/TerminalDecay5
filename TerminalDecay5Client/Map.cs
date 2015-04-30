@@ -230,7 +230,8 @@ namespace TerminalDecay5Client
                 }
                 else
                 {
-                    LblSidePanel.Text = "Empty: " + transmition[1][1] + " farm: " + transmition[1][2] + " habitat: " + transmition[1][3] + " mine:" + transmition[1][4] + " solarplant: " + transmition[1][5] + " well: " + transmition[1][6] + " fabricator: " + transmition[1][7]; ;
+                    LblSidePanel.Text = "Empty: " + transmition[1][1] + " farm: " + transmition[1][2] + " habitat: " + transmition[1][3] + " mine:" + transmition[1][4] + " solarplant: " + transmition[1][5] + " well: " + transmition[1][6] + " fabricator: " + transmition[1][7] + Environment.NewLine;
+                    LblSidePanel.Text += "Patrol: " + transmition[2][0] + " gunner: " + transmition[2][1] + " turret:" + transmition[2][2] + " artillery:" + transmition[2][3] + " drone base:" + transmition[2][4];
                     BtnBuild.Visible = true;
                 }
             }

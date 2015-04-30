@@ -97,7 +97,7 @@ namespace TerminalDecay5Server
             foreach (BuildQueueItem item in u.BuildingBuildQueue)
             {
                 long itemCompleted = UpdateBuildQueue(item, u, Cmn.BuildCost);
-                
+
                 if (itemCompleted != 99999999999999)
                 {
                     long toBuild = itemCompleted - item.Complete;
@@ -759,6 +759,7 @@ namespace TerminalDecay5Server
         {
             string response = MessageConstants.MessageTypes[5] + MessageConstants.nextMessageToken;
             response += SendBuildingsOntile(message);
+            response += SendDefenceOnTile(message);
             response += MessageConstants.messageCompleteToken;
             NetworkStream clientStream = tcpClient.GetStream();
             ASCIIEncoding encoder = new ASCIIEncoding();
@@ -769,12 +770,27 @@ namespace TerminalDecay5Server
             clientStream.Flush();
         }
 
+        private string SendDefenceOnTile(List<List<string>> message)
+        {
+            string response = "";
+            
+            Outpost op = getOutpost(message[0][2], message[0][3]);
+
+            if (op == null)
+            {
+                response += "-1" + MessageConstants.splitMessageToken;
+            }
+            else
+            {
+                response += op.Defence[Cmn.DefenceType[Cmn.DefTenum.Patrol]] + MessageConstants.splitMessageToken + op.Defence[Cmn.DefenceType[Cmn.DefTenum.Gunner]] + MessageConstants.splitMessageToken + op.Defence[Cmn.DefenceType[Cmn.DefTenum.Turret]] + MessageConstants.splitMessageToken + op.Defence[Cmn.DefenceType[Cmn.DefTenum.Artillery]] + MessageConstants.splitMessageToken + op.Defence[Cmn.DefenceType[Cmn.DefTenum.DroneBase]] + MessageConstants.nextMessageToken; ;
+            }
+            return response;
+        }
+
         private string SendBuildingsOntile(List<List<string>> message)
         {
 
             string response = "";
-            bool found = false;
-
 
             Outpost op = getOutpost(message[0][2], message[0][3]);
 

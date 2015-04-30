@@ -1029,7 +1029,7 @@ namespace TerminalDecay5Client
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1059, 831);
+            this.ClientSize = new System.Drawing.Size(1159, 831);
             this.Controls.Add(this.lblDefenceDroneBase);
             this.Controls.Add(this.lblDefenceArtillery);
             this.Controls.Add(this.lblDefenceTurret);
