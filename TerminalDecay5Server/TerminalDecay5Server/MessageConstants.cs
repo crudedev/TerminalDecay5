@@ -24,6 +24,7 @@ namespace TerminalDecay5Server
             MessageTypes.Add(7, "SendBuildList~##:@~@:xcvb");
             MessageTypes.Add(8, "SendBuildRequest~y6s'sye7");
             MessageTypes.Add(9, "SendDefBuildList~xstfzbyj");
+            MessageTypes.Add(10, "SendDefBuildRequest}P{Lf:");
         }
 
     }

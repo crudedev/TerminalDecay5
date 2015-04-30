@@ -7,14 +7,16 @@ namespace TerminalDecay5Server
     {
         public List<MapTile> Maptiles;
         public List<Outpost> outposts;
-        public List<BuildQueueItem> BuildQueue;
+        public List<BuildQueueItem> BuildingBuildQueue;
+        public List<BuildQueueItem> DefenceBuildQueue;
         public List<Player> players;
         public Random r;
 
         public void InitUniverse()
         {
             Maptiles = new List<MapTile>();
-            BuildQueue = new List<BuildQueueItem>();
+            BuildingBuildQueue = new List<BuildQueueItem>();
+            DefenceBuildQueue = new List<BuildQueueItem>();
             outposts = new List<Outpost>();
             players = new List<Player>();
 

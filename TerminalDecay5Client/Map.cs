@@ -248,20 +248,20 @@ namespace TerminalDecay5Client
         private void UpdateBuildPanel(List<List<string>> transmition)
         {
             lblEmpty.Text = "Empty: " + transmition[1][1];
-            LblFarm.Text = "farm: "+transmition[1][2];
-            lblHabitat.Text = "habitat: " +transmition[1][3];
-            lblMine.Text = "mine: " +transmition[1][4];
+            LblFarm.Text = "farm: " + transmition[1][2];
+            lblHabitat.Text = "habitat: " + transmition[1][3];
+            lblMine.Text = "mine: " + transmition[1][4];
             LblSolarPlant.Text = "solar plant: " + transmition[1][5];
             lblWell.Text = "well: " + transmition[1][6];
             lblfabricator.Text = "fabricator: " + transmition[1][7];
-            
+
             lblCostFarm.Text = updateBuildPanelCostString(transmition, 3);
             LblCostHabitabt.Text = updateBuildPanelCostString(transmition, 4);
             LblCostMine.Text = updateBuildPanelCostString(transmition, 5);
             lblCostSolarPlant.Text = updateBuildPanelCostString(transmition, 6);
             lblCostWell.Text = updateBuildPanelCostString(transmition, 7);
             lblCostFabricator.Text = updateBuildPanelCostString(transmition, 8);
-            
+
 
             //draw lblbuildxxxxxx values here when the queue has been built
 
@@ -273,12 +273,12 @@ namespace TerminalDecay5Client
                 foreach (string s in transmition[i])
                 {
                     nonEmptyValue++;
-                    if(s!="0")
+                    if (s != "0")
                     {
                         switch (nonEmptyValue)
                         {
                             case 0:
-                                lblProductionMine.Text = "metal: " +s ;
+                                lblProductionMine.Text = "metal: " + s;
                                 break;
                             case 1:
                                 lblProductionWell.Text = "water: " + s;
@@ -306,7 +306,7 @@ namespace TerminalDecay5Client
             lblBuildFabricator.Text = transmition[15][5];
         }
 
-        private string updateBuildPanelCostString(List<List<string>> transmition,int x)
+        private string updateBuildPanelCostString(List<List<string>> transmition, int x)
         {
             return string.Format("Population: {0}, Metal: {1}, Water: {2}, Power: {3}, Food {4}", transmition[x][0], transmition[x][1], transmition[x][2], transmition[x][3], transmition[x][4]);
         }
@@ -354,7 +354,7 @@ namespace TerminalDecay5Client
             lblProductionMine.Visible = show;
             lblProductionSolar.Visible = show;
             lblProductionWell.Visible = show;
-                     
+
 
             cmdBuild.Visible = show;
 
@@ -366,12 +366,12 @@ namespace TerminalDecay5Client
             BtnDef.Visible = !show;
 
             LblSidePanel.Visible = !show;
-            
+
         }
 
         private void showDefenceMenu(bool show)
         {
-           
+
             lblDefExtant.Visible = show;
             lblDefBuild.Visible = show;
             lblDefFuture.Visible = show;
@@ -432,7 +432,7 @@ namespace TerminalDecay5Client
                 buildList.Add(Convert.ToInt32(txtSolarPlant.Text));
                 buildList.Add(Convert.ToInt32(txtFabricator.Text));
 
-                string request = MessageConstants.splitMessageToken + Convert.ToString(playerToken) +MessageConstants.nextMessageToken;
+                string request = MessageConstants.splitMessageToken + Convert.ToString(playerToken) + MessageConstants.nextMessageToken;
 
                 foreach (int i in buildList)
                 {
@@ -441,9 +441,9 @@ namespace TerminalDecay5Client
 
                 request += MessageConstants.nextMessageToken;
                 request += _currentX + MessageConstants.splitMessageToken + _currentY;
-                
+
                 ServerConnection sc = new ServerConnection();
-                sc.ServerRequest(UpdateBuildPanel, 8,request);
+                sc.ServerRequest(UpdateBuildPanel, 8, request);
 
             }
             catch (Exception)
@@ -456,7 +456,7 @@ namespace TerminalDecay5Client
                 txtFabricator.Text = "0";
 
                 MessageBox.Show("Invalid Input");
-                
+
             }
 
         }
@@ -482,14 +482,14 @@ namespace TerminalDecay5Client
             lblTurret.Text = "turret: " + transmition[1][3];
             lblArtillery.Text = "artillery: " + transmition[1][4];
             lblDroneBase.Text = "drone base: " + transmition[1][5];
-            
+
             lblCostPatrol.Text = updateBuildPanelCostString(transmition, 3);
             lblCostGunner.Text = updateBuildPanelCostString(transmition, 4);
             lblCostTurret.Text = updateBuildPanelCostString(transmition, 5);
             lblCostArtillery.Text = updateBuildPanelCostString(transmition, 6);
             lblCostDroneBase.Text = updateBuildPanelCostString(transmition, 7);
 
-                       
+
 
             int nonEmptyValue = -1;
 
@@ -524,8 +524,52 @@ namespace TerminalDecay5Client
                 nonEmptyValue = -1;
             }
 
-                    
+            lblPatrolBuild.Text = transmition[9][0];
+            lblGunnerBuild.Text = transmition[9][1];
+            lblTurretBuild.Text = transmition[9][2];
+            lblArtilleryBuild.Text = transmition[9][3];
+            lblDroneBaseBuild.Text = transmition[9][4];
+
         }
-        
+
+        private void btnBuildDefence_Click(object sender, EventArgs e)
+        {
+            List<int> defBuildList = new List<int>();
+            try
+            {
+                defBuildList.Add(Convert.ToInt32(txtPatrol.Text));
+                defBuildList.Add(Convert.ToInt32(txtGunner.Text));
+                defBuildList.Add(Convert.ToInt32(txtTurret.Text));
+                defBuildList.Add(Convert.ToInt32(txtArtillery.Text));
+                defBuildList.Add(Convert.ToInt32(txtDroneBase.Text));
+
+                string request = MessageConstants.splitMessageToken + Convert.ToString(playerToken) + MessageConstants.nextMessageToken;
+
+                foreach (int i in defBuildList)
+                {
+                    request += i + MessageConstants.splitMessageToken;
+                }
+
+                request += MessageConstants.nextMessageToken;
+                request += _currentX + MessageConstants.splitMessageToken + _currentY;
+
+                ServerConnection sc = new ServerConnection();
+                sc.ServerRequest(UpdateBuildPanel, 10, request);
+
+            }
+            catch (Exception)
+            {
+                txtMine.Text = "0";
+                txtWell.Text = "0";
+                txtHabitat.Text = "0";
+                txtFarm.Text = "0";
+                txtSolarPlant.Text = "0";
+                txtFabricator.Text = "0";
+
+                MessageBox.Show("Invalid Input");
+
+            }
+        }
+
     }
 }

@@ -24,7 +24,7 @@ namespace TerminalDecay5Server
             _listenThread = new Thread(new ThreadStart(ListenForClients));
             _listenThread.Start();
             universe.players = new List<Player>();
-            _serverTick = new Timer(RunUniverse, universe, 0, 30000);
+            _serverTick = new Timer(RunUniverse, universe, 20000, 40000);
         }
 
         static void RunUniverse(object ob)
@@ -92,79 +92,117 @@ namespace TerminalDecay5Server
             }
             #endregion
 
-            #region Update Buildings Build Queue
+            List<BuildQueueItem> remove = new List<BuildQueueItem>();
 
-
-            foreach (BuildQueueItem item in u.BuildQueue)
+            foreach (BuildQueueItem item in u.BuildingBuildQueue)
             {
-                Outpost o = u.outposts[item.OutpostId];
-                long FabCapacity = o.Buildings[Cmn.BuildType[Cmn.BldTenum.Fabricator]];
-
-
-                long itemCompleted = 99999999999999;
-
-                for (int i = 0; i < item.resourcesRemaining.Count; i++)
-                {
-
-                    long removeValue = 0;
-
-                    if (item.resourcesRemaining[i] > FabCapacity)
-                    {
-                        removeValue = FabCapacity;
-                    }
-                    else
-                    {
-                        removeValue = item.resourcesRemaining[i];
-                    }
-
-                    if (u.players[item.PlayerId].Resources[i] > removeValue)
-                    {
-                        item.resourcesRemaining[i] -= removeValue;
-                        u.players[item.PlayerId].Resources[i] -= removeValue;
-                    }
-                    else
-                    {
-                        item.resourcesRemaining[i] -= u.players[item.PlayerId].Resources[i];
-                        u.players[item.PlayerId].Resources[i] = 0;
-                    }
-
-                    long total = Cmn.BuildCost[item.ItemType][i] * item.ItemTotal;
-                    long completed = Cmn.BuildCost[item.ItemType][i] * item.Complete;
-
-                    if ((total - completed) - (total - item.resourcesRemaining[i]) > Cmn.BuildCost[item.ItemType][i])
-                    {
-                        float mod = (total - item.resourcesRemaining[i]) % Cmn.BuildCost[item.ItemType][i];
-                        float built = ((total - item.resourcesRemaining[i]) - mod) / Cmn.BuildCost[item.ItemType][i];
-
-                        if (built > 0)
-                        {
-                            if (itemCompleted > built)
-                            {
-                                itemCompleted = Convert.ToInt64(built);
-
-                            }
-                        }
-                    }
-
-                }
-
+                long itemCompleted = UpdateBuildQueue(item, u, Cmn.BuildCost);
+                
                 if (itemCompleted != 99999999999999)
                 {
                     long toBuild = itemCompleted - item.Complete;
-                    o.Buildings[item.ItemType] += toBuild;
+                    u.outposts[item.OutpostId].Buildings[item.ItemType] += toBuild;
                     item.Complete = itemCompleted;
 
                     if (item.Complete >= item.ItemTotal)
                     {
-                        u.BuildQueue.Remove(item);
+                        remove.Add(item);
                     }
+                }
+            }
+
+            foreach (var item in remove)
+            {
+                u.BuildingBuildQueue.Remove(item);
+            }
+
+            remove = new List<BuildQueueItem>();
+
+            foreach (BuildQueueItem item in u.DefenceBuildQueue)
+            {
+                long itemCompleted = UpdateBuildQueue(item, u, Cmn.DefenceCost);
+
+                if (itemCompleted != 99999999999999)
+                {
+                    long toBuild = itemCompleted - item.Complete;
+                    u.outposts[item.OutpostId].Defence[item.ItemType] += toBuild;
+                    item.Complete = itemCompleted;
+
+                    if (item.Complete >= item.ItemTotal)
+                    {
+                        remove.Add(item);
+                    }
+                }
+            }
+
+
+            foreach (var item in remove)
+            {
+                u.DefenceBuildQueue.Remove(item);
+            }
+        }
+
+        private static long UpdateBuildQueue(BuildQueueItem item, Universe u, List<List<long>> cost)
+        {
+
+            Outpost o = u.outposts[item.OutpostId];
+            long FabCapacity = o.Buildings[Cmn.BuildType[Cmn.BldTenum.Fabricator]];
+
+
+            long itemCompleted = 99999999999999;
+
+            for (int i = 0; i < item.resourcesRemaining.Count; i++)
+            {
+
+                long removeValue = 0;
+
+                if (item.resourcesRemaining[i] > FabCapacity)
+                {
+                    removeValue = FabCapacity;
+                }
+                else
+                {
+                    removeValue = item.resourcesRemaining[i];
+                }
+
+                if (u.players[item.PlayerId].Resources[i] > removeValue)
+                {
+                    item.resourcesRemaining[i] -= removeValue;
+                    u.players[item.PlayerId].Resources[i] -= removeValue;
+                }
+                else
+                {
+                    item.resourcesRemaining[i] -= u.players[item.PlayerId].Resources[i];
+                    u.players[item.PlayerId].Resources[i] = 0;
+                }
+
+                long total = cost[item.ItemType][i] * item.ItemTotal;
+                long completed = cost[item.ItemType][i] * item.Complete;
+
+                if ((total - item.resourcesRemaining[i]) - completed >= cost[item.ItemType][i])
+                {
+                    float mod = (total - item.resourcesRemaining[i]) % cost[item.ItemType][i];
+                    float built = ((total - item.resourcesRemaining[i]) - mod) / cost[item.ItemType][i];
+
+                    if (built > 0)
+                    {
+                        if (itemCompleted > built)
+                        {
+                            itemCompleted = Convert.ToInt64(built);
+
+                        }
+                    }
+                }
+                else
+                {
+                    itemCompleted = 99999999999999;
                 }
 
             }
-            #endregion
 
-
+            return itemCompleted;
         }
+
 
         private void ListenForClients()
         {
@@ -300,11 +338,26 @@ namespace TerminalDecay5Server
                 SendDefenceBuildList(Transmitions, tcpClient);
             }
 
-
+            if (Transmitions[0][0] == MessageConstants.MessageTypes[10])
+            {
+                AddToDefenceBuildQueue(Transmitions, tcpClient);
+            }
 
             tcpClient.Close();
             client = null;
 
+        }
+
+        private void AddToDefenceBuildQueue(List<List<string>> Transmitions, TcpClient tcpClient)
+        {
+            for (int i = 0; i < Transmitions[1].Count - 1; i++)
+            {
+                if (Convert.ToInt32(Transmitions[1][i]) > 0)
+                {
+                    BuildQueueItem b = new BuildQueueItem(getPlayer(Transmitions[0][1]).PlayerID, getOutpost(Transmitions[2][0], Transmitions[2][1]).ID, Convert.ToInt32(Transmitions[1][i]), i, Cmn.DefenceCost[i]);
+                    universe.DefenceBuildQueue.Add(b);
+                }
+            }
         }
 
         private void SendDefenceBuildList(List<List<string>> Transmitions, TcpClient tcpClient)
@@ -328,7 +381,30 @@ namespace TerminalDecay5Server
                 response += prod + MessageConstants.splitMessageToken;
             }
 
-            //add additional details here from build queue
+            response += MessageConstants.nextMessageToken;
+
+            List<long> inProgress = new List<long>();
+            foreach (var item in Cmn.DefenceType)
+            {
+                inProgress.Add(0);
+            }
+
+            Player pl = getPlayer(Transmitions[0][1]);
+
+            foreach (var item in universe.DefenceBuildQueue)
+            {
+                if (item.PlayerId == pl.PlayerID)
+                {
+                    inProgress[item.ItemType] = item.ItemTotal - item.Complete;
+                }
+            }
+
+            foreach (var item in inProgress)
+            {
+                response += item + MessageConstants.splitMessageToken;
+            }
+
+
 
             response += MessageConstants.messageCompleteToken;
             NetworkStream clientStream = tcpClient.GetStream();
@@ -368,7 +444,7 @@ namespace TerminalDecay5Server
                 if (Convert.ToInt32(Transmitions[1][i]) > 0)
                 {
                     BuildQueueItem b = new BuildQueueItem(getPlayer(Transmitions[0][1]).PlayerID, getOutpost(Transmitions[2][0], Transmitions[2][1]).ID, Convert.ToInt32(Transmitions[1][i]), i, Cmn.BuildCost[i]);
-                    universe.BuildQueue.Add(b);
+                    universe.BuildingBuildQueue.Add(b);
                 }
             }
         }
@@ -406,11 +482,11 @@ namespace TerminalDecay5Server
 
             Player pl = getPlayer(Transmitions[0][1]);
 
-            foreach (var item in universe.BuildQueue)
+            foreach (var item in universe.BuildingBuildQueue)
             {
                 if (item.PlayerId == pl.PlayerID)
                 {
-                    inProgress[item.ItemType] = item.ItemTotal + item.Complete;
+                    inProgress[item.ItemType] = item.ItemTotal - item.Complete;
                 }
             }
 

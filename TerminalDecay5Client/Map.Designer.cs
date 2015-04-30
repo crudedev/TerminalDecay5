@@ -671,7 +671,7 @@ namespace TerminalDecay5Client
             // lblDefenceDroneBase
             // 
             this.lblDefenceDroneBase.AutoSize = true;
-            this.lblDefenceDroneBase.Location = new System.Drawing.Point(1507, 414);
+            this.lblDefenceDroneBase.Location = new System.Drawing.Point(820, 444);
             this.lblDefenceDroneBase.Name = "lblDefenceDroneBase";
             this.lblDefenceDroneBase.Size = new System.Drawing.Size(46, 13);
             this.lblDefenceDroneBase.TabIndex = 98;
@@ -681,7 +681,7 @@ namespace TerminalDecay5Client
             // lblDefenceArtillery
             // 
             this.lblDefenceArtillery.AutoSize = true;
-            this.lblDefenceArtillery.Location = new System.Drawing.Point(1507, 368);
+            this.lblDefenceArtillery.Location = new System.Drawing.Point(820, 398);
             this.lblDefenceArtillery.Name = "lblDefenceArtillery";
             this.lblDefenceArtillery.Size = new System.Drawing.Size(46, 13);
             this.lblDefenceArtillery.TabIndex = 97;
@@ -691,7 +691,7 @@ namespace TerminalDecay5Client
             // lblDefenceTurret
             // 
             this.lblDefenceTurret.AutoSize = true;
-            this.lblDefenceTurret.Location = new System.Drawing.Point(1507, 324);
+            this.lblDefenceTurret.Location = new System.Drawing.Point(820, 354);
             this.lblDefenceTurret.Name = "lblDefenceTurret";
             this.lblDefenceTurret.Size = new System.Drawing.Size(46, 13);
             this.lblDefenceTurret.TabIndex = 96;
@@ -701,7 +701,7 @@ namespace TerminalDecay5Client
             // lblDefenceGunner
             // 
             this.lblDefenceGunner.AutoSize = true;
-            this.lblDefenceGunner.Location = new System.Drawing.Point(1507, 278);
+            this.lblDefenceGunner.Location = new System.Drawing.Point(820, 308);
             this.lblDefenceGunner.Name = "lblDefenceGunner";
             this.lblDefenceGunner.Size = new System.Drawing.Size(46, 13);
             this.lblDefenceGunner.TabIndex = 95;
@@ -711,7 +711,7 @@ namespace TerminalDecay5Client
             // lblDefencePatrol
             // 
             this.lblDefencePatrol.AutoSize = true;
-            this.lblDefencePatrol.Location = new System.Drawing.Point(1507, 233);
+            this.lblDefencePatrol.Location = new System.Drawing.Point(820, 263);
             this.lblDefencePatrol.Name = "lblDefencePatrol";
             this.lblDefencePatrol.Size = new System.Drawing.Size(46, 13);
             this.lblDefencePatrol.TabIndex = 94;
@@ -721,7 +721,7 @@ namespace TerminalDecay5Client
             // lblDefPoints
             // 
             this.lblDefPoints.AutoSize = true;
-            this.lblDefPoints.Location = new System.Drawing.Point(1507, 131);
+            this.lblDefPoints.Location = new System.Drawing.Point(820, 161);
             this.lblDefPoints.Name = "lblDefPoints";
             this.lblDefPoints.Size = new System.Drawing.Size(80, 13);
             this.lblDefPoints.TabIndex = 93;
@@ -731,7 +731,7 @@ namespace TerminalDecay5Client
             // lblCostDroneBase
             // 
             this.lblCostDroneBase.AutoSize = true;
-            this.lblCostDroneBase.Location = new System.Drawing.Point(1381, 418);
+            this.lblCostDroneBase.Location = new System.Drawing.Point(412, 444);
             this.lblCostDroneBase.Name = "lblCostDroneBase";
             this.lblCostDroneBase.Size = new System.Drawing.Size(28, 13);
             this.lblCostDroneBase.TabIndex = 91;
@@ -741,7 +741,7 @@ namespace TerminalDecay5Client
             // lblCostArtillery
             // 
             this.lblCostArtillery.AutoSize = true;
-            this.lblCostArtillery.Location = new System.Drawing.Point(1381, 372);
+            this.lblCostArtillery.Location = new System.Drawing.Point(412, 398);
             this.lblCostArtillery.Name = "lblCostArtillery";
             this.lblCostArtillery.Size = new System.Drawing.Size(28, 13);
             this.lblCostArtillery.TabIndex = 90;
@@ -751,7 +751,7 @@ namespace TerminalDecay5Client
             // lblCostTurret
             // 
             this.lblCostTurret.AutoSize = true;
-            this.lblCostTurret.Location = new System.Drawing.Point(1381, 328);
+            this.lblCostTurret.Location = new System.Drawing.Point(412, 354);
             this.lblCostTurret.Name = "lblCostTurret";
             this.lblCostTurret.Size = new System.Drawing.Size(28, 13);
             this.lblCostTurret.TabIndex = 89;
@@ -761,7 +761,7 @@ namespace TerminalDecay5Client
             // lblCostGunner
             // 
             this.lblCostGunner.AutoSize = true;
-            this.lblCostGunner.Location = new System.Drawing.Point(1381, 282);
+            this.lblCostGunner.Location = new System.Drawing.Point(412, 308);
             this.lblCostGunner.Name = "lblCostGunner";
             this.lblCostGunner.Size = new System.Drawing.Size(28, 13);
             this.lblCostGunner.TabIndex = 88;
@@ -771,7 +771,7 @@ namespace TerminalDecay5Client
             // lblCostPatrol
             // 
             this.lblCostPatrol.AutoSize = true;
-            this.lblCostPatrol.Location = new System.Drawing.Point(1381, 237);
+            this.lblCostPatrol.Location = new System.Drawing.Point(412, 263);
             this.lblCostPatrol.Name = "lblCostPatrol";
             this.lblCostPatrol.Size = new System.Drawing.Size(28, 13);
             this.lblCostPatrol.TabIndex = 87;
@@ -781,7 +781,7 @@ namespace TerminalDecay5Client
             // lblDefCost
             // 
             this.lblDefCost.AutoSize = true;
-            this.lblDefCost.Location = new System.Drawing.Point(1381, 135);
+            this.lblDefCost.Location = new System.Drawing.Point(412, 161);
             this.lblDefCost.Name = "lblDefCost";
             this.lblDefCost.Size = new System.Drawing.Size(31, 13);
             this.lblDefCost.TabIndex = 86;
@@ -790,18 +790,19 @@ namespace TerminalDecay5Client
             // 
             // btnBuildDefence
             // 
-            this.btnBuildDefence.Location = new System.Drawing.Point(1651, 518);
+            this.btnBuildDefence.Location = new System.Drawing.Point(901, 548);
             this.btnBuildDefence.Name = "btnBuildDefence";
             this.btnBuildDefence.Size = new System.Drawing.Size(119, 23);
             this.btnBuildDefence.TabIndex = 85;
             this.btnBuildDefence.Text = "Add To Build Queue";
             this.btnBuildDefence.UseVisualStyleBackColor = true;
             this.btnBuildDefence.Visible = false;
+            this.btnBuildDefence.Click += new System.EventHandler(this.btnBuildDefence_Click);
             // 
             // lblDefBuild
             // 
             this.lblDefBuild.AutoSize = true;
-            this.lblDefBuild.Location = new System.Drawing.Point(1667, 131);
+            this.lblDefBuild.Location = new System.Drawing.Point(917, 161);
             this.lblDefBuild.Name = "lblDefBuild";
             this.lblDefBuild.Size = new System.Drawing.Size(30, 13);
             this.lblDefBuild.TabIndex = 84;
@@ -811,7 +812,7 @@ namespace TerminalDecay5Client
             // lblDroneBaseBuild
             // 
             this.lblDroneBaseBuild.AutoSize = true;
-            this.lblDroneBaseBuild.Location = new System.Drawing.Point(1284, 418);
+            this.lblDroneBaseBuild.Location = new System.Drawing.Point(315, 444);
             this.lblDroneBaseBuild.Name = "lblDroneBaseBuild";
             this.lblDroneBaseBuild.Size = new System.Drawing.Size(63, 13);
             this.lblDroneBaseBuild.TabIndex = 82;
@@ -821,7 +822,7 @@ namespace TerminalDecay5Client
             // lblArtilleryBuild
             // 
             this.lblArtilleryBuild.AutoSize = true;
-            this.lblArtilleryBuild.Location = new System.Drawing.Point(1284, 372);
+            this.lblArtilleryBuild.Location = new System.Drawing.Point(315, 398);
             this.lblArtilleryBuild.Name = "lblArtilleryBuild";
             this.lblArtilleryBuild.Size = new System.Drawing.Size(39, 13);
             this.lblArtilleryBuild.TabIndex = 81;
@@ -832,7 +833,7 @@ namespace TerminalDecay5Client
             // 
             this.lblTurretBuild.AccessibleRole = System.Windows.Forms.AccessibleRole.None;
             this.lblTurretBuild.AutoSize = true;
-            this.lblTurretBuild.Location = new System.Drawing.Point(1284, 328);
+            this.lblTurretBuild.Location = new System.Drawing.Point(315, 354);
             this.lblTurretBuild.Name = "lblTurretBuild";
             this.lblTurretBuild.Size = new System.Drawing.Size(34, 13);
             this.lblTurretBuild.TabIndex = 80;
@@ -842,7 +843,7 @@ namespace TerminalDecay5Client
             // lblGunnerBuild
             // 
             this.lblGunnerBuild.AutoSize = true;
-            this.lblGunnerBuild.Location = new System.Drawing.Point(1284, 282);
+            this.lblGunnerBuild.Location = new System.Drawing.Point(315, 308);
             this.lblGunnerBuild.Name = "lblGunnerBuild";
             this.lblGunnerBuild.Size = new System.Drawing.Size(43, 13);
             this.lblGunnerBuild.TabIndex = 79;
@@ -852,7 +853,7 @@ namespace TerminalDecay5Client
             // lblPatrolBuild
             // 
             this.lblPatrolBuild.AutoSize = true;
-            this.lblPatrolBuild.Location = new System.Drawing.Point(1284, 237);
+            this.lblPatrolBuild.Location = new System.Drawing.Point(315, 263);
             this.lblPatrolBuild.Name = "lblPatrolBuild";
             this.lblPatrolBuild.Size = new System.Drawing.Size(36, 13);
             this.lblPatrolBuild.TabIndex = 78;
@@ -862,7 +863,7 @@ namespace TerminalDecay5Client
             // label30
             // 
             this.label30.AutoSize = true;
-            this.label30.Location = new System.Drawing.Point(1103, 422);
+            this.label30.Location = new System.Drawing.Point(134, 448);
             this.label30.Name = "label30";
             this.label30.Size = new System.Drawing.Size(63, 13);
             this.label30.TabIndex = 75;
@@ -872,7 +873,7 @@ namespace TerminalDecay5Client
             // label31
             // 
             this.label31.AutoSize = true;
-            this.label31.Location = new System.Drawing.Point(1103, 376);
+            this.label31.Location = new System.Drawing.Point(134, 402);
             this.label31.Name = "label31";
             this.label31.Size = new System.Drawing.Size(42, 13);
             this.label31.TabIndex = 74;
@@ -882,7 +883,7 @@ namespace TerminalDecay5Client
             // label32
             // 
             this.label32.AutoSize = true;
-            this.label32.Location = new System.Drawing.Point(1103, 332);
+            this.label32.Location = new System.Drawing.Point(134, 358);
             this.label32.Name = "label32";
             this.label32.Size = new System.Drawing.Size(34, 13);
             this.label32.TabIndex = 73;
@@ -892,7 +893,7 @@ namespace TerminalDecay5Client
             // label33
             // 
             this.label33.AutoSize = true;
-            this.label33.Location = new System.Drawing.Point(1103, 286);
+            this.label33.Location = new System.Drawing.Point(134, 312);
             this.label33.Name = "label33";
             this.label33.Size = new System.Drawing.Size(43, 13);
             this.label33.TabIndex = 72;
@@ -902,7 +903,7 @@ namespace TerminalDecay5Client
             // label34
             // 
             this.label34.AutoSize = true;
-            this.label34.Location = new System.Drawing.Point(1103, 241);
+            this.label34.Location = new System.Drawing.Point(134, 267);
             this.label34.Name = "label34";
             this.label34.Size = new System.Drawing.Size(36, 13);
             this.label34.TabIndex = 71;
@@ -912,7 +913,7 @@ namespace TerminalDecay5Client
             // lblDefFuture
             // 
             this.lblDefFuture.AutoSize = true;
-            this.lblDefFuture.Location = new System.Drawing.Point(1284, 135);
+            this.lblDefFuture.Location = new System.Drawing.Point(315, 161);
             this.lblDefFuture.Name = "lblDefFuture";
             this.lblDefFuture.Size = new System.Drawing.Size(40, 13);
             this.lblDefFuture.TabIndex = 69;
@@ -922,7 +923,7 @@ namespace TerminalDecay5Client
             // lblDefExtant
             // 
             this.lblDefExtant.AutoSize = true;
-            this.lblDefExtant.Location = new System.Drawing.Point(1206, 135);
+            this.lblDefExtant.Location = new System.Drawing.Point(237, 161);
             this.lblDefExtant.Name = "lblDefExtant";
             this.lblDefExtant.Size = new System.Drawing.Size(43, 13);
             this.lblDefExtant.TabIndex = 68;
@@ -931,7 +932,7 @@ namespace TerminalDecay5Client
             // 
             // txtDroneBase
             // 
-            this.txtDroneBase.Location = new System.Drawing.Point(1670, 407);
+            this.txtDroneBase.Location = new System.Drawing.Point(920, 437);
             this.txtDroneBase.Name = "txtDroneBase";
             this.txtDroneBase.Size = new System.Drawing.Size(100, 20);
             this.txtDroneBase.TabIndex = 65;
@@ -941,7 +942,7 @@ namespace TerminalDecay5Client
             // lblDroneBase
             // 
             this.lblDroneBase.AutoSize = true;
-            this.lblDroneBase.Location = new System.Drawing.Point(1206, 419);
+            this.lblDroneBase.Location = new System.Drawing.Point(237, 445);
             this.lblDroneBase.Name = "lblDroneBase";
             this.lblDroneBase.Size = new System.Drawing.Size(60, 13);
             this.lblDroneBase.TabIndex = 64;
@@ -950,7 +951,7 @@ namespace TerminalDecay5Client
             // 
             // txtArtillery
             // 
-            this.txtArtillery.Location = new System.Drawing.Point(1670, 361);
+            this.txtArtillery.Location = new System.Drawing.Point(920, 391);
             this.txtArtillery.Name = "txtArtillery";
             this.txtArtillery.Size = new System.Drawing.Size(100, 20);
             this.txtArtillery.TabIndex = 63;
@@ -960,7 +961,7 @@ namespace TerminalDecay5Client
             // lblArtillery
             // 
             this.lblArtillery.AutoSize = true;
-            this.lblArtillery.Location = new System.Drawing.Point(1206, 373);
+            this.lblArtillery.Location = new System.Drawing.Point(237, 399);
             this.lblArtillery.Name = "lblArtillery";
             this.lblArtillery.Size = new System.Drawing.Size(39, 13);
             this.lblArtillery.TabIndex = 62;
@@ -969,7 +970,7 @@ namespace TerminalDecay5Client
             // 
             // txtTurret
             // 
-            this.txtTurret.Location = new System.Drawing.Point(1670, 317);
+            this.txtTurret.Location = new System.Drawing.Point(920, 347);
             this.txtTurret.Name = "txtTurret";
             this.txtTurret.Size = new System.Drawing.Size(100, 20);
             this.txtTurret.TabIndex = 61;
@@ -979,7 +980,7 @@ namespace TerminalDecay5Client
             // lblTurret
             // 
             this.lblTurret.AutoSize = true;
-            this.lblTurret.Location = new System.Drawing.Point(1206, 329);
+            this.lblTurret.Location = new System.Drawing.Point(237, 355);
             this.lblTurret.Name = "lblTurret";
             this.lblTurret.Size = new System.Drawing.Size(34, 13);
             this.lblTurret.TabIndex = 60;
@@ -988,7 +989,7 @@ namespace TerminalDecay5Client
             // 
             // txtGunner
             // 
-            this.txtGunner.Location = new System.Drawing.Point(1670, 271);
+            this.txtGunner.Location = new System.Drawing.Point(920, 301);
             this.txtGunner.Name = "txtGunner";
             this.txtGunner.Size = new System.Drawing.Size(100, 20);
             this.txtGunner.TabIndex = 59;
@@ -998,7 +999,7 @@ namespace TerminalDecay5Client
             // lblGunner
             // 
             this.lblGunner.AutoSize = true;
-            this.lblGunner.Location = new System.Drawing.Point(1206, 283);
+            this.lblGunner.Location = new System.Drawing.Point(237, 309);
             this.lblGunner.Name = "lblGunner";
             this.lblGunner.Size = new System.Drawing.Size(43, 13);
             this.lblGunner.TabIndex = 58;
@@ -1007,7 +1008,7 @@ namespace TerminalDecay5Client
             // 
             // txtPatrol
             // 
-            this.txtPatrol.Location = new System.Drawing.Point(1670, 226);
+            this.txtPatrol.Location = new System.Drawing.Point(920, 256);
             this.txtPatrol.Name = "txtPatrol";
             this.txtPatrol.Size = new System.Drawing.Size(100, 20);
             this.txtPatrol.TabIndex = 57;
@@ -1017,7 +1018,7 @@ namespace TerminalDecay5Client
             // lblPatrol
             // 
             this.lblPatrol.AutoSize = true;
-            this.lblPatrol.Location = new System.Drawing.Point(1206, 238);
+            this.lblPatrol.Location = new System.Drawing.Point(237, 264);
             this.lblPatrol.Name = "lblPatrol";
             this.lblPatrol.Size = new System.Drawing.Size(36, 13);
             this.lblPatrol.TabIndex = 56;
@@ -1028,7 +1029,7 @@ namespace TerminalDecay5Client
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1822, 831);
+            this.ClientSize = new System.Drawing.Size(1059, 831);
             this.Controls.Add(this.lblDefenceDroneBase);
             this.Controls.Add(this.lblDefenceArtillery);
             this.Controls.Add(this.lblDefenceTurret);
