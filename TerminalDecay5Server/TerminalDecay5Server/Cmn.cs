@@ -23,7 +23,6 @@ namespace TerminalDecay5Server
             Farm = 3,
             SolarPLant = 4,
             Fabricator = 5
-
         }
 
         public static Dictionary<BldTenum, int> BuildType;
@@ -32,21 +31,20 @@ namespace TerminalDecay5Server
 
         public static List<List<long>> BuildingProduction;
 
-        public enum UntTenum
+        public enum OffTenum
         {
             Scout = 0,
-            Intercepter = 1,
-            Gunship = 2,
-            Bomber = 3,
-            Frigate = 4,
-            Destroyer = 5,
-            Carrier = 6
-
+            Gunship = 1,
+            Bomber = 2,
+            Frigate = 3,
+            Destroyer = 4,
+            Carrier = 5,
+            Battleship = 6
         }
 
-        public static Dictionary<UntTenum, int> UnitType;
+        public static Dictionary<OffTenum, int> OffenceType;
 
-        public static List<List<int>> UnitCost;
+        public static List<List<long>> OffenceCost;
 
         public enum DefTenum
         {
@@ -63,6 +61,9 @@ namespace TerminalDecay5Server
 
         public static List<long> DefenceAttack;
         public static List<long> DefenceDefence;
+
+        public static List<long> OffenceAttack;
+        public static List<long> OffenceDefence;
 
 
         public static void Init()
@@ -95,11 +96,25 @@ namespace TerminalDecay5Server
                 {DefTenum.DroneBase,4}
             };
 
+            OffenceType = new Dictionary<OffTenum, int>
+            {
+                {OffTenum.Scout,0},
+                {OffTenum.Gunship,1},
+                {OffTenum.Bomber,2},
+                {OffTenum.Frigate,3},
+                {OffTenum.Destroyer,4},
+                {OffTenum.Carrier,5},    
+                {OffTenum.Battleship,6},
+            };
+
             BuildCost = new List<List<long>>();
             BuildingProduction = new List<List<long>>();
             DefenceCost = new List<List<long>>();
             DefenceDefence = new List<long>();
             DefenceAttack = new List<long>();
+            OffenceCost = new List<List<long>>();
+            OffenceDefence = new List<long>();
+            OffenceAttack = new List<long>();
 
             foreach (KeyValuePair<BldTenum, int> build in BuildType)
             {
@@ -135,6 +150,18 @@ namespace TerminalDecay5Server
                 DefenceAttack.Add(0);
             }
 
+            foreach (KeyValuePair<OffTenum, int> item in OffenceType)
+            {
+                List<long> ocost = new List<long>();
+                foreach (KeyValuePair<Renum, int> res in Resource)
+                {
+                    ocost.Add(0);
+                }
+                OffenceCost.Add(ocost);
+
+                OffenceDefence.Add(0);
+                OffenceAttack.Add(0);
+            }
 
             BuildCost[BuildType[BldTenum.Mine]][Resource[Renum.Population]] = 1;
             BuildCost[BuildType[BldTenum.Mine]][Resource[Renum.Metal]] = 2;
@@ -219,6 +246,70 @@ namespace TerminalDecay5Server
             DefenceDefence[DefenceType[DefTenum.Artillery]] = 15;
             DefenceDefence[DefenceType[DefTenum.DroneBase]] = 40;
 
+            DefenceAttack[DefenceType[DefTenum.Patrol]] = 2;
+            DefenceAttack[DefenceType[DefTenum.Gunner]] = 5;
+            DefenceAttack[DefenceType[DefTenum.Turret]] = 10;
+            DefenceAttack[DefenceType[DefTenum.Artillery]] = 15;
+            DefenceAttack[DefenceType[DefTenum.DroneBase]] = 40;
+
+
+            OffenceCost[OffenceType[OffTenum.Scout]][Resource[Renum.Food]] = 1;
+            OffenceCost[OffenceType[OffTenum.Scout]][Resource[Renum.Metal]] = 1;
+            OffenceCost[OffenceType[OffTenum.Scout]][Resource[Renum.Population]] = 1;
+            OffenceCost[OffenceType[OffTenum.Scout]][Resource[Renum.Power]] = 1;
+            OffenceCost[OffenceType[OffTenum.Scout]][Resource[Renum.Water]] = 1;
+
+            OffenceCost[OffenceType[OffTenum.Gunship]][Resource[Renum.Food]] = 2;
+            OffenceCost[OffenceType[OffTenum.Gunship]][Resource[Renum.Metal]] = 2;
+            OffenceCost[OffenceType[OffTenum.Gunship]][Resource[Renum.Population]] = 2;
+            OffenceCost[OffenceType[OffTenum.Gunship]][Resource[Renum.Power]] = 2;
+            OffenceCost[OffenceType[OffTenum.Gunship]][Resource[Renum.Water]] = 2;
+
+            OffenceCost[OffenceType[OffTenum.Bomber]][Resource[Renum.Food]] = 3;
+            OffenceCost[OffenceType[OffTenum.Bomber]][Resource[Renum.Metal]] = 3;
+            OffenceCost[OffenceType[OffTenum.Bomber]][Resource[Renum.Population]] = 3;
+            OffenceCost[OffenceType[OffTenum.Bomber]][Resource[Renum.Power]] = 3;
+            OffenceCost[OffenceType[OffTenum.Bomber]][Resource[Renum.Water]] = 3;
+
+            OffenceCost[OffenceType[OffTenum.Frigate]][Resource[Renum.Food]] = 4;
+            OffenceCost[OffenceType[OffTenum.Frigate]][Resource[Renum.Metal]] = 4;
+            OffenceCost[OffenceType[OffTenum.Frigate]][Resource[Renum.Population]] = 4;
+            OffenceCost[OffenceType[OffTenum.Frigate]][Resource[Renum.Power]] = 4;
+            OffenceCost[OffenceType[OffTenum.Frigate]][Resource[Renum.Water]] = 4;
+
+            OffenceCost[OffenceType[OffTenum.Destroyer]][Resource[Renum.Food]] = 5;
+            OffenceCost[OffenceType[OffTenum.Destroyer]][Resource[Renum.Metal]] = 5;
+            OffenceCost[OffenceType[OffTenum.Destroyer]][Resource[Renum.Population]] = 5;
+            OffenceCost[OffenceType[OffTenum.Destroyer]][Resource[Renum.Power]] = 5;
+            OffenceCost[OffenceType[OffTenum.Destroyer]][Resource[Renum.Water]] = 5;
+
+            OffenceCost[OffenceType[OffTenum.Carrier]][Resource[Renum.Food]] = 6;
+            OffenceCost[OffenceType[OffTenum.Carrier]][Resource[Renum.Metal]] = 6;
+            OffenceCost[OffenceType[OffTenum.Carrier]][Resource[Renum.Population]] = 6;
+            OffenceCost[OffenceType[OffTenum.Carrier]][Resource[Renum.Power]] = 6;
+            OffenceCost[OffenceType[OffTenum.Carrier]][Resource[Renum.Water]] = 6;
+
+            OffenceCost[OffenceType[OffTenum.Battleship]][Resource[Renum.Food]] = 7;
+            OffenceCost[OffenceType[OffTenum.Battleship]][Resource[Renum.Metal]] = 7;
+            OffenceCost[OffenceType[OffTenum.Battleship]][Resource[Renum.Population]] = 7;
+            OffenceCost[OffenceType[OffTenum.Battleship]][Resource[Renum.Power]] = 7;
+            OffenceCost[OffenceType[OffTenum.Battleship]][Resource[Renum.Water]] = 7;
+
+            OffenceDefence[OffenceType[OffTenum.Scout]] = 1;
+            OffenceDefence[OffenceType[OffTenum.Gunship]] = 2;
+            OffenceDefence[OffenceType[OffTenum.Bomber]] = 3;
+            OffenceDefence[OffenceType[OffTenum.Frigate]] = 4;
+            OffenceDefence[OffenceType[OffTenum.Destroyer]] = 5;
+            OffenceDefence[OffenceType[OffTenum.Carrier]] = 6;
+            OffenceDefence[OffenceType[OffTenum.Battleship]] = 7;
+
+            OffenceAttack[OffenceType[OffTenum.Scout]] = 1;
+            OffenceAttack[OffenceType[OffTenum.Gunship]] = 2;
+            OffenceAttack[OffenceType[OffTenum.Bomber]] = 3;
+            OffenceAttack[OffenceType[OffTenum.Frigate]] = 4;
+            OffenceAttack[OffenceType[OffTenum.Destroyer]] = 5;
+            OffenceAttack[OffenceType[OffTenum.Carrier]] = 6;
+            OffenceAttack[OffenceType[OffTenum.Battleship]] = 7;
         }
     }
 }
