@@ -141,11 +141,11 @@ namespace TerminalDecay5Client
             this.label22 = new System.Windows.Forms.Label();
             this.label23 = new System.Windows.Forms.Label();
             this.label24 = new System.Windows.Forms.Label();
-            this.label25 = new System.Windows.Forms.Label();
-            this.label26 = new System.Windows.Forms.Label();
-            this.label27 = new System.Windows.Forms.Label();
-            this.label28 = new System.Windows.Forms.Label();
-            this.label29 = new System.Windows.Forms.Label();
+            this.lblDestroyer = new System.Windows.Forms.Label();
+            this.lblFrigate = new System.Windows.Forms.Label();
+            this.lblBomber = new System.Windows.Forms.Label();
+            this.lblGunship = new System.Windows.Forms.Label();
+            this.lblScout = new System.Windows.Forms.Label();
             this.label35 = new System.Windows.Forms.Label();
             this.label36 = new System.Windows.Forms.Label();
             this.textBox1 = new System.Windows.Forms.TextBox();
@@ -170,8 +170,8 @@ namespace TerminalDecay5Client
             this.label51 = new System.Windows.Forms.Label();
             this.label52 = new System.Windows.Forms.Label();
             this.label53 = new System.Windows.Forms.Label();
-            this.label54 = new System.Windows.Forms.Label();
-            this.label55 = new System.Windows.Forms.Label();
+            this.lblBattleship = new System.Windows.Forms.Label();
+            this.lblCarrier = new System.Windows.Forms.Label();
             this.textBox6 = new System.Windows.Forms.TextBox();
             this.label56 = new System.Windows.Forms.Label();
             this.textBox7 = new System.Windows.Forms.TextBox();
@@ -1261,55 +1261,55 @@ namespace TerminalDecay5Client
             this.label24.Text = "patrol:";
             this.label24.Visible = false;
             // 
-            // label25
+            // lblDestroyer
             // 
-            this.label25.AutoSize = true;
-            this.label25.Location = new System.Drawing.Point(1074, 411);
-            this.label25.Name = "label25";
-            this.label25.Size = new System.Drawing.Size(63, 13);
-            this.label25.TabIndex = 121;
-            this.label25.Text = "drone base:";
-            this.label25.Visible = false;
+            this.lblDestroyer.AutoSize = true;
+            this.lblDestroyer.Location = new System.Drawing.Point(1074, 411);
+            this.lblDestroyer.Name = "lblDestroyer";
+            this.lblDestroyer.Size = new System.Drawing.Size(53, 13);
+            this.lblDestroyer.TabIndex = 121;
+            this.lblDestroyer.Text = "destroyer:";
+            this.lblDestroyer.Visible = false;
             // 
-            // label26
+            // lblFrigate
             // 
-            this.label26.AutoSize = true;
-            this.label26.Location = new System.Drawing.Point(1074, 365);
-            this.label26.Name = "label26";
-            this.label26.Size = new System.Drawing.Size(42, 13);
-            this.label26.TabIndex = 120;
-            this.label26.Text = "artillery:";
-            this.label26.Visible = false;
+            this.lblFrigate.AutoSize = true;
+            this.lblFrigate.Location = new System.Drawing.Point(1074, 365);
+            this.lblFrigate.Name = "lblFrigate";
+            this.lblFrigate.Size = new System.Drawing.Size(39, 13);
+            this.lblFrigate.TabIndex = 120;
+            this.lblFrigate.Text = "frigate:";
+            this.lblFrigate.Visible = false;
             // 
-            // label27
+            // lblBomber
             // 
-            this.label27.AutoSize = true;
-            this.label27.Location = new System.Drawing.Point(1074, 321);
-            this.label27.Name = "label27";
-            this.label27.Size = new System.Drawing.Size(34, 13);
-            this.label27.TabIndex = 119;
-            this.label27.Text = "turret:";
-            this.label27.Visible = false;
+            this.lblBomber.AutoSize = true;
+            this.lblBomber.Location = new System.Drawing.Point(1074, 321);
+            this.lblBomber.Name = "lblBomber";
+            this.lblBomber.Size = new System.Drawing.Size(45, 13);
+            this.lblBomber.TabIndex = 119;
+            this.lblBomber.Text = "bomber:";
+            this.lblBomber.Visible = false;
             // 
-            // label28
+            // lblGunship
             // 
-            this.label28.AutoSize = true;
-            this.label28.Location = new System.Drawing.Point(1074, 275);
-            this.label28.Name = "label28";
-            this.label28.Size = new System.Drawing.Size(43, 13);
-            this.label28.TabIndex = 118;
-            this.label28.Text = "gunner:";
-            this.label28.Visible = false;
+            this.lblGunship.AutoSize = true;
+            this.lblGunship.Location = new System.Drawing.Point(1074, 275);
+            this.lblGunship.Name = "lblGunship";
+            this.lblGunship.Size = new System.Drawing.Size(47, 13);
+            this.lblGunship.TabIndex = 118;
+            this.lblGunship.Text = "gunship:";
+            this.lblGunship.Visible = false;
             // 
-            // label29
+            // lblScout
             // 
-            this.label29.AutoSize = true;
-            this.label29.Location = new System.Drawing.Point(1074, 230);
-            this.label29.Name = "label29";
-            this.label29.Size = new System.Drawing.Size(36, 13);
-            this.label29.TabIndex = 117;
-            this.label29.Text = "patrol:";
-            this.label29.Visible = false;
+            this.lblScout.AutoSize = true;
+            this.lblScout.Location = new System.Drawing.Point(1074, 230);
+            this.lblScout.Name = "lblScout";
+            this.lblScout.Size = new System.Drawing.Size(36, 13);
+            this.lblScout.TabIndex = 117;
+            this.lblScout.Text = "scout:";
+            this.lblScout.Visible = false;
             // 
             // label35
             // 
@@ -1546,25 +1546,25 @@ namespace TerminalDecay5Client
             this.label53.Text = "artillery";
             this.label53.Visible = false;
             // 
-            // label54
+            // lblBattleship
             // 
-            this.label54.AutoSize = true;
-            this.label54.Location = new System.Drawing.Point(1074, 503);
-            this.label54.Name = "label54";
-            this.label54.Size = new System.Drawing.Size(63, 13);
-            this.label54.TabIndex = 147;
-            this.label54.Text = "drone base:";
-            this.label54.Visible = false;
+            this.lblBattleship.AutoSize = true;
+            this.lblBattleship.Location = new System.Drawing.Point(1074, 503);
+            this.lblBattleship.Name = "lblBattleship";
+            this.lblBattleship.Size = new System.Drawing.Size(56, 13);
+            this.lblBattleship.TabIndex = 147;
+            this.lblBattleship.Text = "Battleship:";
+            this.lblBattleship.Visible = false;
             // 
-            // label55
+            // lblCarrier
             // 
-            this.label55.AutoSize = true;
-            this.label55.Location = new System.Drawing.Point(1074, 457);
-            this.label55.Name = "label55";
-            this.label55.Size = new System.Drawing.Size(42, 13);
-            this.label55.TabIndex = 146;
-            this.label55.Text = "artillery:";
-            this.label55.Visible = false;
+            this.lblCarrier.AutoSize = true;
+            this.lblCarrier.Location = new System.Drawing.Point(1074, 457);
+            this.lblCarrier.Name = "lblCarrier";
+            this.lblCarrier.Size = new System.Drawing.Size(39, 13);
+            this.lblCarrier.TabIndex = 146;
+            this.lblCarrier.Text = "carrier:";
+            this.lblCarrier.Visible = false;
             // 
             // textBox6
             // 
@@ -1635,8 +1635,8 @@ namespace TerminalDecay5Client
             this.Controls.Add(this.label51);
             this.Controls.Add(this.label52);
             this.Controls.Add(this.label53);
-            this.Controls.Add(this.label54);
-            this.Controls.Add(this.label55);
+            this.Controls.Add(this.lblBattleship);
+            this.Controls.Add(this.lblCarrier);
             this.Controls.Add(this.textBox6);
             this.Controls.Add(this.label56);
             this.Controls.Add(this.textBox7);
@@ -1661,11 +1661,11 @@ namespace TerminalDecay5Client
             this.Controls.Add(this.label22);
             this.Controls.Add(this.label23);
             this.Controls.Add(this.label24);
-            this.Controls.Add(this.label25);
-            this.Controls.Add(this.label26);
-            this.Controls.Add(this.label27);
-            this.Controls.Add(this.label28);
-            this.Controls.Add(this.label29);
+            this.Controls.Add(this.lblDestroyer);
+            this.Controls.Add(this.lblFrigate);
+            this.Controls.Add(this.lblBomber);
+            this.Controls.Add(this.lblGunship);
+            this.Controls.Add(this.lblScout);
             this.Controls.Add(this.label35);
             this.Controls.Add(this.label36);
             this.Controls.Add(this.textBox1);
@@ -1895,11 +1895,11 @@ namespace TerminalDecay5Client
         private Label label22;
         private Label label23;
         private Label label24;
-        private Label label25;
-        private Label label26;
-        private Label label27;
-        private Label label28;
-        private Label label29;
+        private Label lblDestroyer;
+        private Label lblFrigate;
+        private Label lblBomber;
+        private Label lblGunship;
+        private Label lblScout;
         private Label label35;
         private Label label36;
         private TextBox textBox1;
@@ -1924,8 +1924,8 @@ namespace TerminalDecay5Client
         private Label label51;
         private Label label52;
         private Label label53;
-        private Label label54;
-        private Label label55;
+        private Label lblBattleship;
+        private Label lblCarrier;
         private TextBox textBox6;
         private Label label56;
         private TextBox textBox7;
