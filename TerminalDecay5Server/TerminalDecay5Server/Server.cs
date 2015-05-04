@@ -140,6 +140,33 @@ namespace TerminalDecay5Server
             {
                 u.DefenceBuildQueue.Remove(item);
             }
+
+
+            remove = new List<BuildQueueItem>();
+
+            foreach (BuildQueueItem item in u.OffenceBuildQueue)
+            {
+                long itemCompleted = UpdateBuildQueue(item, u, Cmn.OffenceCost);
+
+                if (itemCompleted != 99999999999999)
+                {
+                    long toBuild = itemCompleted - item.Complete;
+                    u.outposts[item.OutpostId].Offence[item.ItemType] += toBuild;
+                    item.Complete = itemCompleted;
+
+                    if (item.Complete >= item.ItemTotal)
+                    {
+                        remove.Add(item);
+                    }
+                }
+            }
+
+
+            foreach (var item in remove)
+            {
+                u.OffenceBuildQueue.Remove(item);
+            }
+
         }
 
         private static long UpdateBuildQueue(BuildQueueItem item, Universe u, List<List<long>> cost)
@@ -347,6 +374,11 @@ namespace TerminalDecay5Server
                 SendOffenceBuildList(Transmitions, tcpClient);
             }
 
+            if (Transmitions[0][0] == MessageConstants.MessageTypes[12])
+            {
+                AddToOffenceBuildQueue(Transmitions, tcpClient);
+            }
+
             tcpClient.Close();
             client = null;
 
@@ -447,6 +479,18 @@ namespace TerminalDecay5Server
                 {
                     BuildQueueItem b = new BuildQueueItem(getPlayer(Transmitions[0][1]).PlayerID, getOutpost(Transmitions[2][0], Transmitions[2][1]).ID, Convert.ToInt32(Transmitions[1][i]), i, Cmn.DefenceCost[i]);
                     universe.DefenceBuildQueue.Add(b);
+                }
+            }
+        }
+
+        private void AddToOffenceBuildQueue(List<List<string>> Transmitions, TcpClient tcpClient)
+        {
+            for (int i = 0; i < Transmitions[1].Count - 1; i++)
+            {
+                if (Convert.ToInt32(Transmitions[1][i]) > 0)
+                {
+                    BuildQueueItem b = new BuildQueueItem(getPlayer(Transmitions[0][1]).PlayerID, getOutpost(Transmitions[2][0], Transmitions[2][1]).ID, Convert.ToInt32(Transmitions[1][i]), i, Cmn.OffenceCost[i]);
+                    universe.OffenceBuildQueue.Add(b);
                 }
             }
         }

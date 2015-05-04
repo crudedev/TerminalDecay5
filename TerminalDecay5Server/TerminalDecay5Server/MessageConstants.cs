@@ -26,6 +26,7 @@ namespace TerminalDecay5Server
             MessageTypes.Add(9, "SendDefBuildList~xstfzbyj");
             MessageTypes.Add(10, "SendDefBuildRequest}P{Lf:");
             MessageTypes.Add(11, "SendOffenceListad54$^$Fdc");
+            MessageTypes.Add(12, "SendOffenceBuildRequest%&");
         }
 
     }

@@ -734,7 +734,44 @@ namespace TerminalDecay5Client
 
         private void btnOffenceBuild_Click(object sender, EventArgs e)
         {
+            List<int> OffBuildList = new List<int>();
+            try
+            {
+                OffBuildList.Add(Convert.ToInt32(txtScout.Text));
+                OffBuildList.Add(Convert.ToInt32(txtGunship.Text));
+                OffBuildList.Add(Convert.ToInt32(txtBomber.Text));
+                OffBuildList.Add(Convert.ToInt32(txtFrigate.Text));
+                OffBuildList.Add(Convert.ToInt32(txtDestroyer.Text));
+                OffBuildList.Add(Convert.ToInt32(txtCarrier.Text));
+                OffBuildList.Add(Convert.ToInt32(txtBattleship.Text));
 
+                string request = MessageConstants.splitMessageToken + Convert.ToString(playerToken) + MessageConstants.nextMessageToken;
+
+                foreach (int i in OffBuildList)
+                {
+                    request += i + MessageConstants.splitMessageToken;
+                }
+
+                request += MessageConstants.nextMessageToken;
+                request += _currentX + MessageConstants.splitMessageToken + _currentY;
+
+                ServerConnection sc = new ServerConnection();
+                sc.ServerRequest(UpdateBuildPanel, 12, request);
+
+            }
+            catch (Exception)
+            {
+                txtScout.Text = "0";
+                txtGunship.Text = "0";
+                txtBomber.Text = "0";
+                txtFrigate.Text = "0";
+                txtDestroyer.Text = "0";
+                txtCarrier.Text = "0";
+                txtBattleship.Text = "0";
+
+                MessageBox.Show("Invalid Input");
+
+            }
         }
     }
 }
