@@ -116,6 +116,7 @@ namespace TerminalDecay5Client
             sc.ServerRequest(RenderMainMap, 3, MessageConstants.splitMessageToken + Convert.ToString(playerToken));
             showBuildmenu(false);
             showDefenceMenu(false);
+            showOffenceMenu(false);
         }
 
         private void RenderMainMap(List<List<string>> transmition)
@@ -244,6 +245,7 @@ namespace TerminalDecay5Client
             sc.ServerRequest(UpdateBuildPanel, 7, MessageConstants.splitMessageToken + Convert.ToString(playerToken) + MessageConstants.splitMessageToken + Convert.ToString(_currentX) + MessageConstants.splitMessageToken + Convert.ToString(_currentY));
             showBuildmenu(true);
             showDefenceMenu(false);
+            showOffenceMenu(false);
         }
 
         private void UpdateBuildPanel(List<List<string>> transmition)
@@ -474,6 +476,7 @@ namespace TerminalDecay5Client
             sc.ServerRequest(UpdateBuildDefPanel, 9, MessageConstants.splitMessageToken + Convert.ToString(playerToken) + MessageConstants.splitMessageToken + Convert.ToString(_currentX) + MessageConstants.splitMessageToken + Convert.ToString(_currentY)); ;
             showDefenceMenu(true);
             showBuildmenu(false);
+            showOffenceMenu(false);
         }
 
         private void UpdateBuildDefPanel(List<List<string>> transmition)
@@ -572,7 +575,166 @@ namespace TerminalDecay5Client
             }
         }
 
- 
+        private void BtnOffence_Click(object sender, EventArgs e)
+        {
+            ServerConnection sc = new ServerConnection();
+            sc.ServerRequest(UpdateBuildOffPanel, 11, MessageConstants.splitMessageToken + Convert.ToString(playerToken) + MessageConstants.splitMessageToken + Convert.ToString(_currentX) + MessageConstants.splitMessageToken + Convert.ToString(_currentY)); ;
+            showDefenceMenu(false);
+            showBuildmenu(false);
+            showOffenceMenu(true);
+        }
 
+        private void showOffenceMenu(bool show)
+        {
+
+            lblOffExtant.Visible = show;
+            lblOffBuild.Visible = show;
+            lblOffFuture.Visible = show;
+            lblOffCost.Visible = show;
+            lblOffenceAttack.Visible = show;
+            lblOffenceDefence.Visible = show;
+
+            lblScout.Visible = show;
+            lblGunship.Visible = show;
+            lblBomber.Visible = show;
+            lblFrigate.Visible = show;
+            lblDestroyer.Visible = show;
+            lblCarrier.Visible = show;
+            lblBattleship.Visible = show;
+
+            lblScoutBuild.Visible = show;
+            lblGunshipBuild.Visible = show;
+            lblBomberBuild.Visible = show;
+            lblFrigateBuild.Visible = show;
+            lblDestroyerBuild.Visible = show;
+            lblCarrierBuild.Visible = show;
+            lblBattleshipBuild.Visible = show;
+
+            lblCostScout.Visible = show;
+            lblCostGunship.Visible = show;
+            lblCostBomber.Visible = show;
+            lblCostFrigate.Visible = show;
+            lblCostDestroyer.Visible = show;
+            lblCostCarrier.Visible = show;
+            lblCostBattleship.Visible = show;
+
+            lblScoutAttack.Visible = show;
+            lblGunshipAttack.Visible = show;
+            lblBomberAttack.Visible = show;
+            lblFrigateAttack.Visible = show;
+            lblDestoyerAttack.Visible = show;
+            lblCarrierAttack.Visible = show;
+            lblBattleshipAttack.Visible = show;
+
+            lblScoutDefence.Visible = show;
+            lblGunshipDefence.Visible = show;
+            lblBomberDefence.Visible = show;
+            lblFrigateDefence.Visible = show;
+            lblDestroyerDefence.Visible = show;
+            lblCarrierDefence.Visible = show;
+            lblBattleshipDeffence.Visible = show;
+
+            txtScout.Visible = show;
+            txtGunship.Visible = show;
+            txtBomber.Visible = show;
+            txtFrigate.Visible = show;
+            txtDestroyer.Visible = show;
+            txtCarrier.Visible = show;
+            txtBattleship.Visible = show;
+
+            btnOffenceBuild.Visible = show;
+
+            MapCanvas.Visible = !show;
+
+            BtnBuild.Visible = !show;
+            btnBuildDefence.Visible = !show;
+            BtnDef.Visible = !show;
+            BtnOffence.Visible = !show;
+
+            LblSidePanel.Visible = !show;
+        }
+
+        private void UpdateBuildOffPanel(List<List<string>> transmition)
+        {
+            lblScout.Text = "scout: " + transmition[1][1];
+            lblGunship.Text = "gunship: " + transmition[1][2];
+            lblBomber.Text = "bomber: " + transmition[1][3];
+            lblFrigate.Text = "frigate: " + transmition[1][4];
+            lblDestroyer.Text = "destroyer: " + transmition[1][5];
+            lblCarrier.Text = "carrier:" + transmition[1][6];
+            lblBattleship.Text = "battleship:" + transmition[1][7];
+
+            lblCostScout.Text = updateBuildPanelCostString(transmition, 3);
+            lblCostGunship.Text = updateBuildPanelCostString(transmition, 4);
+            lblCostBomber.Text = updateBuildPanelCostString(transmition, 5);
+            lblCostFrigate.Text = updateBuildPanelCostString(transmition, 6);
+            lblCostDestroyer.Text = updateBuildPanelCostString(transmition, 7);
+            lblCostCarrier.Text = updateBuildPanelCostString(transmition, 8);
+            lblCostBattleship.Text = updateBuildPanelCostString(transmition, 9);
+
+
+
+            int nonEmptyValue = -1;
+
+            for (int i = 3; i < 9; i++)
+            {
+
+                foreach (string s in transmition[i])
+                {
+                    nonEmptyValue++;
+                    if (s != "0")
+                    {
+                        switch (nonEmptyValue)
+                        {
+                            case 0:
+                                lblProductionMine.Text = "metal: " + s;
+                                break;
+                            case 1:
+                                lblProductionWell.Text = "water: " + s;
+                                break;
+                            case 2:
+                                lblProductionHabitat.Text = "population: " + s;
+                                break;
+                            case 3:
+                                lblProductionFarm.Text = "food: " + s;
+                                break;
+                            case 4:
+                                lblProductionSolar.Text = "power: " + s;
+                                break;
+                        }
+                    }
+                }
+                nonEmptyValue = -1;
+            }
+
+            lblScoutBuild.Text = transmition[11][0];
+            lblGunshipBuild.Text = transmition[11][1];
+            lblBomberBuild.Text = transmition[11][2];
+            lblFrigateBuild.Text = transmition[11][3];
+            lblDestroyerBuild.Text = transmition[11][4];
+            lblCarrierBuild.Text = transmition[11][5];
+            lblBattleshipBuild.Text = transmition[11][6];
+
+            lblScoutAttack.Text = transmition[12][0];
+            lblGunshipAttack.Text = transmition[12][1];
+            lblBomberAttack.Text = transmition[12][2];
+            lblFrigateAttack.Text = transmition[12][3];
+            lblDestoyerAttack.Text = transmition[12][4];
+            lblCarrierAttack.Text = transmition[12][5];
+            lblBattleshipAttack.Text = transmition[12][6];
+
+            lblScoutDefence.Text = transmition[13][0];
+            lblGunshipDefence.Text = transmition[13][1];
+            lblBomberDefence.Text = transmition[13][2];
+            lblFrigateDefence.Text = transmition[13][3];
+            lblDestroyerDefence.Text = transmition[13][4];
+            lblCarrierDefence.Text = transmition[13][5];
+            lblBattleshipDeffence.Text = transmition[13][6];
+        }
+
+        private void btnOffenceBuild_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

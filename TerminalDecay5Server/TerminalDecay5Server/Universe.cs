@@ -9,7 +9,7 @@ namespace TerminalDecay5Server
         public List<Outpost> outposts;
         public List<BuildQueueItem> BuildingBuildQueue;
         public List<BuildQueueItem> DefenceBuildQueue;
-        public List<BuildQueueItem> UnitBuildQueue;
+        public List<BuildQueueItem> OffenceBuildQueue;
         public List<Player> players;
         public Random r;
 
@@ -18,7 +18,7 @@ namespace TerminalDecay5Server
             Maptiles = new List<MapTile>();
             BuildingBuildQueue = new List<BuildQueueItem>();
             DefenceBuildQueue = new List<BuildQueueItem>();
-            UnitBuildQueue = new List<BuildQueueItem>();
+            OffenceBuildQueue = new List<BuildQueueItem>();
             outposts = new List<Outpost>();
             players = new List<Player>();
 

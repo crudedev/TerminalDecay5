@@ -203,7 +203,6 @@ namespace TerminalDecay5Server
             return itemCompleted;
         }
 
-
         private void ListenForClients()
         {
             _tcpListener.Start();
@@ -343,8 +342,100 @@ namespace TerminalDecay5Server
                 AddToDefenceBuildQueue(Transmitions, tcpClient);
             }
 
+            if (Transmitions[0][0] == MessageConstants.MessageTypes[11])
+            {
+                SendOffenceBuildList(Transmitions, tcpClient);
+            }
+
             tcpClient.Close();
             client = null;
+
+        }
+
+        private void SendOffenceBuildList(List<List<string>> Transmitions, TcpClient tcpClient)
+        {
+            string response = MessageConstants.MessageTypes[11] + MessageConstants.nextMessageToken;
+            response += SendOffenceOntile(Transmitions);
+            response += MessageConstants.nextMessageToken;
+
+            foreach (List<long> d in Cmn.OffenceCost)
+            {
+                foreach (long val in d)
+                {
+                    response += val + MessageConstants.splitMessageToken;
+                }
+
+                response += MessageConstants.nextMessageToken;
+            }
+
+            foreach (long prod in Cmn.OffenceAttack)
+            {
+                response += prod + MessageConstants.splitMessageToken;
+            }
+
+            response += MessageConstants.nextMessageToken;
+
+            List<long> inProgress = new List<long>();
+            foreach (var item in Cmn.OffenceType)
+            {
+                inProgress.Add(0);
+            }
+
+            Player pl = getPlayer(Transmitions[0][1]);
+
+            foreach (var item in universe.OffenceBuildQueue)
+            {
+                if (item.PlayerId == pl.PlayerID)
+                {
+                    inProgress[item.ItemType] = item.ItemTotal - item.Complete;
+                }
+            }
+
+            foreach (var item in inProgress)
+            {
+                response += item + MessageConstants.splitMessageToken;
+            }
+
+            response += MessageConstants.nextMessageToken;
+
+            foreach (var item in Cmn.OffenceAttack)
+            {
+                response += item + MessageConstants.splitMessageToken;
+            }
+
+            response += MessageConstants.nextMessageToken;
+
+            foreach (var item in Cmn.OffenceDefence)
+            {
+                response += item + MessageConstants.splitMessageToken;
+            }
+            
+            response += MessageConstants.messageCompleteToken;
+            NetworkStream clientStream = tcpClient.GetStream();
+            ASCIIEncoding encoder = new ASCIIEncoding();
+
+            byte[] buffer = encoder.GetBytes(response);
+
+            clientStream.Write(buffer, 0, buffer.Length);
+            clientStream.Flush();
+        }
+
+        private string SendOffenceOntile(List<List<string>> Transmitions)
+        {
+            string response = "";
+            
+            Outpost op = getOutpost(Transmitions[0][2], Transmitions[0][3]);
+
+            if (op == null)
+            {
+                response += "-1" + MessageConstants.splitMessageToken;
+            }
+            else
+            {
+                response += op.OwnerID + MessageConstants.splitMessageToken + op.Offence[Cmn.OffenceType[Cmn.OffTenum.Scout]] + MessageConstants.splitMessageToken + op.Offence[Cmn.OffenceType[Cmn.OffTenum.Gunship]] + MessageConstants.splitMessageToken + op.Offence[Cmn.OffenceType[Cmn.OffTenum.Bomber]] + MessageConstants.splitMessageToken + op.Offence[Cmn.OffenceType[Cmn.OffTenum.Frigate]] + MessageConstants.splitMessageToken + op.Offence[Cmn.OffenceType[Cmn.OffTenum.Destroyer]] + MessageConstants.splitMessageToken + op.Offence[Cmn.OffenceType[Cmn.OffTenum.Carrier]] + MessageConstants.splitMessageToken + op.Offence[Cmn.OffenceType[Cmn.OffTenum.Battleship]] + MessageConstants.nextMessageToken; ;
+            }
+
+            return response;
 
         }
 
@@ -633,6 +724,8 @@ namespace TerminalDecay5Server
 
                 o.Defence[Cmn.DefenceType[Cmn.DefTenum.Patrol]] = 5;
                 o.Defence[Cmn.DefenceType[Cmn.DefTenum.Gunner]] = 2;
+
+                o.Offence[Cmn.OffenceType[Cmn.OffTenum.Scout]] = 3;
 
                 universe.outposts.Add(o);
 

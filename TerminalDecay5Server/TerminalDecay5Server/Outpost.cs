@@ -17,6 +17,8 @@ namespace TerminalDecay5Server
 
         public List<long> Defence;
 
+        public List<long> Offence;
+
         //public int mine;
         //public int well;
         //public int habitat;
@@ -41,6 +43,12 @@ namespace TerminalDecay5Server
             foreach (var d in Cmn.DefenceType)
             {
                 Defence.Add(0);
+            }
+
+            Offence = new List<long>();
+            foreach (var o in Cmn.OffenceType)
+            {
+                Offence.Add(0);
             }
         }
     }
