@@ -15,9 +15,13 @@ namespace TerminalDecay5Client
         int CurrentView = -1;
         //0 = resource;
         //1 = buildview;
+        //2 = attackView
 
         private int _currentX;
         private int _currentY;
+
+        private int _targetX;
+        private int _targetY;
 
         public Map()
         {
@@ -59,8 +63,7 @@ namespace TerminalDecay5Client
         {
             ServerConnection sc = new ServerConnection();
             sc.ServerRequest(RenderResMap, 0, MessageConstants.splitMessageToken + Convert.ToString(playerToken));
-            showBuildmenu(false);
-            showDefenceMenu(false);
+            hideMenus();
         }
 
         private void RenderResMap(List<List<string>> transmition)
@@ -114,9 +117,7 @@ namespace TerminalDecay5Client
         {
             ServerConnection sc = new ServerConnection();
             sc.ServerRequest(RenderMainMap, 3, MessageConstants.splitMessageToken + Convert.ToString(playerToken));
-            showBuildmenu(false);
-            showDefenceMenu(false);
-            showOffenceMenu(false);
+            hideMenus();
         }
 
         private void RenderMainMap(List<List<string>> transmition)
@@ -192,6 +193,8 @@ namespace TerminalDecay5Client
             mx = (mx - (mx % 26)) / 26;
             my = (my - (my % 26)) / 26;
 
+            LblSelectedBase.Text = "";
+
             if (CurrentView == 0)
             {
                 if (m.Button == MouseButtons.Left)
@@ -212,7 +215,57 @@ namespace TerminalDecay5Client
                 }
             }
 
+            if(CurrentView == 2)
+            {
+                if (m.Button == MouseButtons.Left)
+                {
+                    _targetX = mx;
+                    _targetY = my;
+
+                    //get the current offence in that place now, and allow them to use it;
+                    ServerConnection sc = new ServerConnection();
+                    sc.ServerRequest(DisplayAttack,13, MessageConstants.splitMessageToken + Convert.ToString(playerToken) + MessageConstants.splitMessageToken + Convert.ToString(_currentX) + MessageConstants.splitMessageToken + Convert.ToString(_currentY) + MessageConstants.splitMessageToken);
+
+                }
+            }
+
+            hideMenus();
+        }
+
+
+        private void DisplayAttack(List<List<string>> transmition)
+        {
+
+        }
+        
+        private void showAttackMenu(bool show)
+        {
+            lblAttaackFrigate.Visible = show;
+            lblAttackBattleship.Visible = show;
+            lblAttackBomber.Visible = show;
+            lblAttackCarrier.Visible = show;
+            lblAttackDestroyer.Visible = show;
+            lblAttackGunship.Visible = show;
+            lblAttackScout.Visible = show;
+
+            txtAttackBattleship.Visible = show;
+            txtAttackBomber.Visible = show;
+            txtAttackCarrier.Visible = show;
+            txtAttackDestroyer.Visible = show;
+            txtAttackFrigate.Visible = show;
+            txtAttackGunship.Visible = show;
+            txtAttackScout.Visible = show;
+
+            btnSendAttack.Visible = show;
+        }
+
+        private void hideMenus()
+        {
             showBuildmenu(false);
+            showDefenceMenu(false);
+            showOffenceMenu(false);
+            showAttackMenu(false);
+
         }
 
         private void UpdateSidePanel(List<List<string>> transmition)
@@ -223,17 +276,16 @@ namespace TerminalDecay5Client
 
             }
 
-            if (transmition[0][0] == MessageConstants.MessageTypes[5])
+             if (transmition[0][0] == MessageConstants.MessageTypes[5])
             {
                 if (transmition[1][0] == "-1")
                 {
                     LblSidePanel.Text = "unoccipied land";
                 }
-                else
+
+                if (transmition[1][0] == "Enemy")
                 {
-                    LblSidePanel.Text = "Empty: " + transmition[1][1] + " farm: " + transmition[1][2] + " habitat: " + transmition[1][3] + " mine:" + transmition[1][4] + " solarplant: " + transmition[1][5] + " well: " + transmition[1][6] + " fabricator: " + transmition[1][7] + Environment.NewLine;
-                    LblSidePanel.Text += "Patrol: " + transmition[2][0] + " gunner: " + transmition[2][1] + " turret:" + transmition[2][2] + " artillery:" + transmition[2][3] + " drone base:" + transmition[2][4];
-                    BtnBuild.Visible = true;
+                    LblSidePanel.Text = "Land occupied by other forces";
                 }
             }
         }
@@ -243,9 +295,9 @@ namespace TerminalDecay5Client
             //show the build list
             ServerConnection sc = new ServerConnection();
             sc.ServerRequest(UpdateBuildPanel, 7, MessageConstants.splitMessageToken + Convert.ToString(playerToken) + MessageConstants.splitMessageToken + Convert.ToString(_currentX) + MessageConstants.splitMessageToken + Convert.ToString(_currentY));
+
+            hideMenus();
             showBuildmenu(true);
-            showDefenceMenu(false);
-            showOffenceMenu(false);
         }
 
         private void UpdateBuildPanel(List<List<string>> transmition)
@@ -474,9 +526,8 @@ namespace TerminalDecay5Client
             //show the build list
             ServerConnection sc = new ServerConnection();
             sc.ServerRequest(UpdateBuildDefPanel, 9, MessageConstants.splitMessageToken + Convert.ToString(playerToken) + MessageConstants.splitMessageToken + Convert.ToString(_currentX) + MessageConstants.splitMessageToken + Convert.ToString(_currentY)); ;
+            hideMenus();
             showDefenceMenu(true);
-            showBuildmenu(false);
-            showOffenceMenu(false);
         }
 
         private void UpdateBuildDefPanel(List<List<string>> transmition)
@@ -579,8 +630,7 @@ namespace TerminalDecay5Client
         {
             ServerConnection sc = new ServerConnection();
             sc.ServerRequest(UpdateBuildOffPanel, 11, MessageConstants.splitMessageToken + Convert.ToString(playerToken) + MessageConstants.splitMessageToken + Convert.ToString(_currentX) + MessageConstants.splitMessageToken + Convert.ToString(_currentY)); ;
-            showDefenceMenu(false);
-            showBuildmenu(false);
+            hideMenus();
             showOffenceMenu(true);
         }
 
@@ -772,6 +822,13 @@ namespace TerminalDecay5Client
                 MessageBox.Show("Invalid Input");
 
             }
+        }
+
+        private void BtnAttack_Click(object sender, EventArgs e)
+        {
+            LblSidePanel.Text = "SelectTarget";
+            CurrentView = 2;
+            
         }
     }
 }

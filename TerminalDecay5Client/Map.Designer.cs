@@ -180,6 +180,23 @@ namespace TerminalDecay5Client
             this.lblCarrierAttack = new System.Windows.Forms.Label();
             this.BtnOffence = new System.Windows.Forms.Button();
             this.btnOffenceBuild = new System.Windows.Forms.Button();
+            this.LblSelectedBase = new System.Windows.Forms.Label();
+            this.BtnAttack = new System.Windows.Forms.Button();
+            this.lblAttackBattleship = new System.Windows.Forms.Label();
+            this.lblAttackCarrier = new System.Windows.Forms.Label();
+            this.lblAttackDestroyer = new System.Windows.Forms.Label();
+            this.lblAttaackFrigate = new System.Windows.Forms.Label();
+            this.lblAttackBomber = new System.Windows.Forms.Label();
+            this.lblAttackGunship = new System.Windows.Forms.Label();
+            this.lblAttackScout = new System.Windows.Forms.Label();
+            this.txtAttackBattleship = new System.Windows.Forms.TextBox();
+            this.txtAttackCarrier = new System.Windows.Forms.TextBox();
+            this.txtAttackDestroyer = new System.Windows.Forms.TextBox();
+            this.txtAttackFrigate = new System.Windows.Forms.TextBox();
+            this.txtAttackBomber = new System.Windows.Forms.TextBox();
+            this.txtAttackGunship = new System.Windows.Forms.TextBox();
+            this.txtAttackScout = new System.Windows.Forms.TextBox();
+            this.btnSendAttack = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.MapCanvas)).BeginInit();
             this.SuspendLayout();
             // 
@@ -716,7 +733,7 @@ namespace TerminalDecay5Client
             // 
             // BtnDef
             // 
-            this.BtnDef.Location = new System.Drawing.Point(901, 47);
+            this.BtnDef.Location = new System.Drawing.Point(886, 47);
             this.BtnDef.Name = "BtnDef";
             this.BtnDef.Size = new System.Drawing.Size(100, 23);
             this.BtnDef.TabIndex = 55;
@@ -1628,7 +1645,7 @@ namespace TerminalDecay5Client
             // 
             // BtnOffence
             // 
-            this.BtnOffence.Location = new System.Drawing.Point(1019, 47);
+            this.BtnOffence.Location = new System.Drawing.Point(992, 47);
             this.BtnOffence.Name = "BtnOffence";
             this.BtnOffence.Size = new System.Drawing.Size(100, 23);
             this.BtnOffence.TabIndex = 154;
@@ -1648,10 +1665,190 @@ namespace TerminalDecay5Client
             this.btnOffenceBuild.Visible = false;
             this.btnOffenceBuild.Click += new System.EventHandler(this.btnOffenceBuild_Click);
             // 
+            // LblSelectedBase
+            // 
+            this.LblSelectedBase.AutoSize = true;
+            this.LblSelectedBase.Location = new System.Drawing.Point(12, 137);
+            this.LblSelectedBase.Name = "LblSelectedBase";
+            this.LblSelectedBase.Size = new System.Drawing.Size(76, 13);
+            this.LblSelectedBase.TabIndex = 156;
+            this.LblSelectedBase.Text = "Selected Base";
+            // 
+            // BtnAttack
+            // 
+            this.BtnAttack.Location = new System.Drawing.Point(1098, 47);
+            this.BtnAttack.Name = "BtnAttack";
+            this.BtnAttack.Size = new System.Drawing.Size(62, 23);
+            this.BtnAttack.TabIndex = 157;
+            this.BtnAttack.Text = "Attack";
+            this.BtnAttack.UseVisualStyleBackColor = true;
+            this.BtnAttack.Visible = false;
+            this.BtnAttack.Click += new System.EventHandler(this.BtnAttack_Click);
+            // 
+            // lblAttackBattleship
+            // 
+            this.lblAttackBattleship.AutoSize = true;
+            this.lblAttackBattleship.Location = new System.Drawing.Point(1168, 508);
+            this.lblAttackBattleship.Name = "lblAttackBattleship";
+            this.lblAttackBattleship.Size = new System.Drawing.Size(49, 13);
+            this.lblAttackBattleship.TabIndex = 164;
+            this.lblAttackBattleship.Text = "batleship";
+            this.lblAttackBattleship.Visible = false;
+            // 
+            // lblAttackCarrier
+            // 
+            this.lblAttackCarrier.AutoSize = true;
+            this.lblAttackCarrier.Location = new System.Drawing.Point(1168, 462);
+            this.lblAttackCarrier.Name = "lblAttackCarrier";
+            this.lblAttackCarrier.Size = new System.Drawing.Size(36, 13);
+            this.lblAttackCarrier.TabIndex = 163;
+            this.lblAttackCarrier.Text = "carrier";
+            this.lblAttackCarrier.Visible = false;
+            // 
+            // lblAttackDestroyer
+            // 
+            this.lblAttackDestroyer.AutoSize = true;
+            this.lblAttackDestroyer.Location = new System.Drawing.Point(1168, 416);
+            this.lblAttackDestroyer.Name = "lblAttackDestroyer";
+            this.lblAttackDestroyer.Size = new System.Drawing.Size(50, 13);
+            this.lblAttackDestroyer.TabIndex = 162;
+            this.lblAttackDestroyer.Text = "destroyer";
+            this.lblAttackDestroyer.Visible = false;
+            // 
+            // lblAttaackFrigate
+            // 
+            this.lblAttaackFrigate.AutoSize = true;
+            this.lblAttaackFrigate.Location = new System.Drawing.Point(1168, 370);
+            this.lblAttaackFrigate.Name = "lblAttaackFrigate";
+            this.lblAttaackFrigate.Size = new System.Drawing.Size(36, 13);
+            this.lblAttaackFrigate.TabIndex = 161;
+            this.lblAttaackFrigate.Text = "frigate";
+            this.lblAttaackFrigate.Visible = false;
+            // 
+            // lblAttackBomber
+            // 
+            this.lblAttackBomber.AutoSize = true;
+            this.lblAttackBomber.Location = new System.Drawing.Point(1168, 326);
+            this.lblAttackBomber.Name = "lblAttackBomber";
+            this.lblAttackBomber.Size = new System.Drawing.Size(45, 13);
+            this.lblAttackBomber.TabIndex = 160;
+            this.lblAttackBomber.Text = "bomber:";
+            this.lblAttackBomber.Visible = false;
+            // 
+            // lblAttackGunship
+            // 
+            this.lblAttackGunship.AutoSize = true;
+            this.lblAttackGunship.Location = new System.Drawing.Point(1168, 280);
+            this.lblAttackGunship.Name = "lblAttackGunship";
+            this.lblAttackGunship.Size = new System.Drawing.Size(47, 13);
+            this.lblAttackGunship.TabIndex = 159;
+            this.lblAttackGunship.Text = "gunship:";
+            this.lblAttackGunship.Visible = false;
+            // 
+            // lblAttackScout
+            // 
+            this.lblAttackScout.AutoSize = true;
+            this.lblAttackScout.Location = new System.Drawing.Point(1168, 235);
+            this.lblAttackScout.Name = "lblAttackScout";
+            this.lblAttackScout.Size = new System.Drawing.Size(36, 13);
+            this.lblAttackScout.TabIndex = 158;
+            this.lblAttackScout.Text = "scout:";
+            this.lblAttackScout.Visible = false;
+            // 
+            // txtAttackBattleship
+            // 
+            this.txtAttackBattleship.Location = new System.Drawing.Point(1282, 509);
+            this.txtAttackBattleship.Name = "txtAttackBattleship";
+            this.txtAttackBattleship.Size = new System.Drawing.Size(100, 20);
+            this.txtAttackBattleship.TabIndex = 171;
+            this.txtAttackBattleship.Text = "0";
+            this.txtAttackBattleship.Visible = false;
+            // 
+            // txtAttackCarrier
+            // 
+            this.txtAttackCarrier.Location = new System.Drawing.Point(1282, 463);
+            this.txtAttackCarrier.Name = "txtAttackCarrier";
+            this.txtAttackCarrier.Size = new System.Drawing.Size(100, 20);
+            this.txtAttackCarrier.TabIndex = 170;
+            this.txtAttackCarrier.Text = "0";
+            this.txtAttackCarrier.Visible = false;
+            // 
+            // txtAttackDestroyer
+            // 
+            this.txtAttackDestroyer.Location = new System.Drawing.Point(1282, 417);
+            this.txtAttackDestroyer.Name = "txtAttackDestroyer";
+            this.txtAttackDestroyer.Size = new System.Drawing.Size(100, 20);
+            this.txtAttackDestroyer.TabIndex = 169;
+            this.txtAttackDestroyer.Text = "0";
+            this.txtAttackDestroyer.Visible = false;
+            // 
+            // txtAttackFrigate
+            // 
+            this.txtAttackFrigate.Location = new System.Drawing.Point(1282, 371);
+            this.txtAttackFrigate.Name = "txtAttackFrigate";
+            this.txtAttackFrigate.Size = new System.Drawing.Size(100, 20);
+            this.txtAttackFrigate.TabIndex = 168;
+            this.txtAttackFrigate.Text = "0";
+            this.txtAttackFrigate.Visible = false;
+            // 
+            // txtAttackBomber
+            // 
+            this.txtAttackBomber.Location = new System.Drawing.Point(1282, 327);
+            this.txtAttackBomber.Name = "txtAttackBomber";
+            this.txtAttackBomber.Size = new System.Drawing.Size(100, 20);
+            this.txtAttackBomber.TabIndex = 167;
+            this.txtAttackBomber.Text = "0";
+            this.txtAttackBomber.Visible = false;
+            // 
+            // txtAttackGunship
+            // 
+            this.txtAttackGunship.Location = new System.Drawing.Point(1282, 281);
+            this.txtAttackGunship.Name = "txtAttackGunship";
+            this.txtAttackGunship.Size = new System.Drawing.Size(100, 20);
+            this.txtAttackGunship.TabIndex = 166;
+            this.txtAttackGunship.Text = "0";
+            this.txtAttackGunship.Visible = false;
+            // 
+            // txtAttackScout
+            // 
+            this.txtAttackScout.Location = new System.Drawing.Point(1282, 236);
+            this.txtAttackScout.Name = "txtAttackScout";
+            this.txtAttackScout.Size = new System.Drawing.Size(100, 20);
+            this.txtAttackScout.TabIndex = 165;
+            this.txtAttackScout.Text = "0";
+            this.txtAttackScout.Visible = false;
+            // 
+            // btnSendAttack
+            // 
+            this.btnSendAttack.Location = new System.Drawing.Point(1351, 548);
+            this.btnSendAttack.Name = "btnSendAttack";
+            this.btnSendAttack.Size = new System.Drawing.Size(119, 23);
+            this.btnSendAttack.TabIndex = 172;
+            this.btnSendAttack.Text = "Attack";
+            this.btnSendAttack.UseVisualStyleBackColor = true;
+            this.btnSendAttack.Visible = false;
+            // 
             // Map
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.ClientSize = new System.Drawing.Size(1880, 831);
+            this.Controls.Add(this.btnSendAttack);
+            this.Controls.Add(this.txtAttackBattleship);
+            this.Controls.Add(this.txtAttackCarrier);
+            this.Controls.Add(this.txtAttackDestroyer);
+            this.Controls.Add(this.txtAttackFrigate);
+            this.Controls.Add(this.txtAttackBomber);
+            this.Controls.Add(this.txtAttackGunship);
+            this.Controls.Add(this.txtAttackScout);
+            this.Controls.Add(this.lblAttackBattleship);
+            this.Controls.Add(this.lblAttackCarrier);
+            this.Controls.Add(this.lblAttackDestroyer);
+            this.Controls.Add(this.lblAttaackFrigate);
+            this.Controls.Add(this.lblAttackBomber);
+            this.Controls.Add(this.lblAttackGunship);
+            this.Controls.Add(this.lblAttackScout);
+            this.Controls.Add(this.BtnAttack);
+            this.Controls.Add(this.LblSelectedBase);
             this.Controls.Add(this.btnOffenceBuild);
             this.Controls.Add(this.BtnOffence);
             this.Controls.Add(this.lblBattleshipDeffence);
@@ -1959,6 +2156,23 @@ namespace TerminalDecay5Client
         private Label lblCarrierAttack;
         private Button BtnOffence;
         private Button btnOffenceBuild;
+        private Label LblSelectedBase;
+        private Button BtnAttack;
+        private Label lblAttackBattleship;
+        private Label lblAttackCarrier;
+        private Label lblAttackDestroyer;
+        private Label lblAttaackFrigate;
+        private Label lblAttackBomber;
+        private Label lblAttackGunship;
+        private Label lblAttackScout;
+        private TextBox txtAttackBattleship;
+        private TextBox txtAttackCarrier;
+        private TextBox txtAttackDestroyer;
+        private TextBox txtAttackFrigate;
+        private TextBox txtAttackBomber;
+        private TextBox txtAttackGunship;
+        private TextBox txtAttackScout;
+        private Button btnSendAttack;
     }
 }
 

@@ -248,6 +248,8 @@ namespace TerminalDecay5Server
 
         private void HandleClientComm(object client)
         {
+
+            #region networking
             TcpClient tcpClient = (TcpClient)client;
             NetworkStream clientStream = tcpClient.GetStream();
 
@@ -295,6 +297,9 @@ namespace TerminalDecay5Server
 
             //message has successfully been received
 
+            #endregion
+
+            #region Message Proccessing
 
             transmitionString = transmitionString.Replace(MessageConstants.messageCompleteToken, "");
 
@@ -313,6 +318,9 @@ namespace TerminalDecay5Server
 
             }
 
+            #endregion
+
+            #region message dispatch
 
             if (Transmitions[0][0] == MessageConstants.MessageTypes[0])
             {
@@ -379,9 +387,20 @@ namespace TerminalDecay5Server
                 AddToOffenceBuildQueue(Transmitions, tcpClient);
             }
 
+            if (Transmitions[0][0] == MessageConstants.MessageTypes[13])
+            {
+                SendOffenceForAttack(Transmitions, tcpClient);
+            }
+
             tcpClient.Close();
             client = null;
 
+            #endregion
+        }
+
+        private void SendOffenceForAttack(List<List<string>> Transmitions, TcpClient tcpClient)
+        {
+            SendOffenceOntile(Transmitions);
         }
 
         private void SendOffenceBuildList(List<List<string>> Transmitions, TcpClient tcpClient)
@@ -441,7 +460,7 @@ namespace TerminalDecay5Server
             {
                 response += item + MessageConstants.splitMessageToken;
             }
-            
+
             response += MessageConstants.messageCompleteToken;
             NetworkStream clientStream = tcpClient.GetStream();
             ASCIIEncoding encoder = new ASCIIEncoding();
@@ -455,7 +474,7 @@ namespace TerminalDecay5Server
         private string SendOffenceOntile(List<List<string>> Transmitions)
         {
             string response = "";
-            
+
             Outpost op = getOutpost(Transmitions[0][2], Transmitions[0][3]);
 
             if (op == null)
@@ -464,7 +483,11 @@ namespace TerminalDecay5Server
             }
             else
             {
-                response += op.OwnerID + MessageConstants.splitMessageToken + op.Offence[Cmn.OffenceType[Cmn.OffTenum.Scout]] + MessageConstants.splitMessageToken + op.Offence[Cmn.OffenceType[Cmn.OffTenum.Gunship]] + MessageConstants.splitMessageToken + op.Offence[Cmn.OffenceType[Cmn.OffTenum.Bomber]] + MessageConstants.splitMessageToken + op.Offence[Cmn.OffenceType[Cmn.OffTenum.Frigate]] + MessageConstants.splitMessageToken + op.Offence[Cmn.OffenceType[Cmn.OffTenum.Destroyer]] + MessageConstants.splitMessageToken + op.Offence[Cmn.OffenceType[Cmn.OffTenum.Carrier]] + MessageConstants.splitMessageToken + op.Offence[Cmn.OffenceType[Cmn.OffTenum.Battleship]] + MessageConstants.nextMessageToken; ;
+                response += op.OwnerID;
+                foreach (var item in Cmn.OffenceType)
+                {
+                    response += MessageConstants.splitMessageToken + op.Offence[item.Value];
+                }
             }
 
             return response;
@@ -671,7 +694,7 @@ namespace TerminalDecay5Server
 
             bool auth = false;
 
-            if (getPlayer(message[0][1]) != null) ;
+            if (getPlayer(message[0][1]) != null)
             {
                 auth = true;
             }
@@ -910,7 +933,7 @@ namespace TerminalDecay5Server
         private string SendDefenceOnTile(List<List<string>> message)
         {
             string response = "";
-            
+
             Outpost op = getOutpost(message[0][2], message[0][3]);
 
             if (op == null)
@@ -937,8 +960,16 @@ namespace TerminalDecay5Server
             }
             else
             {
-                long freeBuild = op.Capacity - (op.Buildings[Cmn.BuildType[Cmn.BldTenum.Farm]] + op.Buildings[Cmn.BuildType[Cmn.BldTenum.Habitat]] + op.Buildings[Cmn.BuildType[Cmn.BldTenum.Mine]] + op.Buildings[Cmn.BuildType[Cmn.BldTenum.SolarPLant]] + op.Buildings[Cmn.BuildType[Cmn.BldTenum.Well]] + op.Buildings[Cmn.BuildType[Cmn.BldTenum.Fabricator]]);
-                response += op.OwnerID + MessageConstants.splitMessageToken + freeBuild + MessageConstants.splitMessageToken + op.Buildings[Cmn.BuildType[Cmn.BldTenum.Farm]] + MessageConstants.splitMessageToken + op.Buildings[Cmn.BuildType[Cmn.BldTenum.Habitat]] + MessageConstants.splitMessageToken + op.Buildings[Cmn.BuildType[Cmn.BldTenum.Mine]] + MessageConstants.splitMessageToken + op.Buildings[Cmn.BuildType[Cmn.BldTenum.SolarPLant]] + MessageConstants.splitMessageToken + op.Buildings[Cmn.BuildType[Cmn.BldTenum.Well]] + MessageConstants.splitMessageToken + op.Buildings[Cmn.BuildType[Cmn.BldTenum.Fabricator]] + MessageConstants.nextMessageToken; ;
+                Player pl = getPlayer(message[0][1]);
+                if (pl.PlayerID == op.OwnerID)
+                {
+                    long freeBuild = op.Capacity - (op.Buildings[Cmn.BuildType[Cmn.BldTenum.Farm]] + op.Buildings[Cmn.BuildType[Cmn.BldTenum.Habitat]] + op.Buildings[Cmn.BuildType[Cmn.BldTenum.Mine]] + op.Buildings[Cmn.BuildType[Cmn.BldTenum.SolarPLant]] + op.Buildings[Cmn.BuildType[Cmn.BldTenum.Well]] + op.Buildings[Cmn.BuildType[Cmn.BldTenum.Fabricator]]);
+                    response += op.OwnerID + MessageConstants.splitMessageToken + freeBuild + MessageConstants.splitMessageToken + op.Buildings[Cmn.BuildType[Cmn.BldTenum.Farm]] + MessageConstants.splitMessageToken + op.Buildings[Cmn.BuildType[Cmn.BldTenum.Habitat]] + MessageConstants.splitMessageToken + op.Buildings[Cmn.BuildType[Cmn.BldTenum.Mine]] + MessageConstants.splitMessageToken + op.Buildings[Cmn.BuildType[Cmn.BldTenum.SolarPLant]] + MessageConstants.splitMessageToken + op.Buildings[Cmn.BuildType[Cmn.BldTenum.Well]] + MessageConstants.splitMessageToken + op.Buildings[Cmn.BuildType[Cmn.BldTenum.Fabricator]] + MessageConstants.nextMessageToken; ;
+                }
+                else
+                {
+                    response += "Enemy" + MessageConstants.splitMessageToken + op.OwnerID + MessageConstants.splitMessageToken;
+                }
             }
 
             return response;
