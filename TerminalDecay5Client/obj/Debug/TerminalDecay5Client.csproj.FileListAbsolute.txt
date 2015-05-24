@@ -102,8 +102,8 @@ C:\TerminalDecay5006\TerminalDecay5Client\obj\Debug\TerminalDecay5Client.Propert
 C:\TerminalDecay5006\TerminalDecay5Client\obj\Debug\TerminalDecay5Client.csproj.GenerateResource.Cache
 C:\TerminalDecay5006\TerminalDecay5Client\obj\Debug\TerminalDecay5Client.exe
 C:\TerminalDecay5006\TerminalDecay5Client\obj\Debug\TerminalDecay5Client.pdb
-C:\Users\D\Dropbox\GitHub\TerminalDecay5\TerminalDecay5Client\bin\Debug\TerminalDecay5Client.exe.config
 C:\Users\D\Dropbox\GitHub\TerminalDecay5\TerminalDecay5Client\bin\Debug\TerminalDecay5Client.exe
+C:\Users\D\Dropbox\GitHub\TerminalDecay5\TerminalDecay5Client\bin\Debug\TerminalDecay5Client.exe.config
 C:\Users\D\Dropbox\GitHub\TerminalDecay5\TerminalDecay5Client\bin\Debug\TerminalDecay5Client.pdb
 C:\Users\D\Dropbox\GitHub\TerminalDecay5\TerminalDecay5Client\bin\Debug\TerminalDecay5Server.exe
 C:\Users\D\Dropbox\GitHub\TerminalDecay5\TerminalDecay5Client\bin\Debug\TerminalDecay5Server.pdb

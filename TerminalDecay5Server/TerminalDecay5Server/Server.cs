@@ -400,7 +400,23 @@ namespace TerminalDecay5Server
 
         private void SendOffenceForAttack(List<List<string>> Transmitions, TcpClient tcpClient)
         {
-            SendOffenceOntile(Transmitions);
+            Player pl = getPlayer(Transmitions[0][1]);
+            if (pl != null)
+            {
+               string response = MessageConstants.MessageTypes[13] + MessageConstants.nextMessageToken;
+
+               response += SendOffenceOntile(Transmitions);
+
+                response += MessageConstants.messageCompleteToken;
+                NetworkStream clientStream = tcpClient.GetStream();
+                ASCIIEncoding encoder = new ASCIIEncoding();
+
+                byte[] buffer = encoder.GetBytes(response);
+
+                clientStream.Write(buffer, 0, buffer.Length);
+                clientStream.Flush();
+            }
+
         }
 
         private void SendOffenceBuildList(List<List<string>> Transmitions, TcpClient tcpClient)

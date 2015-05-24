@@ -195,6 +195,8 @@ namespace TerminalDecay5Client
 
             LblSelectedBase.Text = "";
 
+            hideMenus();
+
             if (CurrentView == 0)
             {
                 if (m.Button == MouseButtons.Left)
@@ -215,7 +217,7 @@ namespace TerminalDecay5Client
                 }
             }
 
-            if(CurrentView == 2)
+            if (CurrentView == 2)
             {
                 if (m.Button == MouseButtons.Left)
                 {
@@ -224,22 +226,33 @@ namespace TerminalDecay5Client
 
                     //get the current offence in that place now, and allow them to use it;
                     ServerConnection sc = new ServerConnection();
-                    sc.ServerRequest(DisplayAttack,13, MessageConstants.splitMessageToken + Convert.ToString(playerToken) + MessageConstants.splitMessageToken + Convert.ToString(_currentX) + MessageConstants.splitMessageToken + Convert.ToString(_currentY) + MessageConstants.splitMessageToken);
-
+                    sc.ServerRequest(DisplayAttack, 13, MessageConstants.splitMessageToken + Convert.ToString(playerToken) + MessageConstants.splitMessageToken + Convert.ToString(_currentX) + MessageConstants.splitMessageToken + Convert.ToString(_currentY) + MessageConstants.splitMessageToken);
+                   
                 }
             }
-
-            hideMenus();
+            
         }
 
 
         private void DisplayAttack(List<List<string>> transmition)
         {
-
+            hideMenus();
+            showAttackMenu(true);
+            
+            lblAttackScout.Text = "Scout: " + transmition[1][0];
+            lblAttackGunship.Text = "Gunship: " + transmition[1][1];
+            lblAttackBomber.Text = "Bomber: " + transmition[1][2];
+            lblAttaackFrigate.Text = "Frigate: " + transmition[1][3];
+            lblAttackDestroyer.Text = "Destroyer: " + transmition[1][4];
+            lblAttackCarrier.Text = "Carrier: " + transmition[1][5];
+            lblAttackBattleship.Text = "BattleShip: " + transmition[1][6];
+            
         }
-        
+
         private void showAttackMenu(bool show)
         {
+            MapCanvas.Visible = !show;
+
             lblAttaackFrigate.Visible = show;
             lblAttackBattleship.Visible = show;
             lblAttackBomber.Visible = show;
@@ -276,7 +289,7 @@ namespace TerminalDecay5Client
 
             }
 
-             if (transmition[0][0] == MessageConstants.MessageTypes[5])
+            if (transmition[0][0] == MessageConstants.MessageTypes[5])
             {
                 if (transmition[1][0] == "-1")
                 {
@@ -700,6 +713,7 @@ namespace TerminalDecay5Client
             btnBuildDefence.Visible = !show;
             BtnDef.Visible = !show;
             BtnOffence.Visible = !show;
+            BtnAttack.Visible = !show;
 
             LblSidePanel.Visible = !show;
         }
@@ -828,7 +842,7 @@ namespace TerminalDecay5Client
         {
             LblSidePanel.Text = "SelectTarget";
             CurrentView = 2;
-            
+
         }
     }
 }
