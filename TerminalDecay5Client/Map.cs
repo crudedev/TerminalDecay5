@@ -232,8 +232,7 @@ namespace TerminalDecay5Client
             }
             
         }
-
-
+        
         private void DisplayAttack(List<List<string>> transmition)
         {
             hideMenus();
@@ -842,6 +841,53 @@ namespace TerminalDecay5Client
         {
             LblSidePanel.Text = "SelectTarget";
             CurrentView = 2;
+
+        }
+
+        private void btnSendAttack_Click(object sender, EventArgs e)
+        {
+            List<int> AttackList = new List<int>();
+            try
+            {
+                AttackList.Add(Convert.ToInt32(txtAttackScout.Text));
+                AttackList.Add(Convert.ToInt32(txtAttackGunship.Text));
+                AttackList.Add(Convert.ToInt32(txtAttackBomber.Text));
+                AttackList.Add(Convert.ToInt32(txtAttackFrigate.Text));
+                AttackList.Add(Convert.ToInt32(txtDestroyer.Text));
+                AttackList.Add(Convert.ToInt32(txtCarrier.Text));
+                AttackList.Add(Convert.ToInt32(txtBattleship));
+
+                string request = MessageConstants.splitMessageToken + Convert.ToString(playerToken) + MessageConstants.nextMessageToken;
+
+                request += _currentX + MessageConstants.splitMessageToken + _currentY + MessageConstants.splitMessageToken + _targetX + MessageConstants.splitMessageToken + _targetY + MessageConstants.nextMessageToken;
+
+                foreach (int i in AttackList)
+                {
+                    request += i + MessageConstants.splitMessageToken;
+                }
+
+                request += MessageConstants.nextMessageToken;
+                request += _currentX + MessageConstants.splitMessageToken + _currentY;
+
+                ServerConnection sc = new ServerConnection();
+                sc.ServerRequest(ResultsOfAttack, 14, request);
+
+            }
+            catch (Exception)
+            {
+                txtMine.Text = "0";
+                txtWell.Text = "0";
+                txtHabitat.Text = "0";
+                txtFarm.Text = "0";
+                txtSolarPlant.Text = "0";
+                txtFabricator.Text = "0";
+
+                MessageBox.Show("Invalid Input");
+
+            }
+        }
+        private void ResultsOfAttack(List<List<string>> transmition)
+        {
 
         }
     }

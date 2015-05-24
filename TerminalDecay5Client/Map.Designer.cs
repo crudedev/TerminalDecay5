@@ -1827,6 +1827,7 @@ namespace TerminalDecay5Client
             this.btnSendAttack.Text = "Attack";
             this.btnSendAttack.UseVisualStyleBackColor = true;
             this.btnSendAttack.Visible = false;
+            this.btnSendAttack.Click += new System.EventHandler(this.btnSendAttack_Click);
             // 
             // Map
             // 

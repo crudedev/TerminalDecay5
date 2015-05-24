@@ -28,6 +28,7 @@ namespace TerminalDecay5Server
             MessageTypes.Add(11, "SendOffenceListad54$^$Fdc");
             MessageTypes.Add(12, "SendOffenceBuildRequest%&");
             MessageTypes.Add(13, "SendOffence^^&ssdef%6565&");
+            MessageTypes.Add(14, "SendAttacku>|&sf65ff%%!!!");
         }
 
     }

@@ -392,10 +392,59 @@ namespace TerminalDecay5Server
                 SendOffenceForAttack(Transmitions, tcpClient);
             }
 
+            if (Transmitions[0][0] == MessageConstants.MessageTypes[14])
+            {
+                Attack(Transmitions, tcpClient);
+            }
+
             tcpClient.Close();
             client = null;
 
             #endregion
+        }
+
+        private void Attack(List<List<string>> Transmitions, TcpClient tcpClient)
+        {
+
+            Player Attacker = getPlayer(Transmitions[0][1]);
+            Outpost AttackOp = getOutpost(Transmitions[1][0], Transmitions[1][1]);
+            Outpost DeffenceOp = getOutpost(Transmitions[1][2], Transmitions[1][3]);
+
+            if(Attacker != null && AttackOp != null && DeffenceOp != null)
+            {
+                if(AttackOp.OwnerID == Attacker.PlayerID && DeffenceOp.OwnerID != Attacker.PlayerID)
+                {
+
+
+
+                    //check that the source has the units
+
+
+                    //Accumulate the offence selected
+                    //Accumulate the Deffence selected
+
+                    //do sum battle n shit
+
+                    //respond the results to the attacker
+
+                    //create a message
+
+                    //create a message reader thingy
+
+
+
+                }
+                else
+                {
+
+                }
+                
+            }
+            else
+            {
+
+            }
+
         }
 
         private void SendOffenceForAttack(List<List<string>> Transmitions, TcpClient tcpClient)
