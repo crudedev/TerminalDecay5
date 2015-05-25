@@ -410,15 +410,26 @@ namespace TerminalDecay5Server
             Outpost AttackOp = getOutpost(Transmitions[1][0], Transmitions[1][1]);
             Outpost DeffenceOp = getOutpost(Transmitions[1][2], Transmitions[1][3]);
 
+            string ErrorResponse = "";
+
             if(Attacker != null && AttackOp != null && DeffenceOp != null)
             {
                 if(AttackOp.OwnerID == Attacker.PlayerID && DeffenceOp.OwnerID != Attacker.PlayerID)
                 {
 
+                    for (int i = 0; i < Cmn.OffenceType.Count; i++)
+                    {
+                        if(Convert.ToInt32(Transmitions[2][i]) < AttackOp.Offence[i])
+                        {
+                            ErrorResponse = "Not Enough Units";
+                        }
+                    }
 
+                    if(ErrorResponse == "")
+                    {
 
-                    //check that the source has the units
-
+                    }
+                    //work out the points here?
 
                     //Accumulate the offence selected
                     //Accumulate the Deffence selected
@@ -436,13 +447,23 @@ namespace TerminalDecay5Server
                 }
                 else
                 {
-
+                    ErrorResponse = "Identity of players conflicts with owners of bases";
                 }
                 
             }
             else
             {
+                ErrorResponse = "Cannot find bases";
+            }
 
+            if(ErrorResponse == "")
+            {
+                //do attack here
+                //respond result of attack
+            }
+            else
+            {
+                //report error back here
             }
 
         }
