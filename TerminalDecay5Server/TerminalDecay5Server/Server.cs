@@ -410,53 +410,75 @@ namespace TerminalDecay5Server
             Outpost AttackOp = getOutpost(Transmitions[1][0], Transmitions[1][1]);
             Outpost DeffenceOp = getOutpost(Transmitions[1][2], Transmitions[1][3]);
 
+            Int64 attackOff = 0;
+            Int64 defenceOff = 0;
+
             string ErrorResponse = "";
 
-            if(Attacker != null && AttackOp != null && DeffenceOp != null)
+            if (Attacker != null && AttackOp != null && DeffenceOp != null)
             {
-                if(AttackOp.OwnerID == Attacker.PlayerID && DeffenceOp.OwnerID != Attacker.PlayerID)
+                if (AttackOp.OwnerID == Attacker.PlayerID && DeffenceOp.OwnerID != Attacker.PlayerID)
                 {
 
                     for (int i = 0; i < Cmn.OffenceType.Count; i++)
                     {
-                        if(Convert.ToInt32(Transmitions[2][i]) < AttackOp.Offence[i])
+                        if (Convert.ToInt32(Transmitions[2][i]) < AttackOp.Offence[i])
                         {
                             ErrorResponse = "Not Enough Units";
                         }
+                        attackOff += Cmn.OffenceAttack[i] * Convert.ToInt32(Transmitions[2][i]);
                     }
 
-                    if(ErrorResponse == "")
+                    if (ErrorResponse == "")
                     {
 
+                        for (int i = 0; i < Cmn.DefenceType.Count; i++)
+                        {
+                            defenceOff = Cmn.DefenceAttack[i] * Convert.ToInt32(Transmitions[2][i]);
+                        }
+
+
+                        float result = defenceOff / attackOff;
+                        float modulous = 0f;
+                    
+                        if(result > 1)
+                        {
+                            modulous = defenceOff % attackOff;
+                        }
+                        else
+                        {
+                            modulous = attackOff % defenceOff;
+                        }
+
+
+
+                        //work out the %
+                        
+                                                                     
+                        //remove the % of troops up to 50%
+
+                        
+                        //respond the results to the attacker
+
+                        //create a message
+
+                        //create a message reader thingy
+
                     }
-                    //work out the points here?
-
-                    //Accumulate the offence selected
-                    //Accumulate the Deffence selected
-
-                    //do sum battle n shit
-
-                    //respond the results to the attacker
-
-                    //create a message
-
-                    //create a message reader thingy
-
-
 
                 }
                 else
                 {
                     ErrorResponse = "Identity of players conflicts with owners of bases";
                 }
-                
+
             }
             else
             {
                 ErrorResponse = "Cannot find bases";
             }
 
-            if(ErrorResponse == "")
+            if (ErrorResponse == "")
             {
                 //do attack here
                 //respond result of attack
@@ -473,9 +495,9 @@ namespace TerminalDecay5Server
             Player pl = getPlayer(Transmitions[0][1]);
             if (pl != null)
             {
-               string response = MessageConstants.MessageTypes[13] + MessageConstants.nextMessageToken;
+                string response = MessageConstants.MessageTypes[13] + MessageConstants.nextMessageToken;
 
-               response += SendOffenceOntile(Transmitions);
+                response += SendOffenceOntile(Transmitions);
 
                 response += MessageConstants.messageCompleteToken;
                 NetworkStream clientStream = tcpClient.GetStream();
@@ -542,7 +564,7 @@ namespace TerminalDecay5Server
 
             response += MessageConstants.nextMessageToken;
 
-            foreach (var item in Cmn.OffenceDefence)
+            foreach (var item in Cmn.OffenceAttack)
             {
                 response += item + MessageConstants.splitMessageToken;
             }
@@ -961,7 +983,7 @@ namespace TerminalDecay5Server
                     long def = 0;
                     for (int index = 0; index < Cmn.DefenceType.Count; index++)
                     {
-                        def += o.Defence[index] * Cmn.DefenceDefence[index];
+                        def += o.Defence[index] * Cmn.DefenceAttack[index];
                     }
 
                     response += MessageConstants.splitMessageToken + def.ToString();

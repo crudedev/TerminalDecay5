@@ -60,11 +60,8 @@ namespace TerminalDecay5Server
         public static List<List<long>> DefenceCost;
 
         public static List<long> DefenceAttack;
-        public static List<long> DefenceDefence;
 
         public static List<long> OffenceAttack;
-        public static List<long> OffenceDefence;
-
 
         public static void Init()
         {
@@ -110,10 +107,8 @@ namespace TerminalDecay5Server
             BuildCost = new List<List<long>>();
             BuildingProduction = new List<List<long>>();
             DefenceCost = new List<List<long>>();
-            DefenceDefence = new List<long>();
             DefenceAttack = new List<long>();
             OffenceCost = new List<List<long>>();
-            OffenceDefence = new List<long>();
             OffenceAttack = new List<long>();
 
             foreach (KeyValuePair<BldTenum, int> build in BuildType)
@@ -146,7 +141,6 @@ namespace TerminalDecay5Server
                 }
                 DefenceCost.Add(dcost);
 
-                DefenceDefence.Add(0);
                 DefenceAttack.Add(0);
             }
 
@@ -159,7 +153,6 @@ namespace TerminalDecay5Server
                 }
                 OffenceCost.Add(ocost);
 
-                OffenceDefence.Add(0);
                 OffenceAttack.Add(0);
             }
 
@@ -240,19 +233,12 @@ namespace TerminalDecay5Server
             DefenceCost[DefenceType[DefTenum.DroneBase]][Resource[Renum.Power]] = 5;
             DefenceCost[DefenceType[DefTenum.DroneBase]][Resource[Renum.Water]] = 5;
 
-            DefenceDefence[DefenceType[DefTenum.Patrol]] = 2;
-            DefenceDefence[DefenceType[DefTenum.Gunner]] = 5;
-            DefenceDefence[DefenceType[DefTenum.Turret]] = 10;
-            DefenceDefence[DefenceType[DefTenum.Artillery]] = 15;
-            DefenceDefence[DefenceType[DefTenum.DroneBase]] = 40;
-
             DefenceAttack[DefenceType[DefTenum.Patrol]] = 2;
             DefenceAttack[DefenceType[DefTenum.Gunner]] = 5;
             DefenceAttack[DefenceType[DefTenum.Turret]] = 10;
             DefenceAttack[DefenceType[DefTenum.Artillery]] = 15;
             DefenceAttack[DefenceType[DefTenum.DroneBase]] = 40;
-
-
+            
             OffenceCost[OffenceType[OffTenum.Scout]][Resource[Renum.Food]] = 1;
             OffenceCost[OffenceType[OffTenum.Scout]][Resource[Renum.Metal]] = 1;
             OffenceCost[OffenceType[OffTenum.Scout]][Resource[Renum.Population]] = 1;
@@ -294,14 +280,6 @@ namespace TerminalDecay5Server
             OffenceCost[OffenceType[OffTenum.Battleship]][Resource[Renum.Population]] = 7;
             OffenceCost[OffenceType[OffTenum.Battleship]][Resource[Renum.Power]] = 7;
             OffenceCost[OffenceType[OffTenum.Battleship]][Resource[Renum.Water]] = 7;
-
-            OffenceDefence[OffenceType[OffTenum.Scout]] = 1;
-            OffenceDefence[OffenceType[OffTenum.Gunship]] = 2;
-            OffenceDefence[OffenceType[OffTenum.Bomber]] = 3;
-            OffenceDefence[OffenceType[OffTenum.Frigate]] = 4;
-            OffenceDefence[OffenceType[OffTenum.Destroyer]] = 5;
-            OffenceDefence[OffenceType[OffTenum.Carrier]] = 6;
-            OffenceDefence[OffenceType[OffTenum.Battleship]] = 7;
 
             OffenceAttack[OffenceType[OffTenum.Scout]] = 1;
             OffenceAttack[OffenceType[OffTenum.Gunship]] = 2;
