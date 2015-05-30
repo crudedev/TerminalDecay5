@@ -786,13 +786,13 @@ namespace TerminalDecay5Client
             lblCarrierAttack.Text = transmition[12][5];
             lblBattleshipAttack.Text = transmition[12][6];
 
-            lblScoutDefence.Text = transmition[13][0];
-            lblGunshipDefence.Text = transmition[13][1];
-            lblBomberDefence.Text = transmition[13][2];
-            lblFrigateDefence.Text = transmition[13][3];
-            lblDestroyerDefence.Text = transmition[13][4];
-            lblCarrierDefence.Text = transmition[13][5];
-            lblBattleshipDeffence.Text = transmition[13][6];
+            //lblScoutDefence.Text = transmition[13][0];
+            //lblGunshipDefence.Text = transmition[13][1];
+            //lblBomberDefence.Text = transmition[13][2];
+            //lblFrigateDefence.Text = transmition[13][3];
+            //lblDestroyerDefence.Text = transmition[13][4];
+            //lblCarrierDefence.Text = transmition[13][5];
+            //lblBattleshipDeffence.Text = transmition[13][6];
         }
 
         private void btnOffenceBuild_Click(object sender, EventArgs e)
@@ -853,9 +853,9 @@ namespace TerminalDecay5Client
                 AttackList.Add(Convert.ToInt32(txtAttackGunship.Text));
                 AttackList.Add(Convert.ToInt32(txtAttackBomber.Text));
                 AttackList.Add(Convert.ToInt32(txtAttackFrigate.Text));
-                AttackList.Add(Convert.ToInt32(txtDestroyer.Text));
-                AttackList.Add(Convert.ToInt32(txtCarrier.Text));
-                AttackList.Add(Convert.ToInt32(txtBattleship));
+                AttackList.Add(Convert.ToInt32(txtAttackDestroyer.Text));
+                AttackList.Add(Convert.ToInt32(txtAttackCarrier.Text));
+                AttackList.Add(Convert.ToInt32(txtAttackBattleship.Text));
 
                 string request = MessageConstants.splitMessageToken + Convert.ToString(playerToken) + MessageConstants.nextMessageToken;
 
@@ -875,12 +875,13 @@ namespace TerminalDecay5Client
             }
             catch (Exception)
             {
-                txtMine.Text = "0";
-                txtWell.Text = "0";
-                txtHabitat.Text = "0";
-                txtFarm.Text = "0";
-                txtSolarPlant.Text = "0";
-                txtFabricator.Text = "0";
+                txtAttackScout.Text = "0";
+                txtAttackGunship.Text = "0";
+                txtAttackBomber.Text = "0";
+                txtAttackFrigate.Text = "0";
+                txtAttackDestroyer.Text = "0";
+                txtAttackCarrier.Text = "0";
+                txtAttackBattleship.Text = "0";
 
                 MessageBox.Show("Invalid Input");
 

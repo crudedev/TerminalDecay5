@@ -405,6 +405,7 @@ namespace TerminalDecay5Server
 
         private void Attack(List<List<string>> Transmitions, TcpClient tcpClient)
         {
+            string response = "";
 
             Player Attacker = getPlayer(Transmitions[0][1]);
             Outpost AttackOp = getOutpost(Transmitions[1][0], Transmitions[1][1]);
@@ -434,33 +435,176 @@ namespace TerminalDecay5Server
 
                         for (int i = 0; i < Cmn.DefenceType.Count; i++)
                         {
-                            defenceOff = Cmn.DefenceAttack[i] * Convert.ToInt32(Transmitions[2][i]);
+                            defenceOff += Cmn.DefenceAttack[i] * DeffenceOp.Defence[i];
                         }
 
+                        string AttackerMessage = "";
+                        string DeffenceMessage = "";
 
                         float result = defenceOff / attackOff;
-                        float modulous = 0f;
-                    
-                        if(result > 1)
+
+                        float attackDeath = 0;
+                        float deffenceDeath = 0;
+
+                        if (result <= 1)
                         {
-                            modulous = defenceOff % attackOff;
+                            if (result <= 1 )
+                            {
+                                deffenceDeath = 0.10f;
+                                attackDeath = 0.20f;
+                                AttackerMessage = "A closely faught battle";
+                                DeffenceMessage = "A closely faught battle";
+                            }
+
+                            if (result < 0.83)
+                            {
+                                deffenceDeath = 0.20f;
+                                attackDeath = 0.15f;
+                                AttackerMessage = "A close victory";
+                                DeffenceMessage = "A minor defeat";
+                            }
+
+                            if (result < 0.66)
+                            {
+                                deffenceDeath = 0.3f;
+                                attackDeath = 0.15f;
+                                AttackerMessage = "Victory";
+                                DeffenceMessage = "Defeat";
+                            }
+
+                            if (result < 0.5)
+                            {
+                                deffenceDeath = 0.4f;
+                                attackDeath = 0.1f;
+                                AttackerMessage = "An impressive victiory";
+                                DeffenceMessage = "A miserable defeat";
+                            }
+
+                            if (result < 0.2)
+                            {
+                                deffenceDeath = 0.6f;
+                                attackDeath = 0.1f;
+                                AttackerMessage = "A triumphant victiory";
+                                DeffenceMessage = "A crushing defeat";
+                            }
+
+                            if (result < 0.1)
+                            {
+                                deffenceDeath = 1;
+                                attackDeath = 0.05f;
+                                AttackerMessage = "Total victiory";
+                                DeffenceMessage = "Total defeat";
+                            }
                         }
                         else
                         {
-                            modulous = attackOff % defenceOff;
+                            if (result >= 1)
+                            {
+                                attackDeath = 0.10f;
+                                deffenceDeath = 0.20f;
+                                AttackerMessage = "A closely faught battle";
+                                DeffenceMessage = "A closely faught battle";
+                            }
+
+                            if (result > 1.2 )
+                            {
+                                attackDeath = 0.25f;
+                                deffenceDeath = 0.15f;
+                                AttackerMessage = "A minor defeat";
+                                DeffenceMessage = "A close victory";
+                            }
+
+                            if (result > 1.5 )
+                            {
+                                attackDeath = 0.3f;
+                                deffenceDeath = 0.2f;
+                                AttackerMessage = "Defeat";
+                                DeffenceMessage = "Victory";
+                            }
+
+                            if (result > 2 )
+                            {
+                                attackDeath = 0.4f;
+                                deffenceDeath = 0.1f;
+                                AttackerMessage = "A miserable defeat";
+                                DeffenceMessage = "An impressive victiory";
+                            }
+
+                            if (result > 5 )
+                            {
+                                attackDeath = 0.8f;
+                                deffenceDeath = 0.05f;
+                                AttackerMessage = "A crushing defeat";
+                                DeffenceMessage = "A triumphant victiory";
+                            }
+
+                            if (result > 10)
+                            {
+                                attackDeath = 1;
+                                deffenceDeath = 0f;
+                                AttackerMessage = "Total defeat";
+                                DeffenceMessage = "Total victiory";
+                            }
                         }
 
+                        foreach (var item in Cmn.OffenceType)
+                        {
+                            float death = AttackOp.Offence[item.Value];
+                            death = death * attackDeath;
+
+                            int sign = universe.r.Next(1000);
+                            float remove = death * 0.3f;
+                            remove = universe.r.Next(Convert.ToInt32(remove));
+
+                            if (sign > 500)
+                            {
+                                death = death + remove;
+                            }
+                            else
+                            {
+                                death = death - remove;
+                            }
+
+                            if(death < 1 && death > 0)
+                            {
+                                death = 1;
+                            }
+
+                            AttackOp.Offence[item.Value] = AttackOp.Offence[item.Value] - Convert.ToInt64(death);
+                            if (AttackOp.Offence[item.Value] < 0)
+                            {
+                                AttackOp.Offence[item.Value] = 0;
+                            }
+                        }
+
+                        foreach (var item in Cmn.DefenceType)
+                        {
+                            float death = DeffenceOp.Defence[item.Value];
+                            death = death * deffenceDeath;
+
+                            int sign = universe.r.Next(1000);
+                            float remove = universe.r.Next(Convert.ToInt32(death * 0.3));
+
+                            if (sign > 500)
+                            {
+                                death = death + remove;
+                            }
+                            else
+                            {
+                                death = death - remove;
+                            }
+
+                            DeffenceOp.Defence[item.Value] = DeffenceOp.Defence[item.Value] - Convert.ToInt64(death);
+                            if (DeffenceOp.Defence[item.Value] < 0)
+                            {
+                                DeffenceOp.Defence[item.Value] = 0;
+                            }
+                        }
+
+                        response = "Success" + MessageConstants.splitMessageToken + AttackerMessage;
 
 
-                        //work out the %
-                        
-                                                                     
-                        //remove the % of troops up to 50%
-
-                        
-                        //respond the results to the attacker
-
-                        //create a message
+                        //create a message and store it for attacker and defender
 
                         //create a message reader thingy
 
@@ -478,15 +622,19 @@ namespace TerminalDecay5Server
                 ErrorResponse = "Cannot find bases";
             }
 
-            if (ErrorResponse == "")
+            if (ErrorResponse != "")
             {
-                //do attack here
-                //respond result of attack
+                response = "Error" + MessageConstants.splitMessageToken + ErrorResponse;
             }
-            else
-            {
-                //report error back here
-            }
+
+            response += MessageConstants.messageCompleteToken;
+            NetworkStream clientStream = tcpClient.GetStream();
+            ASCIIEncoding encoder = new ASCIIEncoding();
+
+            byte[] buffer = encoder.GetBytes(response);
+
+            clientStream.Write(buffer, 0, buffer.Length);
+            clientStream.Flush();
 
         }
 
@@ -591,10 +739,10 @@ namespace TerminalDecay5Server
             }
             else
             {
-                response += op.OwnerID;
+                //response += op.OwnerID;
                 foreach (var item in Cmn.OffenceType)
                 {
-                    response += MessageConstants.splitMessageToken + op.Offence[item.Value];
+                    response += op.Offence[item.Value] + MessageConstants.splitMessageToken ;
                 }
             }
 
@@ -900,7 +1048,7 @@ namespace TerminalDecay5Server
                 o.Defence[Cmn.DefenceType[Cmn.DefTenum.Patrol]] = 5;
                 o.Defence[Cmn.DefenceType[Cmn.DefTenum.Gunner]] = 2;
 
-                o.Offence[Cmn.OffenceType[Cmn.OffTenum.Scout]] = 3;
+                o.Offence[Cmn.OffenceType[Cmn.OffTenum.Scout]] = 10;
 
                 universe.outposts.Add(o);
 

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TerminalDecay5Server
 {
-    class Messages
+    class Message
     {
         int senderID;
         int recipientID;
