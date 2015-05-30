@@ -601,12 +601,14 @@ namespace TerminalDecay5Server
                             }
                         }
 
+
+                        Message temp = new Message(-1, Attacker.PlayerID, "Attacking Another Player", AttackerMessage);
+                        universe.Messages.Add(temp);
+                        temp = new Message(-1, DeffenceOp.OwnerID, "Attacked by Another Player", DeffenceMessage);
+                        universe.Messages.Add(temp);
+
                         response = "Success" + MessageConstants.splitMessageToken + AttackerMessage;
-
-
-                        //create a message and store it for attacker and defender
-
-                        //create a message reader thingy
+                                            
 
                     }
 

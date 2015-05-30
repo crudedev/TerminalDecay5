@@ -197,6 +197,7 @@ namespace TerminalDecay5Client
             this.txtAttackGunship = new System.Windows.Forms.TextBox();
             this.txtAttackScout = new System.Windows.Forms.TextBox();
             this.btnSendAttack = new System.Windows.Forms.Button();
+            this.BtnMessages = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.MapCanvas)).BeginInit();
             this.SuspendLayout();
             // 
@@ -1829,10 +1830,21 @@ namespace TerminalDecay5Client
             this.btnSendAttack.Visible = false;
             this.btnSendAttack.Click += new System.EventHandler(this.btnSendAttack_Click);
             // 
+            // BtnMessages
+            // 
+            this.BtnMessages.Location = new System.Drawing.Point(641, 7);
+            this.BtnMessages.Name = "BtnMessages";
+            this.BtnMessages.Size = new System.Drawing.Size(75, 23);
+            this.BtnMessages.TabIndex = 173;
+            this.BtnMessages.Text = "Messages";
+            this.BtnMessages.UseVisualStyleBackColor = true;
+            this.BtnMessages.Click += new System.EventHandler(this.BtnMessages_Click);
+            // 
             // Map
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.ClientSize = new System.Drawing.Size(1880, 831);
+            this.Controls.Add(this.BtnMessages);
             this.Controls.Add(this.btnSendAttack);
             this.Controls.Add(this.txtAttackBattleship);
             this.Controls.Add(this.txtAttackCarrier);
@@ -2174,6 +2186,7 @@ namespace TerminalDecay5Client
         private TextBox txtAttackGunship;
         private TextBox txtAttackScout;
         private Button btnSendAttack;
+        private Button BtnMessages;
     }
 }
 

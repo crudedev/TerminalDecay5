@@ -12,6 +12,7 @@ namespace TerminalDecay5Server
         public List<BuildQueueItem> OffenceBuildQueue;
         public List<Player> players;
         public Random r;
+        public List<Message> Messages;
 
         public void InitUniverse()
         {

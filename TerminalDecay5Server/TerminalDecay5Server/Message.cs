@@ -6,16 +6,28 @@ using System.Threading.Tasks;
 
 namespace TerminalDecay5Server
 {
-    class Message
+    public class Message
     {
         int senderID;
         int recipientID;
 
-        string title;
-        string message;
+        string messageTitle;
+        string messageBody;
 
         DateTime sentDate;
+        bool read;
 
+        public Message(int sender, int recipient, string title, string message)
+        {
 
+            senderID = sender;
+            recipientID = recipient;
+            messageTitle = title;
+            messageBody = message;
+
+            read = false;
+            sentDate = DateTime.Now;
+        }
+        
     }
 }

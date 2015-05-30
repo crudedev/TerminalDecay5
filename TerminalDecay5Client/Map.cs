@@ -23,6 +23,8 @@ namespace TerminalDecay5Client
         private int _targetX;
         private int _targetY;
 
+        Messages frmMessage = new Messages();
+
         public Map()
         {
             InitializeComponent();
@@ -890,6 +892,11 @@ namespace TerminalDecay5Client
         private void ResultsOfAttack(List<List<string>> transmition)
         {
 
+        }
+
+        private void BtnMessages_Click(object sender, EventArgs e)
+        {
+            frmMessage.Show();
         }
     }
 }
