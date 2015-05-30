@@ -22,6 +22,7 @@ namespace TerminalDecay5Server
             OffenceBuildQueue = new List<BuildQueueItem>();
             outposts = new List<Outpost>();
             players = new List<Player>();
+            Messages = new List<Message>();
 
             MapTile t;
 

@@ -1834,7 +1834,7 @@ namespace TerminalDecay5Client
             // 
             this.BtnMessages.Location = new System.Drawing.Point(641, 7);
             this.BtnMessages.Name = "BtnMessages";
-            this.BtnMessages.Size = new System.Drawing.Size(75, 23);
+            this.BtnMessages.Size = new System.Drawing.Size(117, 23);
             this.BtnMessages.TabIndex = 173;
             this.BtnMessages.Text = "Messages";
             this.BtnMessages.UseVisualStyleBackColor = true;

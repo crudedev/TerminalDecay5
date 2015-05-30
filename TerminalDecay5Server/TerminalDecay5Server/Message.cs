@@ -8,14 +8,14 @@ namespace TerminalDecay5Server
 {
     public class Message
     {
-        int senderID;
-        int recipientID;
+        public int senderID;
+        public int recipientID;
 
-        string messageTitle;
-        string messageBody;
+        public string messageTitle;
+        public string messageBody;
 
-        DateTime sentDate;
-        bool read;
+        public DateTime sentDate;
+        public bool read;
 
         public Message(int sender, int recipient, string title, string message)
         {

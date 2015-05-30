@@ -115,3 +115,4 @@ C:\Users\D\Dropbox\GitHub\TerminalDecay5\TerminalDecay5Client\obj\Debug\Terminal
 C:\Users\D\Dropbox\GitHub\TerminalDecay5\TerminalDecay5Client\obj\Debug\TerminalDecay5Client.csproj.GenerateResource.Cache
 C:\Users\D\Dropbox\GitHub\TerminalDecay5\TerminalDecay5Client\obj\Debug\TerminalDecay5Client.exe
 C:\Users\D\Dropbox\GitHub\TerminalDecay5\TerminalDecay5Client\obj\Debug\TerminalDecay5Client.pdb
+C:\Users\D\Dropbox\GitHub\TerminalDecay5\TerminalDecay5Client\obj\Debug\TerminalDecay5Client.Messages.resources

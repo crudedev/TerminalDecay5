@@ -54,6 +54,8 @@ namespace TerminalDecay5Client
             LblMetal.Text = "Metal: " + transmition[1][1];
             LblPopulation.Text = "Population: " + transmition[1][2];
             LblWater.Text = "Water: " + transmition[1][4];
+
+            BtnMessages.Text = "Messages (" + transmition[2][0] + ")";
         }
 
         public void SetPlayerToken(Guid tok)
@@ -897,6 +899,7 @@ namespace TerminalDecay5Client
         private void BtnMessages_Click(object sender, EventArgs e)
         {
             frmMessage.Show();
+            frmMessage.Init(universe);
         }
     }
 }

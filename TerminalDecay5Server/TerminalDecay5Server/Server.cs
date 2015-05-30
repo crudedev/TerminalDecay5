@@ -933,6 +933,18 @@ namespace TerminalDecay5Server
 
             string reply = MessageConstants.MessageTypes[6] + MessageConstants.nextMessageToken;
             reply += pl.Resources[Cmn.Resource[Cmn.Renum.Food]] + MessageConstants.splitMessageToken + pl.Resources[Cmn.Resource[Cmn.Renum.Metal]] + MessageConstants.splitMessageToken + pl.Resources[Cmn.Resource[Cmn.Renum.Population]] + MessageConstants.splitMessageToken + pl.Resources[Cmn.Resource[Cmn.Renum.Power]] + MessageConstants.splitMessageToken + pl.Resources[Cmn.Resource[Cmn.Renum.Water]] + MessageConstants.splitMessageToken;
+
+            int mescount = 0;
+            foreach (var item in universe.Messages)
+            {
+                if(item.recipientID == pl.PlayerID && item.read == false)
+                {
+                    mescount++;
+                }
+
+            }
+            reply += MessageConstants.nextMessageToken + mescount.ToString();
+            
             reply += MessageConstants.messageCompleteToken;
 
             NetworkStream clientStream = tcpClient.GetStream();
@@ -1050,7 +1062,7 @@ namespace TerminalDecay5Server
                 o.Defence[Cmn.DefenceType[Cmn.DefTenum.Patrol]] = 5;
                 o.Defence[Cmn.DefenceType[Cmn.DefTenum.Gunner]] = 2;
 
-                o.Offence[Cmn.OffenceType[Cmn.OffTenum.Scout]] = 10;
+                o.Offence[Cmn.OffenceType[Cmn.OffTenum.Scout]] = 5;
 
                 universe.outposts.Add(o);
 
