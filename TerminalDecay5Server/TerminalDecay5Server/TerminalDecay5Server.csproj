@@ -54,7 +54,6 @@
     <Compile Include="Serialised.cs" />
     <Compile Include="Serialiser.cs" />
     <Compile Include="Server.cs" />
-    <Compile Include="Unit.cs" />
     <Compile Include="Universe.cs" />
   </ItemGroup>
   <ItemGroup>

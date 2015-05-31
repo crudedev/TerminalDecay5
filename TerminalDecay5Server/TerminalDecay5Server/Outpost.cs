@@ -1,35 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace TerminalDecay5Server
 {
-    public class Outpost
+    [Serializable()]
+    public class Outpost : ISerializable
     {
         public int ID;
         public int OwnerID;
-        public int Upgrade;
         public int Capacity;
-        public int Production;
 
         public List<Position> Tiles;
-
         public List<long> Buildings;
-
         public List<long> Defence;
-
         public List<long> Offence;
-
-        //public int mine;
-        //public int well;
-        //public int habitat;
-        //public int farm;
-        //public int solarPlant;
-        //public int fabracator;
-
-        public int watertank;
-        public int storeHouse;
-        public int capacitors;
-        public int freezer;
 
         public Outpost()
         {
@@ -51,7 +37,28 @@ namespace TerminalDecay5Server
                 Offence.Add(0);
             }
         }
-    }
 
+        public Outpost(SerializationInfo info, StreamingContext ctxt)
+        {
+            this.ID = (int)info.GetValue("id", typeof(int));
+            this.OwnerID = (int)info.GetValue("ownerid", typeof(int));
+            this.Capacity = (int)info.GetValue("capacity", typeof(int));
+            this.Tiles = (List<Position>)info.GetValue("tiles", typeof(List<Position>));
+            this.Buildings = (List<long>)info.GetValue("building", typeof(List<long>));
+            this.Defence = (List<long>)info.GetValue("defence", typeof(List<long>));
+            this.Offence = (List<long>)info.GetValue("offence", typeof(List<long>));                 
+        }
+
+        public void GetObjectData(SerializationInfo info, StreamingContext ctxt)
+        {
+            info.AddValue("id", this.ID);
+            info.AddValue("ownerid", this.OwnerID);
+            info.AddValue("capacity", this.Capacity);
+            info.AddValue("tiles", this.Tiles);
+            info.AddValue("building", this.Buildings);
+            info.AddValue("defence", this.Defence);
+            info.AddValue("offence", this.Offence);
+        }
+    }
 
 }
