@@ -36,7 +36,7 @@ namespace TerminalDecay5Client
         public void Init(Guid playertoken)
         {
             playerToken = playertoken;
-            
+
         }
 
         private void btnRefreshMessages_Click(object sender, EventArgs e)
@@ -60,5 +60,24 @@ namespace TerminalDecay5Client
                 ListContacts.Items.Add(item);
             }
         }
+        
+        void lstMessages_Click(object sender, System.EventArgs e)
+        {
+            ListBox l = (ListBox)sender;
+            string request = MessageConstants.nextMessageToken + playerToken.ToString() + MessageConstants.nextMessageToken + l.SelectedIndex;
+
+            ServerConnection sc = new ServerConnection();
+            sc.ServerRequest(renderSpecificMessage, 16, request);
+        }
+
+        private void renderSpecificMessage(List<List<string>> transmition)
+        {
+            if(transmition[1][0] != "")
+            { 
+            txtTitle.Text = transmition[1][0] + " sent by: " + transmition[1][1] + " at:" + transmition[1][3];
+            txtMessage.Text = transmition[1][2];
+            }
+        }
+        
     }
 }

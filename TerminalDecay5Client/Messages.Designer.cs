@@ -69,6 +69,7 @@
             this.lstMessages.Name = "lstMessages";
             this.lstMessages.Size = new System.Drawing.Size(485, 433);
             this.lstMessages.TabIndex = 180;
+            this.lstMessages.Click += lstMessages_Click;
             // 
             // btnRefreshMessages
             // 

@@ -14,6 +14,7 @@ namespace TerminalDecay5Server
         private TcpListener _tcpListener;
         private Thread _listenThread;
         private Timer _serverTick;
+        private Timer _serverSave;
 
         public void Serve()
         {
@@ -25,12 +26,24 @@ namespace TerminalDecay5Server
             _listenThread.Start();
             universe.players = new List<Player>();
             _serverTick = new Timer(RunUniverse, universe, 20000, 40000);
+            _serverSave = new Timer(SaveUnivsere, universe, 20000, 400000);
+        }
+
+        static void SaveUnivsere(object ob)
+        {
+            Universe u = (Universe)ob;
+            string path = "C:\\TDSave\\" + Guid.NewGuid().ToString() + ".loldongs";
+            Serialiser s = new Serialiser();
+            s.SerializeUniverse(path, new Serialised(u));
+
         }
 
         static void RunUniverse(object ob)
         {
-            #region add resoureces from buildings
             Universe u = (Universe)ob;
+
+            #region add resoureces from buildings
+            
             foreach (Outpost outpost in u.outposts)
             {
                 for (int i = 0; i < Cmn.BuildType.Count; i++)
@@ -402,10 +415,49 @@ namespace TerminalDecay5Server
                 SendMessages(Transmitions, tcpClient);
             }
 
+            if (Transmitions[0][0] == MessageConstants.MessageTypes[16])
+            {
+                ReadMessage(Transmitions, tcpClient);
+            }
+
             tcpClient.Close();
             client = null;
 
             #endregion
+        }
+
+        private void ReadMessage(List<List<string>> Transmitions, TcpClient tcpClient)
+        {
+            
+
+            string response = MessageConstants.MessageTypes[16] + MessageConstants.nextMessageToken;
+            
+            Player pl = getPlayer(Transmitions[1][0]);
+            
+            int messageCount = 0;
+
+            foreach (var item in universe.Messages)
+            {
+                if (item.recipientID == pl.PlayerID)
+                {                    
+                    messageCount++;
+                    if (messageCount == Convert.ToInt32(Transmitions[2][0])+1) 
+                    {
+                        response += item.messageTitle + MessageConstants.splitMessageToken + item.senderID + MessageConstants.splitMessageToken + item.messageBody + MessageConstants.splitMessageToken + item.sentDate;
+                        item.read = true;
+                    }
+                }
+            }
+            
+            response += MessageConstants.messageCompleteToken;
+            NetworkStream clientStream = tcpClient.GetStream();
+            ASCIIEncoding encoder = new ASCIIEncoding();
+
+            byte[] buffer = encoder.GetBytes(response);
+
+            clientStream.Write(buffer, 0, buffer.Length);
+            clientStream.Flush();
+
         }
 
         private void SendMessages(List<List<string>> Transmitions, TcpClient tcpClient)
@@ -421,7 +473,7 @@ namespace TerminalDecay5Server
 
             foreach (var item in universe.Messages)
             {
-                if(item.recipientID == pl.PlayerID)
+                if (item.recipientID == pl.PlayerID)
                 {
                     Mes.Add(item);
                 }
@@ -496,7 +548,7 @@ namespace TerminalDecay5Server
 
                         if (result <= 1)
                         {
-                            if (result <= 1 )
+                            if (result <= 1)
                             {
                                 deffenceDeath = 0.10f;
                                 attackDeath = 0.20f;
@@ -554,7 +606,7 @@ namespace TerminalDecay5Server
                                 DeffenceMessage = "A closely faught battle";
                             }
 
-                            if (result > 1.2 )
+                            if (result > 1.2)
                             {
                                 attackDeath = 0.25f;
                                 deffenceDeath = 0.15f;
@@ -562,7 +614,7 @@ namespace TerminalDecay5Server
                                 DeffenceMessage = "A close victory";
                             }
 
-                            if (result > 1.5 )
+                            if (result > 1.5)
                             {
                                 attackDeath = 0.3f;
                                 deffenceDeath = 0.2f;
@@ -570,7 +622,7 @@ namespace TerminalDecay5Server
                                 DeffenceMessage = "Victory";
                             }
 
-                            if (result > 2 )
+                            if (result > 2)
                             {
                                 attackDeath = 0.4f;
                                 deffenceDeath = 0.1f;
@@ -578,7 +630,7 @@ namespace TerminalDecay5Server
                                 DeffenceMessage = "An impressive victiory";
                             }
 
-                            if (result > 5 )
+                            if (result > 5)
                             {
                                 attackDeath = 0.8f;
                                 deffenceDeath = 0.05f;
@@ -613,7 +665,7 @@ namespace TerminalDecay5Server
                                 death = death - remove;
                             }
 
-                            if(death < 1 && death > 0)
+                            if (death < 1 && death > 0)
                             {
                                 death = 1;
                             }
@@ -656,7 +708,7 @@ namespace TerminalDecay5Server
                         universe.Messages.Add(temp);
 
                         response = "Success" + MessageConstants.splitMessageToken + AttackerMessage;
-                                            
+
 
                     }
 
@@ -792,7 +844,7 @@ namespace TerminalDecay5Server
                 //response += op.OwnerID;
                 foreach (var item in Cmn.OffenceType)
                 {
-                    response += op.Offence[item.Value] + MessageConstants.splitMessageToken ;
+                    response += op.Offence[item.Value] + MessageConstants.splitMessageToken;
                 }
             }
 
@@ -985,14 +1037,14 @@ namespace TerminalDecay5Server
             int mescount = 0;
             foreach (var item in universe.Messages)
             {
-                if(item.recipientID == pl.PlayerID && item.read == false)
+                if (item.recipientID == pl.PlayerID && item.read == false)
                 {
                     mescount++;
                 }
 
             }
             reply += MessageConstants.nextMessageToken + mescount.ToString();
-            
+
             reply += MessageConstants.messageCompleteToken;
 
             NetworkStream clientStream = tcpClient.GetStream();

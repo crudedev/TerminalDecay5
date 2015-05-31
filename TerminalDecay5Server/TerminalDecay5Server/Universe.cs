@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace TerminalDecay5Server
 {
-    public class Universe
+    [Serializable()]
+    public class Universe : ISerializable
     {
         public List<MapTile> Maptiles;
         public List<Outpost> outposts;
@@ -54,5 +57,39 @@ namespace TerminalDecay5Server
                 }
             }
         }
+
+        public Universe()
+        {
+
+        }
+
+        public Universe(SerializationInfo info, StreamingContext ctxt)
+        {
+
+            this.Maptiles = (List<MapTile>)info.GetValue("maptiles",typeof(List<MapTile>));
+            this.outposts = (List<Outpost>)info.GetValue("outposts", typeof(List<Outpost>));
+            this.BuildingBuildQueue = (List<BuildQueueItem>)info.GetValue("buildingqueue",typeof(List<BuildQueueItem>));
+            this.DefenceBuildQueue = (List<BuildQueueItem>)info.GetValue("defencequeue", typeof(List<BuildQueueItem>));
+            this.OffenceBuildQueue = (List<BuildQueueItem>)info.GetValue("offencequeue",typeof(List<BuildQueueItem>));
+            this.players = (List<Player>)info.GetValue("players", typeof(List<Player>));
+            this.r = (Random)info.GetValue("random",typeof(Random));
+            this.Messages = (List<Message>)info.GetValue("messages",typeof(List<Message>));
+
+        }
+
+        public void GetObjectData(SerializationInfo info, StreamingContext ctxt)
+        {
+
+            info.AddValue("maptiles", this.Maptiles);
+            info.AddValue("outposts", this.outposts);
+            info.AddValue("buildingqueue", this.BuildingBuildQueue);
+            info.AddValue("defencequeue", this.DefenceBuildQueue);
+            info.AddValue("offencequeue", this.OffenceBuildQueue);
+            info.AddValue("players", this.players);
+            info.AddValue("random", this.r);
+            info.AddValue("messages", this.Messages);
+        }
+
+
     }
 }
