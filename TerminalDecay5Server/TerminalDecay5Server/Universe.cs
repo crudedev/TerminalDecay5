@@ -27,33 +27,36 @@ namespace TerminalDecay5Server
             players = new List<Player>();
             Messages = new List<Message>();
 
-            MapTile t;
-
-            int x = 0;
-            int y = 0;
-
-            r = new Random();
-            
-            for (int i = 0; i < 625; i++)
+            if (false)
             {
-                t = new MapTile();
-                t.Resources[Cmn.Resource[Cmn.Renum.Metal]] = r.Next(20000);
-                t.Resources[Cmn.Resource[Cmn.Renum.Food]] = r.Next(500);
-                t.Resources[Cmn.Resource[Cmn.Renum.Water]]= r.Next(10000);
+                MapTile t;
 
-                t.MaxResources[Cmn.Resource[Cmn.Renum.Metal]] = t.Resources[Cmn.Resource[Cmn.Renum.Metal]];
-                t.MaxResources[Cmn.Resource[Cmn.Renum.Food]] = t.Resources[Cmn.Resource[Cmn.Renum.Food]];
-                t.MaxResources[Cmn.Resource[Cmn.Renum.Water]]= t.Resources[Cmn.Resource[Cmn.Renum.Water]];
+                int x = 0;
+                int y = 0;
 
-                Maptiles.Add(t);
-                t.X = x;
-                t.Y = y;
+                r = new Random();
 
-                x++;
-                if (x==25)
+                for (int i = 0; i < 625; i++)
                 {
-                    x = 0;
-                    y++;
+                    t = new MapTile();
+                    t.Resources[Cmn.Resource[Cmn.Renum.Metal]] = r.Next(20000);
+                    t.Resources[Cmn.Resource[Cmn.Renum.Food]] = r.Next(500);
+                    t.Resources[Cmn.Resource[Cmn.Renum.Water]] = r.Next(10000);
+
+                    t.MaxResources[Cmn.Resource[Cmn.Renum.Metal]] = t.Resources[Cmn.Resource[Cmn.Renum.Metal]];
+                    t.MaxResources[Cmn.Resource[Cmn.Renum.Food]] = t.Resources[Cmn.Resource[Cmn.Renum.Food]];
+                    t.MaxResources[Cmn.Resource[Cmn.Renum.Water]] = t.Resources[Cmn.Resource[Cmn.Renum.Water]];
+
+                    Maptiles.Add(t);
+                    t.X = x;
+                    t.Y = y;
+
+                    x++;
+                    if (x == 25)
+                    {
+                        x = 0;
+                        y++;
+                    }
                 }
             }
         }
@@ -66,14 +69,14 @@ namespace TerminalDecay5Server
         public Universe(SerializationInfo info, StreamingContext ctxt)
         {
 
-            this.Maptiles = (List<MapTile>)info.GetValue("maptiles",typeof(List<MapTile>));
+            this.Maptiles = (List<MapTile>)info.GetValue("maptiles", typeof(List<MapTile>));
             this.outposts = (List<Outpost>)info.GetValue("outposts", typeof(List<Outpost>));
-            this.BuildingBuildQueue = (List<BuildQueueItem>)info.GetValue("buildingqueue",typeof(List<BuildQueueItem>));
+            this.BuildingBuildQueue = (List<BuildQueueItem>)info.GetValue("buildingqueue", typeof(List<BuildQueueItem>));
             this.DefenceBuildQueue = (List<BuildQueueItem>)info.GetValue("defencequeue", typeof(List<BuildQueueItem>));
-            this.OffenceBuildQueue = (List<BuildQueueItem>)info.GetValue("offencequeue",typeof(List<BuildQueueItem>));
+            this.OffenceBuildQueue = (List<BuildQueueItem>)info.GetValue("offencequeue", typeof(List<BuildQueueItem>));
             this.players = (List<Player>)info.GetValue("players", typeof(List<Player>));
-            this.r = (Random)info.GetValue("random",typeof(Random));
-            this.Messages = (List<Message>)info.GetValue("messages",typeof(List<Message>));
+            this.r = (Random)info.GetValue("random", typeof(Random));
+            this.Messages = (List<Message>)info.GetValue("messages", typeof(List<Message>));
 
         }
 

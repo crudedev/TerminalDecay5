@@ -20,11 +20,19 @@ namespace TerminalDecay5Server
         {
             Cmn.Init();
             universe.InitUniverse();
+
+            string path = "C:\\TDSave\\642df721-6d96-4851-895e-d0e84ad925e2.loldongs";
+
+            Serialiser s = new Serialiser();
+            Serialised sd = new Serialised();
+
+            sd = s.DeSerializeUniverse(path);
+            universe = sd.tu;
+
             MessageConstants.InitValues();
             _tcpListener = new TcpListener(IPAddress.Any, 3000);
             _listenThread = new Thread(new ThreadStart(ListenForClients));
             _listenThread.Start();
-            universe.players = new List<Player>();
             _serverTick = new Timer(RunUniverse, universe, 20000, 40000);
             _serverSave = new Timer(SaveUnivsere, universe, 20000, 400000);
         }
@@ -43,7 +51,7 @@ namespace TerminalDecay5Server
             Universe u = (Universe)ob;
 
             #region add resoureces from buildings
-            
+
             foreach (Outpost outpost in u.outposts)
             {
                 for (int i = 0; i < Cmn.BuildType.Count; i++)
@@ -428,27 +436,27 @@ namespace TerminalDecay5Server
 
         private void ReadMessage(List<List<string>> Transmitions, TcpClient tcpClient)
         {
-            
+
 
             string response = MessageConstants.MessageTypes[16] + MessageConstants.nextMessageToken;
-            
+
             Player pl = getPlayer(Transmitions[1][0]);
-            
+
             int messageCount = 0;
 
             foreach (var item in universe.Messages)
             {
                 if (item.recipientID == pl.PlayerID)
-                {                    
+                {
                     messageCount++;
-                    if (messageCount == Convert.ToInt32(Transmitions[2][0])+1) 
+                    if (messageCount == Convert.ToInt32(Transmitions[2][0]) + 1)
                     {
                         response += item.messageTitle + MessageConstants.splitMessageToken + item.senderID + MessageConstants.splitMessageToken + item.messageBody + MessageConstants.splitMessageToken + item.sentDate;
                         item.read = true;
                     }
                 }
             }
-            
+
             response += MessageConstants.messageCompleteToken;
             NetworkStream clientStream = tcpClient.GetStream();
             ASCIIEncoding encoder = new ASCIIEncoding();
