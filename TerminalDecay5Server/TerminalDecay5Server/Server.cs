@@ -397,15 +397,63 @@ namespace TerminalDecay5Server
                 Attack(Transmitions, tcpClient);
             }
 
+            if (Transmitions[0][0] == MessageConstants.MessageTypes[15])
+            {
+                SendMessages(Transmitions, tcpClient);
+            }
+
             tcpClient.Close();
             client = null;
 
             #endregion
         }
 
+        private void SendMessages(List<List<string>> Transmitions, TcpClient tcpClient)
+        {
+
+
+            string response = MessageConstants.MessageTypes[15] + MessageConstants.nextMessageToken;
+
+
+            Player pl = getPlayer(Transmitions[1][0]);
+
+            List<Message> Mes = new List<Message>();
+
+            foreach (var item in universe.Messages)
+            {
+                if(item.recipientID == pl.PlayerID)
+                {
+                    Mes.Add(item);
+                }
+            }
+
+
+            foreach (var item in Mes)
+            {
+                response += item.senderID + ": " + item.messageTitle + MessageConstants.splitMessageToken;
+            }
+
+            response += MessageConstants.nextMessageToken;
+
+            foreach (var item in universe.players)
+            {
+                response += item.PlayerID + ":" + item.Name + MessageConstants.splitMessageToken;
+            }
+
+            response += MessageConstants.messageCompleteToken;
+            NetworkStream clientStream = tcpClient.GetStream();
+            ASCIIEncoding encoder = new ASCIIEncoding();
+
+            byte[] buffer = encoder.GetBytes(response);
+
+            clientStream.Write(buffer, 0, buffer.Length);
+            clientStream.Flush();
+
+        }
+
         private void Attack(List<List<string>> Transmitions, TcpClient tcpClient)
         {
-            string response = "";
+            string response = MessageConstants.MessageTypes[14] + MessageConstants.nextMessageToken;
 
             Player Attacker = getPlayer(Transmitions[0][1]);
             Outpost AttackOp = getOutpost(Transmitions[1][0], Transmitions[1][1]);

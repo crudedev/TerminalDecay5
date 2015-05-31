@@ -898,8 +898,13 @@ namespace TerminalDecay5Client
 
         private void BtnMessages_Click(object sender, EventArgs e)
         {
+
+            if(frmMessage == null || frmMessage.IsDisposed)
+            {
+                frmMessage = new Messages();
+            }
             frmMessage.Show();
-            frmMessage.Init(universe);
+            frmMessage.Init(playerToken);
         }
     }
 }

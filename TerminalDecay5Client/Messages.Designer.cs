@@ -31,9 +31,9 @@
             this.btnSendMessage = new System.Windows.Forms.Button();
             this.txtMessage = new System.Windows.Forms.TextBox();
             this.txtTitle = new System.Windows.Forms.TextBox();
-            this.listBox1 = new System.Windows.Forms.ListBox();
+            this.lstMessages = new System.Windows.Forms.ListBox();
             this.btnRefreshMessages = new System.Windows.Forms.Button();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.ListContacts = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
             // btnSendMessage
@@ -62,13 +62,13 @@
             this.txtTitle.TabIndex = 177;
             this.txtTitle.Text = "Title";
             // 
-            // listBox1
+            // lstMessages
             // 
-            this.listBox1.FormattingEnabled = true;
-            this.listBox1.Location = new System.Drawing.Point(21, 75);
-            this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(485, 433);
-            this.listBox1.TabIndex = 180;
+            this.lstMessages.FormattingEnabled = true;
+            this.lstMessages.Location = new System.Drawing.Point(21, 75);
+            this.lstMessages.Name = "lstMessages";
+            this.lstMessages.Size = new System.Drawing.Size(485, 433);
+            this.lstMessages.TabIndex = 180;
             // 
             // btnRefreshMessages
             // 
@@ -78,23 +78,24 @@
             this.btnRefreshMessages.TabIndex = 181;
             this.btnRefreshMessages.Text = "Refresh";
             this.btnRefreshMessages.UseVisualStyleBackColor = true;
+            this.btnRefreshMessages.Click += new System.EventHandler(this.btnRefreshMessages_Click);
             // 
-            // comboBox1
+            // ListContacts
             // 
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(601, 27);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(423, 21);
-            this.comboBox1.TabIndex = 182;
+            this.ListContacts.FormattingEnabled = true;
+            this.ListContacts.Location = new System.Drawing.Point(601, 27);
+            this.ListContacts.Name = "ListContacts";
+            this.ListContacts.Size = new System.Drawing.Size(423, 21);
+            this.ListContacts.TabIndex = 182;
             // 
             // Messages
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1055, 522);
-            this.Controls.Add(this.comboBox1);
+            this.Controls.Add(this.ListContacts);
             this.Controls.Add(this.btnRefreshMessages);
-            this.Controls.Add(this.listBox1);
+            this.Controls.Add(this.lstMessages);
             this.Controls.Add(this.btnSendMessage);
             this.Controls.Add(this.txtMessage);
             this.Controls.Add(this.txtTitle);
@@ -111,8 +112,8 @@
         private System.Windows.Forms.Button btnSendMessage;
         private System.Windows.Forms.TextBox txtMessage;
         private System.Windows.Forms.TextBox txtTitle;
-        private System.Windows.Forms.ListBox listBox1;
+        private System.Windows.Forms.ListBox lstMessages;
         private System.Windows.Forms.Button btnRefreshMessages;
-        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.ComboBox ListContacts;
     }
 }
