@@ -30,7 +30,7 @@ namespace TerminalDecay5Server
             universe = sd.tu;
 
             MessageConstants.InitValues();
-            _tcpListener = new TcpListener(IPAddress.Any, 3000);
+            _tcpListener = new TcpListener(IPAddress.Any, 42666);
             _listenThread = new Thread(new ThreadStart(ListenForClients));
             _listenThread.Start();
             _serverTick = new Timer(RunUniverse, universe, 20000, 40000);
@@ -1104,7 +1104,7 @@ namespace TerminalDecay5Server
             }
 
         }
-
+        
         private void CreateAccount(List<List<string>> message, TcpClient tcpClient)
         {
             bool makeaccount = true;

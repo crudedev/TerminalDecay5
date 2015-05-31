@@ -35,11 +35,13 @@ namespace TerminalDecay5Client
 
         public void ServerRequest(ClientCallback callback, int mtype, string req)
         {
+            IPAddress ad =  Dns.GetHostAddresses("dankdankdank.ddns.net")[0];
+            
             MessageConstants.InitValues();
 
             TcpClient client = new TcpClient();
 
-            IPEndPoint serverEndPoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 3000);
+            IPEndPoint serverEndPoint = new IPEndPoint(ad, 42666);
 
             client.Connect(serverEndPoint);
 
