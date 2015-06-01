@@ -8,7 +8,7 @@ namespace TerminalDecay5Server
     [Serializable()]
     public class Universe : ISerializable
     {
-        public List<MapTile> Maptiles;
+        public List<Cluster> clusters;
         public List<Outpost> outposts;
         public List<BuildQueueItem> BuildingBuildQueue;
         public List<BuildQueueItem> DefenceBuildQueue;
@@ -19,7 +19,14 @@ namespace TerminalDecay5Server
 
         public void InitUniverse()
         {
-            Maptiles = new List<MapTile>();
+            clusters = new List<Cluster>();
+            clusters.Add(new Cluster());
+            clusters[0].solarSystems = new List<SolarSystem>();
+            clusters[0].solarSystems.Add(new SolarSystem());
+            clusters[0].solarSystems[0].planets = new List<Planet>();
+            clusters[0].solarSystems[0].planets.Add(new Planet());
+            clusters[0].solarSystems[0].planets[0].mapTiles = new List<MapTile>();
+            
             BuildingBuildQueue = new List<BuildQueueItem>();
             DefenceBuildQueue = new List<BuildQueueItem>();
             OffenceBuildQueue = new List<BuildQueueItem>();
@@ -27,7 +34,7 @@ namespace TerminalDecay5Server
             players = new List<Player>();
             Messages = new List<Message>();
 
-            if (false)
+            if (true)
             {
                 MapTile t;
 
@@ -47,9 +54,8 @@ namespace TerminalDecay5Server
                     t.MaxResources[Cmn.Resource[Cmn.Renum.Food]] = t.Resources[Cmn.Resource[Cmn.Renum.Food]];
                     t.MaxResources[Cmn.Resource[Cmn.Renum.Water]] = t.Resources[Cmn.Resource[Cmn.Renum.Water]];
 
-                    Maptiles.Add(t);
-                    t.X = x;
-                    t.Y = y;
+                    clusters[0].solarSystems[0].planets[0].mapTiles.Add(t);
+                    t.position = new Position(x, y);
 
                     x++;
                     if (x == 25)
@@ -69,7 +75,7 @@ namespace TerminalDecay5Server
         public Universe(SerializationInfo info, StreamingContext ctxt)
         {
 
-            this.Maptiles = (List<MapTile>)info.GetValue("maptiles", typeof(List<MapTile>));
+            this.clusters = (List<Cluster>)info.GetValue("Cluster", typeof(List<Cluster>));
             this.outposts = (List<Outpost>)info.GetValue("outposts", typeof(List<Outpost>));
             this.BuildingBuildQueue = (List<BuildQueueItem>)info.GetValue("buildingqueue", typeof(List<BuildQueueItem>));
             this.DefenceBuildQueue = (List<BuildQueueItem>)info.GetValue("defencequeue", typeof(List<BuildQueueItem>));
@@ -83,7 +89,7 @@ namespace TerminalDecay5Server
         public void GetObjectData(SerializationInfo info, StreamingContext ctxt)
         {
 
-            info.AddValue("maptiles", this.Maptiles);
+            info.AddValue("Cluster", this.clusters);
             info.AddValue("outposts", this.outposts);
             info.AddValue("buildingqueue", this.BuildingBuildQueue);
             info.AddValue("defencequeue", this.DefenceBuildQueue);

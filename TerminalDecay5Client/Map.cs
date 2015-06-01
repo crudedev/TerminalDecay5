@@ -73,16 +73,24 @@ namespace TerminalDecay5Client
         private void RenderResMap(List<List<string>> transmition)
         {
             CurrentView = 0;
-            universe.Maptiles = new List<MapTile>();
+            universe.clusters = new List<Cluster>();
+            universe.clusters.Add(new Cluster());
+            universe.clusters[0].solarSystems = new List<SolarSystem>();
+            universe.clusters[0].solarSystems.Add(new SolarSystem());
+            universe.clusters[0].solarSystems[0].planets = new List<Planet>();
+            universe.clusters[0].solarSystems[0].planets.Add(new Planet());
+            universe.clusters[0].solarSystems[0].planets[0].mapTiles = new List<MapTile>();
+            universe.clusters[0].solarSystems[0].planets[0].mapTiles = new List<MapTile>();
             for (int i = 1; i < transmition.Count - 1; i++)
             {
                 MapTile m = new MapTile();
-                m.X = Convert.ToInt64(transmition[i][0]);
-                m.Y = Convert.ToInt64(transmition[i][1]);
+                m.position = new Position();
+                m.position.X = Convert.ToInt32(transmition[i][0]);
+                m.position.Y = Convert.ToInt32(transmition[i][1]);
                 m.Resources[Cmn.Resource[Cmn.Renum.Metal]] = Convert.ToInt64(transmition[i][2]);
                 m.Resources[Cmn.Resource[Cmn.Renum.Food]] = Convert.ToInt64(transmition[i][3]);
                 m.Resources[Cmn.Resource[Cmn.Renum.Water]] = Convert.ToInt64(transmition[i][4]);
-                universe.Maptiles.Add(m);
+                universe.clusters[0].solarSystems[0].planets[0].mapTiles.Add(m);
             }
 
             Bitmap MapImage = new Bitmap(MapCanvas.Width, MapCanvas.Height);
@@ -94,7 +102,7 @@ namespace TerminalDecay5Client
 
             Color c;
 
-            foreach (MapTile m in universe.Maptiles)
+            foreach (MapTile m in universe.clusters[0].solarSystems[0].planets[0].mapTiles)
             {
 
                 double fr = Convert.ToDouble(m.Resources[Cmn.Resource[Cmn.Renum.Metal]]) / 20000f * 255f;
@@ -110,7 +118,7 @@ namespace TerminalDecay5Client
                 tilegraph = Graphics.FromImage(maptile);
                 SolidBrush b = new SolidBrush(c);
                 tilegraph.FillRectangle(b, 0, 0, 25, 25);
-                mapgraph.DrawImage(maptile, new Point(Convert.ToInt32(m.X * 26), Convert.ToInt32(m.Y * 26)));
+                mapgraph.DrawImage(maptile, new Point(Convert.ToInt32(m.position.X * 26), Convert.ToInt32(m.position.Y * 26)));
 
             }
 

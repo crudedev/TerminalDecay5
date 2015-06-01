@@ -26,8 +26,8 @@ namespace TerminalDecay5Server
             Serialiser s = new Serialiser();
             Serialised sd = new Serialised();
 
-            sd = s.DeSerializeUniverse(path);
-            universe = sd.tu;
+         //   sd = s.DeSerializeUniverse(path);
+         //   universe = sd.tu;
 
             MessageConstants.InitValues();
             _tcpListener = new TcpListener(IPAddress.Any, 42666);
@@ -42,7 +42,7 @@ namespace TerminalDecay5Server
             Universe u = (Universe)ob;
             string path = "C:\\TDSave\\" + Guid.NewGuid().ToString() + ".loldongs";
             Serialiser s = new Serialiser();
-            s.SerializeUniverse(path, new Serialised(u));
+         //   s.SerializeUniverse(path, new Serialised(u));
 
         }
 
@@ -67,7 +67,7 @@ namespace TerminalDecay5Server
                             int pickedTile = (int)(u.r.Next(outpost.Tiles.Count));
                             if (!pickedTiles.Contains(pickedTile))
                             {
-                                MapTile m = u.Maptiles[getTileFromPosition(outpost.Tiles[pickedTile])];
+                                MapTile m = u.clusters[0].solarSystems[0].planets[0].mapTiles[getTileFromPosition(outpost.Tiles[pickedTile])];
                                 if (m.Resources[ii] > Cmn.BuildingProduction[i][ii])
                                 {
                                     found = true;
@@ -95,7 +95,7 @@ namespace TerminalDecay5Server
             #endregion
 
             #region update teh map
-            foreach (MapTile item in u.Maptiles)
+            foreach (MapTile item in u.clusters[0].solarSystems[0].planets[0].mapTiles)
             {
                 item.Resources[Cmn.Resource[Cmn.Renum.Food]] = (long)(item.Resources[Cmn.Resource[Cmn.Renum.Food]] * 1.001);
                 item.Resources[Cmn.Resource[Cmn.Renum.Water]] = (long)(item.Resources[Cmn.Resource[Cmn.Renum.Water]] * 1.001);
@@ -1081,9 +1081,9 @@ namespace TerminalDecay5Server
             {
                 string Message = MessageConstants.MessageTypes[0] + MessageConstants.nextMessageToken;
 
-                foreach (MapTile m in universe.Maptiles)
+                foreach (MapTile m in universe.clusters[0].solarSystems[0].planets[0].mapTiles)
                 {
-                    Message = Message + Convert.ToString(m.X) + MessageConstants.splitMessageToken + Convert.ToString(m.Y) + MessageConstants.splitMessageToken + m.Resources[Cmn.Resource[Cmn.Renum.Metal]] + MessageConstants.splitMessageToken + m.Resources[Cmn.Resource[Cmn.Renum.Food]] + MessageConstants.splitMessageToken + m.Resources[Cmn.Resource[Cmn.Renum.Water]];
+                    Message = Message + Convert.ToString(m.position.X) + MessageConstants.splitMessageToken + Convert.ToString(m.position.Y) + MessageConstants.splitMessageToken + m.Resources[Cmn.Resource[Cmn.Renum.Metal]] + MessageConstants.splitMessageToken + m.Resources[Cmn.Resource[Cmn.Renum.Food]] + MessageConstants.splitMessageToken + m.Resources[Cmn.Resource[Cmn.Renum.Water]];
                     Message = Message + MessageConstants.nextMessageToken;
                 }
 
@@ -1280,7 +1280,7 @@ namespace TerminalDecay5Server
             //find the tile involved from the message 
             int index = Convert.ToInt32(message[0][2]) * 25 + Convert.ToInt32(message[0][3]);
 
-            string response = MessageConstants.MessageTypes[4] + MessageConstants.nextMessageToken + universe.Maptiles[index].Resources[Cmn.Resource[Cmn.Renum.Metal]] + MessageConstants.splitMessageToken + universe.Maptiles[index].Resources[Cmn.Resource[Cmn.Renum.Food]] + MessageConstants.splitMessageToken + universe.Maptiles[index].Resources[Cmn.Resource[Cmn.Renum.Water]] + MessageConstants.splitMessageToken;
+            string response = MessageConstants.MessageTypes[4] + MessageConstants.nextMessageToken + universe.clusters[0].solarSystems[0].planets[0].mapTiles[index].Resources[Cmn.Resource[Cmn.Renum.Metal]] + MessageConstants.splitMessageToken + universe.clusters[0].solarSystems[0].planets[0].mapTiles[index].Resources[Cmn.Resource[Cmn.Renum.Food]] + MessageConstants.splitMessageToken + universe.clusters[0].solarSystems[0].planets[0].mapTiles[index].Resources[Cmn.Resource[Cmn.Renum.Water]] + MessageConstants.splitMessageToken;
 
             response += MessageConstants.messageCompleteToken;
 

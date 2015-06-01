@@ -99,8 +99,7 @@ namespace TerminalDecay5Client
                 //the client has disconnected from the server
                 return;
             }
-
-
+            
 
             List<List<string>> transmition = DecodeTransmition(reply);
 
