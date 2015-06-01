@@ -79,9 +79,15 @@ namespace TerminalDecay5Client
                     encoder = new ASCIIEncoding();
 
                     reply += encoder.GetString(message, 0, bytesRead);
-                    if (bytesRead < 4096)
+
+                    if (reply.Substring(reply.Length - MessageConstants.messageCompleteToken.Length,MessageConstants.messageCompleteToken.Length) == MessageConstants.messageCompleteToken)
                     {
                         break;
+                    }
+
+                    if (bytesRead < 4096)
+                    {
+                      //  break;
                     }
 
                     bytesRead = clientStream.Read(message, 0, 4096);

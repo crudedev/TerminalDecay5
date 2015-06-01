@@ -279,7 +279,7 @@ namespace TerminalDecay5Server
 
             ASCIIEncoding encoder = new ASCIIEncoding();
 
-            string transmitionString = "";
+            string transmissionString = "";
 
 
             bytesRead = 0;
@@ -295,10 +295,17 @@ namespace TerminalDecay5Server
                     //message has successfully been received
                     encoder = new ASCIIEncoding();
 
-                    transmitionString += encoder.GetString(message, 0, bytesRead);
-                    if (bytesRead < 4096)
+                    transmissionString += encoder.GetString(message, 0, bytesRead);
+                    
+
+                    if (transmissionString.Substring(transmissionString.Length - MessageConstants.messageCompleteToken.Length, MessageConstants.messageCompleteToken.Length) == MessageConstants.messageCompleteToken)
                     {
                         break;
+                    }
+
+                    if (bytesRead < 4096)
+                    {
+                        //  break;
                     }
 
                     bytesRead = clientStream.Read(message, 0, 4096);
@@ -322,11 +329,11 @@ namespace TerminalDecay5Server
 
             #region Message Proccessing
 
-            transmitionString = transmitionString.Replace(MessageConstants.messageCompleteToken, "");
+            transmissionString = transmissionString.Replace(MessageConstants.messageCompleteToken, "");
 
 
             string[] messages;
-            messages = transmitionString.Split(new string[] { MessageConstants.nextMessageToken }, StringSplitOptions.None);
+            messages = transmissionString.Split(new string[] { MessageConstants.nextMessageToken }, StringSplitOptions.None);
 
             List<List<string>> Transmitions = new List<List<string>>();
 
@@ -1219,6 +1226,8 @@ namespace TerminalDecay5Server
             {
                 reply = MessageConstants.MessageTypes[2] + MessageConstants.nextMessageToken + "nope";
             }
+
+            reply += MessageConstants.messageCompleteToken;
 
             NetworkStream clientStream = tcpClient.GetStream();
             ASCIIEncoding encoder = new ASCIIEncoding();
