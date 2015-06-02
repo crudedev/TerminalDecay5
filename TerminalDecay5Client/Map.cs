@@ -47,15 +47,15 @@ namespace TerminalDecay5Client
             sc.ServerRequest(DrawPlayerResources, 6, MessageConstants.splitMessageToken + Convert.ToString(playerToken) + MessageConstants.splitMessageToken);
         }
 
-        private void DrawPlayerResources(List<List<string>> transmition)
+        private void DrawPlayerResources(List<List<string>> transmission)
         {
-            LblEnergy.Text = "Power: " + transmition[1][3];
-            LblFood.Text = "Food: " + transmition[1][0];
-            LblMetal.Text = "Metal: " + transmition[1][1];
-            LblPopulation.Text = "Population: " + transmition[1][2];
-            LblWater.Text = "Water: " + transmition[1][4];
+            LblEnergy.Text = "Power: " + transmission[1][3];
+            LblFood.Text = "Food: " + transmission[1][0];
+            LblMetal.Text = "Metal: " + transmission[1][1];
+            LblPopulation.Text = "Population: " + transmission[1][2];
+            LblWater.Text = "Water: " + transmission[1][4];
 
-            BtnMessages.Text = "Messages (" + transmition[2][0] + ")";
+            BtnMessages.Text = "Messages (" + transmission[2][0] + ")";
         }
 
         public void SetPlayerToken(Guid tok)
@@ -70,7 +70,7 @@ namespace TerminalDecay5Client
             hideMenus();
         }
 
-        private void RenderResMap(List<List<string>> transmition)
+        private void RenderResMap(List<List<string>> transmission)
         {
             CurrentView = 0;
             universe.clusters = new List<Cluster>();
@@ -81,15 +81,15 @@ namespace TerminalDecay5Client
             universe.clusters[0].solarSystems[0].planets.Add(new Planet());
             universe.clusters[0].solarSystems[0].planets[0].mapTiles = new List<MapTile>();
             universe.clusters[0].solarSystems[0].planets[0].mapTiles = new List<MapTile>();
-            for (int i = 1; i < transmition.Count - 1; i++)
+            for (int i = 1; i < transmission.Count - 1; i++)
             {
                 MapTile m = new MapTile();
                 m.position = new Position();
-                m.position.X = Convert.ToInt32(transmition[i][0]);
-                m.position.Y = Convert.ToInt32(transmition[i][1]);
-                m.Resources[Cmn.Resource[Cmn.Renum.Metal]] = Convert.ToInt64(transmition[i][2]);
-                m.Resources[Cmn.Resource[Cmn.Renum.Food]] = Convert.ToInt64(transmition[i][3]);
-                m.Resources[Cmn.Resource[Cmn.Renum.Water]] = Convert.ToInt64(transmition[i][4]);
+                m.position.X = Convert.ToInt32(transmission[i][0]);
+                m.position.Y = Convert.ToInt32(transmission[i][1]);
+                m.Resources[Cmn.Resource[Cmn.Renum.Metal]] = Convert.ToInt64(transmission[i][2]);
+                m.Resources[Cmn.Resource[Cmn.Renum.Food]] = Convert.ToInt64(transmission[i][3]);
+                m.Resources[Cmn.Resource[Cmn.Renum.Water]] = Convert.ToInt64(transmission[i][4]);
                 universe.clusters[0].solarSystems[0].planets[0].mapTiles.Add(m);
             }
 
@@ -132,8 +132,12 @@ namespace TerminalDecay5Client
             hideMenus();
         }
 
-        private void RenderMainMap(List<List<string>> transmition)
+        private void RenderMainMap(List<List<string>> transmission)
         {
+
+            CheckLoggedOut(transmission);
+
+
             CurrentView = 1;
             Bitmap MapImage = new Bitmap(MapCanvas.Width, MapCanvas.Height);
 
@@ -158,7 +162,7 @@ namespace TerminalDecay5Client
                 }
             }
 
-            foreach (List<string> l in transmition)
+            foreach (List<string> l in transmission)
             {
                 if (l.Count == 5)
                 {
@@ -181,7 +185,7 @@ namespace TerminalDecay5Client
 
                     maptile = new Bitmap(10, 10);
                     tilegraph = Graphics.FromImage(maptile);
-                    int temp = Convert.ToInt32(transmition[1][4]);
+                    int temp = Convert.ToInt32(transmission[1][4]);
                     if (temp > 255)
                     {
                         temp = 255;
@@ -239,25 +243,25 @@ namespace TerminalDecay5Client
                     //get the current offence in that place now, and allow them to use it;
                     ServerConnection sc = new ServerConnection();
                     sc.ServerRequest(DisplayAttack, 13, MessageConstants.splitMessageToken + Convert.ToString(playerToken) + MessageConstants.splitMessageToken + Convert.ToString(_currentX) + MessageConstants.splitMessageToken + Convert.ToString(_currentY) + MessageConstants.splitMessageToken);
-                   
+
                 }
             }
-            
+
         }
-        
-        private void DisplayAttack(List<List<string>> transmition)
+
+        private void DisplayAttack(List<List<string>> transmission)
         {
             hideMenus();
             showAttackMenu(true);
-            
-            lblAttackScout.Text = "Scout: " + transmition[1][0];
-            lblAttackGunship.Text = "Gunship: " + transmition[1][1];
-            lblAttackBomber.Text = "Bomber: " + transmition[1][2];
-            lblAttaackFrigate.Text = "Frigate: " + transmition[1][3];
-            lblAttackDestroyer.Text = "Destroyer: " + transmition[1][4];
-            lblAttackCarrier.Text = "Carrier: " + transmition[1][5];
-            lblAttackBattleship.Text = "BattleShip: " + transmition[1][6];
-            
+
+            lblAttackScout.Text = "Scout: " + transmission[1][0];
+            lblAttackGunship.Text = "Gunship: " + transmission[1][1];
+            lblAttackBomber.Text = "Bomber: " + transmission[1][2];
+            lblAttaackFrigate.Text = "Frigate: " + transmission[1][3];
+            lblAttackDestroyer.Text = "Destroyer: " + transmission[1][4];
+            lblAttackCarrier.Text = "Carrier: " + transmission[1][5];
+            lblAttackBattleship.Text = "BattleShip: " + transmission[1][6];
+
         }
 
         private void showAttackMenu(bool show)
@@ -292,22 +296,25 @@ namespace TerminalDecay5Client
 
         }
 
-        private void UpdateSidePanel(List<List<string>> transmition)
+        private void UpdateSidePanel(List<List<string>> transmission)
         {
-            if (transmition[0][0] == MessageConstants.MessageTypes[4])
+            if (transmission[0][0] == MessageConstants.MessageTypes[4])
             {
-                LblSidePanel.Text = "Metal: " + transmition[1][0] + " Organics: " + transmition[1][1] + " Water: " + transmition[1][2];
+                LblSidePanel.Text = "Metal: " + transmission[1][0] + " Organics: " + transmission[1][1] + " Water: " + transmission[1][2];
 
             }
 
-            if (transmition[0][0] == MessageConstants.MessageTypes[5])
+            if (transmission[0][0] == MessageConstants.MessageTypes[5])
             {
-                if (transmition[1][0] == "-1")
+
+
+
+                if (transmission[1][0] == "-1")
                 {
                     LblSidePanel.Text = "unoccipied land";
                 }
 
-                if (transmition[1][0] == "Enemy")
+                if (transmission[1][0] == "Enemy")
                 {
                     LblSidePanel.Text = "Land occupied by other forces";
                 }
@@ -324,22 +331,22 @@ namespace TerminalDecay5Client
             showBuildmenu(true);
         }
 
-        private void UpdateBuildPanel(List<List<string>> transmition)
+        private void UpdateBuildPanel(List<List<string>> transmission)
         {
-            lblEmpty.Text = "Empty: " + transmition[1][1];
-            LblFarm.Text = "farm: " + transmition[1][2];
-            lblHabitat.Text = "habitat: " + transmition[1][3];
-            lblMine.Text = "mine: " + transmition[1][4];
-            LblSolarPlant.Text = "solar plant: " + transmition[1][5];
-            lblWell.Text = "well: " + transmition[1][6];
-            lblfabricator.Text = "fabricator: " + transmition[1][7];
+            lblEmpty.Text = "Empty: " + transmission[1][1];
+            LblFarm.Text = "farm: " + transmission[1][2];
+            lblHabitat.Text = "habitat: " + transmission[1][3];
+            lblMine.Text = "mine: " + transmission[1][4];
+            LblSolarPlant.Text = "solar plant: " + transmission[1][5];
+            lblWell.Text = "well: " + transmission[1][6];
+            lblfabricator.Text = "fabricator: " + transmission[1][7];
 
-            lblCostFarm.Text = updateBuildPanelCostString(transmition, 3);
-            LblCostHabitabt.Text = updateBuildPanelCostString(transmition, 4);
-            LblCostMine.Text = updateBuildPanelCostString(transmition, 5);
-            lblCostSolarPlant.Text = updateBuildPanelCostString(transmition, 6);
-            lblCostWell.Text = updateBuildPanelCostString(transmition, 7);
-            lblCostFabricator.Text = updateBuildPanelCostString(transmition, 8);
+            lblCostFarm.Text = updateBuildPanelCostString(transmission, 3);
+            LblCostHabitabt.Text = updateBuildPanelCostString(transmission, 4);
+            LblCostMine.Text = updateBuildPanelCostString(transmission, 5);
+            lblCostSolarPlant.Text = updateBuildPanelCostString(transmission, 6);
+            lblCostWell.Text = updateBuildPanelCostString(transmission, 7);
+            lblCostFabricator.Text = updateBuildPanelCostString(transmission, 8);
 
 
             //draw lblbuildxxxxxx values here when the queue has been built
@@ -349,7 +356,7 @@ namespace TerminalDecay5Client
             for (int i = 9; i < 15; i++)
             {
 
-                foreach (string s in transmition[i])
+                foreach (string s in transmission[i])
                 {
                     nonEmptyValue++;
                     if (s != "0")
@@ -377,17 +384,17 @@ namespace TerminalDecay5Client
                 nonEmptyValue = -1;
             }
 
-            lblBuildFarm.Text = transmition[15][3];
-            lblBuildHabitat.Text = transmition[15][2];
-            lblBuildMine.Text = transmition[15][0];
-            LblBuildSolarPlant.Text = transmition[15][4];
-            lblBuildWell.Text = transmition[15][1];
-            lblBuildFabricator.Text = transmition[15][5];
+            lblBuildFarm.Text = transmission[15][3];
+            lblBuildHabitat.Text = transmission[15][2];
+            lblBuildMine.Text = transmission[15][0];
+            LblBuildSolarPlant.Text = transmission[15][4];
+            lblBuildWell.Text = transmission[15][1];
+            lblBuildFabricator.Text = transmission[15][5];
         }
 
-        private string updateBuildPanelCostString(List<List<string>> transmition, int x)
+        private string updateBuildPanelCostString(List<List<string>> transmission, int x)
         {
-            return string.Format("Population: {0}, Metal: {1}, Water: {2}, Power: {3}, Food {4}", transmition[x][0], transmition[x][1], transmition[x][2], transmition[x][3], transmition[x][4]);
+            return string.Format("Population: {0}, Metal: {1}, Water: {2}, Power: {3}, Food {4}", transmission[x][0], transmission[x][1], transmission[x][2], transmission[x][3], transmission[x][4]);
         }
 
         private void showBuildmenu(bool show)
@@ -554,19 +561,19 @@ namespace TerminalDecay5Client
             showDefenceMenu(true);
         }
 
-        private void UpdateBuildDefPanel(List<List<string>> transmition)
+        private void UpdateBuildDefPanel(List<List<string>> transmission)
         {
-            lblPatrol.Text = "patrol: " + transmition[1][1];
-            lblGunner.Text = "gunner: " + transmition[1][2];
-            lblTurret.Text = "turret: " + transmition[1][3];
-            lblArtillery.Text = "artillery: " + transmition[1][4];
-            lblDroneBase.Text = "drone base: " + transmition[1][5];
+            lblPatrol.Text = "patrol: " + transmission[1][1];
+            lblGunner.Text = "gunner: " + transmission[1][2];
+            lblTurret.Text = "turret: " + transmission[1][3];
+            lblArtillery.Text = "artillery: " + transmission[1][4];
+            lblDroneBase.Text = "drone base: " + transmission[1][5];
 
-            lblCostPatrol.Text = updateBuildPanelCostString(transmition, 3);
-            lblCostGunner.Text = updateBuildPanelCostString(transmition, 4);
-            lblCostTurret.Text = updateBuildPanelCostString(transmition, 5);
-            lblCostArtillery.Text = updateBuildPanelCostString(transmition, 6);
-            lblCostDroneBase.Text = updateBuildPanelCostString(transmition, 7);
+            lblCostPatrol.Text = updateBuildPanelCostString(transmission, 3);
+            lblCostGunner.Text = updateBuildPanelCostString(transmission, 4);
+            lblCostTurret.Text = updateBuildPanelCostString(transmission, 5);
+            lblCostArtillery.Text = updateBuildPanelCostString(transmission, 6);
+            lblCostDroneBase.Text = updateBuildPanelCostString(transmission, 7);
 
 
 
@@ -575,7 +582,7 @@ namespace TerminalDecay5Client
             for (int i = 3; i < 9; i++)
             {
 
-                foreach (string s in transmition[i])
+                foreach (string s in transmission[i])
                 {
                     nonEmptyValue++;
                     if (s != "0")
@@ -603,11 +610,11 @@ namespace TerminalDecay5Client
                 nonEmptyValue = -1;
             }
 
-            lblPatrolBuild.Text = transmition[9][0];
-            lblGunnerBuild.Text = transmition[9][1];
-            lblTurretBuild.Text = transmition[9][2];
-            lblArtilleryBuild.Text = transmition[9][3];
-            lblDroneBaseBuild.Text = transmition[9][4];
+            lblPatrolBuild.Text = transmission[9][0];
+            lblGunnerBuild.Text = transmission[9][1];
+            lblTurretBuild.Text = transmission[9][2];
+            lblArtilleryBuild.Text = transmission[9][3];
+            lblDroneBaseBuild.Text = transmission[9][4];
 
         }
 
@@ -729,23 +736,23 @@ namespace TerminalDecay5Client
             LblSidePanel.Visible = !show;
         }
 
-        private void UpdateBuildOffPanel(List<List<string>> transmition)
+        private void UpdateBuildOffPanel(List<List<string>> transmission)
         {
-            lblScout.Text = "scout: " + transmition[1][1];
-            lblGunship.Text = "gunship: " + transmition[1][2];
-            lblBomber.Text = "bomber: " + transmition[1][3];
-            lblFrigate.Text = "frigate: " + transmition[1][4];
-            lblDestroyer.Text = "destroyer: " + transmition[1][5];
-            lblCarrier.Text = "carrier:" + transmition[1][6];
-            lblBattleship.Text = "battleship:" + transmition[1][7];
+            lblScout.Text = "scout: " + transmission[1][1];
+            lblGunship.Text = "gunship: " + transmission[1][2];
+            lblBomber.Text = "bomber: " + transmission[1][3];
+            lblFrigate.Text = "frigate: " + transmission[1][4];
+            lblDestroyer.Text = "destroyer: " + transmission[1][5];
+            lblCarrier.Text = "carrier:" + transmission[1][6];
+            lblBattleship.Text = "battleship:" + transmission[1][7];
 
-            lblCostScout.Text = updateBuildPanelCostString(transmition, 3);
-            lblCostGunship.Text = updateBuildPanelCostString(transmition, 4);
-            lblCostBomber.Text = updateBuildPanelCostString(transmition, 5);
-            lblCostFrigate.Text = updateBuildPanelCostString(transmition, 6);
-            lblCostDestroyer.Text = updateBuildPanelCostString(transmition, 7);
-            lblCostCarrier.Text = updateBuildPanelCostString(transmition, 8);
-            lblCostBattleship.Text = updateBuildPanelCostString(transmition, 9);
+            lblCostScout.Text = updateBuildPanelCostString(transmission, 3);
+            lblCostGunship.Text = updateBuildPanelCostString(transmission, 4);
+            lblCostBomber.Text = updateBuildPanelCostString(transmission, 5);
+            lblCostFrigate.Text = updateBuildPanelCostString(transmission, 6);
+            lblCostDestroyer.Text = updateBuildPanelCostString(transmission, 7);
+            lblCostCarrier.Text = updateBuildPanelCostString(transmission, 8);
+            lblCostBattleship.Text = updateBuildPanelCostString(transmission, 9);
 
 
 
@@ -754,7 +761,7 @@ namespace TerminalDecay5Client
             for (int i = 3; i < 9; i++)
             {
 
-                foreach (string s in transmition[i])
+                foreach (string s in transmission[i])
                 {
                     nonEmptyValue++;
                     if (s != "0")
@@ -782,29 +789,29 @@ namespace TerminalDecay5Client
                 nonEmptyValue = -1;
             }
 
-            lblScoutBuild.Text = transmition[11][0];
-            lblGunshipBuild.Text = transmition[11][1];
-            lblBomberBuild.Text = transmition[11][2];
-            lblFrigateBuild.Text = transmition[11][3];
-            lblDestroyerBuild.Text = transmition[11][4];
-            lblCarrierBuild.Text = transmition[11][5];
-            lblBattleshipBuild.Text = transmition[11][6];
+            lblScoutBuild.Text = transmission[11][0];
+            lblGunshipBuild.Text = transmission[11][1];
+            lblBomberBuild.Text = transmission[11][2];
+            lblFrigateBuild.Text = transmission[11][3];
+            lblDestroyerBuild.Text = transmission[11][4];
+            lblCarrierBuild.Text = transmission[11][5];
+            lblBattleshipBuild.Text = transmission[11][6];
 
-            lblScoutAttack.Text = transmition[12][0];
-            lblGunshipAttack.Text = transmition[12][1];
-            lblBomberAttack.Text = transmition[12][2];
-            lblFrigateAttack.Text = transmition[12][3];
-            lblDestoyerAttack.Text = transmition[12][4];
-            lblCarrierAttack.Text = transmition[12][5];
-            lblBattleshipAttack.Text = transmition[12][6];
+            lblScoutAttack.Text = transmission[12][0];
+            lblGunshipAttack.Text = transmission[12][1];
+            lblBomberAttack.Text = transmission[12][2];
+            lblFrigateAttack.Text = transmission[12][3];
+            lblDestoyerAttack.Text = transmission[12][4];
+            lblCarrierAttack.Text = transmission[12][5];
+            lblBattleshipAttack.Text = transmission[12][6];
 
-            //lblScoutDefence.Text = transmition[13][0];
-            //lblGunshipDefence.Text = transmition[13][1];
-            //lblBomberDefence.Text = transmition[13][2];
-            //lblFrigateDefence.Text = transmition[13][3];
-            //lblDestroyerDefence.Text = transmition[13][4];
-            //lblCarrierDefence.Text = transmition[13][5];
-            //lblBattleshipDeffence.Text = transmition[13][6];
+            //lblScoutDefence.Text = transmission[13][0];
+            //lblGunshipDefence.Text = transmission[13][1];
+            //lblBomberDefence.Text = transmission[13][2];
+            //lblFrigateDefence.Text = transmission[13][3];
+            //lblDestroyerDefence.Text = transmission[13][4];
+            //lblCarrierDefence.Text = transmission[13][5];
+            //lblBattleshipDeffence.Text = transmission[13][6];
         }
 
         private void btnOffenceBuild_Click(object sender, EventArgs e)
@@ -899,7 +906,8 @@ namespace TerminalDecay5Client
 
             }
         }
-        private void ResultsOfAttack(List<List<string>> transmition)
+
+        private void ResultsOfAttack(List<List<string>> transmission)
         {
 
         }
@@ -907,12 +915,22 @@ namespace TerminalDecay5Client
         private void BtnMessages_Click(object sender, EventArgs e)
         {
 
-            if(frmMessage == null || frmMessage.IsDisposed)
+            if (frmMessage == null || frmMessage.IsDisposed)
             {
                 frmMessage = new Messages();
             }
             frmMessage.Show();
             frmMessage.Init(playerToken);
+        }
+
+        private void CheckLoggedOut(List<List<string>> transmission)
+        {
+            if (transmission[1][0] == "Logout")
+            {
+                MessageBox.Show("user token wrong, user logged out");
+                this.Close();
+                return;
+            }
         }
     }
 }

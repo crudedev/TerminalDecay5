@@ -10,13 +10,13 @@ namespace TerminalDecay5Client
     class ServerConnection
     {
 
-        private List<List<string>> DecodeTransmition(string Message)
+        private List<List<string>> Decodetransmission(string Message)
         {
             Message = Message.Replace(MessageConstants.messageCompleteToken, "");
             string[] messages;
             messages = Message.Split(new string[] { MessageConstants.nextMessageToken }, StringSplitOptions.None);
 
-            List<List<string>> Transmitions = new List<List<string>>();
+            List<List<string>> transmissions = new List<List<string>>();
 
 
             foreach (string m in messages)
@@ -24,11 +24,11 @@ namespace TerminalDecay5Client
                 List<string> messageList = new List<string>();
                 messageList.AddRange(m.Split(new string[] { MessageConstants.splitMessageToken }, StringSplitOptions.None));
 
-                Transmitions.Add(messageList);
+                transmissions.Add(messageList);
 
             }
 
-            return Transmitions;
+            return transmissions;
         }
 
         public delegate void ClientCallback(List<List<string>> transfer);
@@ -107,11 +107,11 @@ namespace TerminalDecay5Client
             }
             
 
-            List<List<string>> transmition = DecodeTransmition(reply);
+            List<List<string>> transmission = Decodetransmission(reply);
 
-            if (transmition[0][0] == MessageConstants.MessageTypes[mtype])
+            if (transmission[0][0] == MessageConstants.MessageTypes[mtype])
             {
-                callback(transmition);
+                callback(transmission);
             }
 
 

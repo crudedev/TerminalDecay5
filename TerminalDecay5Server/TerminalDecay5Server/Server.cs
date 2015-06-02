@@ -26,8 +26,8 @@ namespace TerminalDecay5Server
             Serialiser s = new Serialiser();
             Serialised sd = new Serialised();
 
-         //   sd = s.DeSerializeUniverse(path);
-         //   universe = sd.tu;
+            //   sd = s.DeSerializeUniverse(path);
+            //   universe = sd.tu;
 
             MessageConstants.InitValues();
             _tcpListener = new TcpListener(IPAddress.Any, 42666);
@@ -42,7 +42,7 @@ namespace TerminalDecay5Server
             Universe u = (Universe)ob;
             string path = "C:\\TDSave\\" + Guid.NewGuid().ToString() + ".loldongs";
             Serialiser s = new Serialiser();
-         //   s.SerializeUniverse(path, new Serialised(u));
+            //   s.SerializeUniverse(path, new Serialised(u));
 
         }
 
@@ -296,7 +296,7 @@ namespace TerminalDecay5Server
                     encoder = new ASCIIEncoding();
 
                     transmissionString += encoder.GetString(message, 0, bytesRead);
-                    
+
 
                     if (transmissionString.Substring(transmissionString.Length - MessageConstants.messageCompleteToken.Length, MessageConstants.messageCompleteToken.Length) == MessageConstants.messageCompleteToken)
                     {
@@ -335,14 +335,14 @@ namespace TerminalDecay5Server
             string[] messages;
             messages = transmissionString.Split(new string[] { MessageConstants.nextMessageToken }, StringSplitOptions.None);
 
-            List<List<string>> Transmitions = new List<List<string>>();
+            List<List<string>> transmissions = new List<List<string>>();
 
             foreach (string m in messages)
             {
                 List<string> messageList = new List<string>();
                 messageList.AddRange(m.Split(new string[] { MessageConstants.splitMessageToken }, StringSplitOptions.None));
 
-                Transmitions.Add(messageList);
+                transmissions.Add(messageList);
 
             }
 
@@ -350,89 +350,89 @@ namespace TerminalDecay5Server
 
             #region message dispatch
 
-            if (Transmitions[0][0] == MessageConstants.MessageTypes[0])
+            if (transmissions[0][0] == MessageConstants.MessageTypes[0])
             {
-                SendResMap(Transmitions, tcpClient);
+                SendResMap(transmissions, tcpClient);
             }
 
-            if (Transmitions[0][0] == MessageConstants.MessageTypes[1])
+            if (transmissions[0][0] == MessageConstants.MessageTypes[1])
             {
-                CreateAccount(Transmitions, tcpClient);
+                CreateAccount(transmissions, tcpClient);
             }
 
-            if (Transmitions[0][0] == MessageConstants.MessageTypes[2])
+            if (transmissions[0][0] == MessageConstants.MessageTypes[2])
             {
-                Login(Transmitions, tcpClient);
+                Login(transmissions, tcpClient);
             }
 
-            if (Transmitions[0][0] == MessageConstants.MessageTypes[3])
+            if (transmissions[0][0] == MessageConstants.MessageTypes[3])
             {
-                SendMainMap(Transmitions, tcpClient);
+                SendMainMap(transmissions, tcpClient);
             }
 
-            if (Transmitions[0][0] == MessageConstants.MessageTypes[4])
+            if (transmissions[0][0] == MessageConstants.MessageTypes[4])
             {
-                SendResTile(Transmitions, tcpClient);
+                SendResTile(transmissions, tcpClient);
             }
 
-            if (Transmitions[0][0] == MessageConstants.MessageTypes[5])
+            if (transmissions[0][0] == MessageConstants.MessageTypes[5])
             {
-                SendBuildTile(Transmitions, tcpClient);
+                SendBuildTile(transmissions, tcpClient);
             }
 
-            if (Transmitions[0][0] == MessageConstants.MessageTypes[6])
+            if (transmissions[0][0] == MessageConstants.MessageTypes[6])
             {
-                SendPlayerResources(Transmitions, tcpClient);
+                SendPlayerResources(transmissions, tcpClient);
             }
 
-            if (Transmitions[0][0] == MessageConstants.MessageTypes[7])
+            if (transmissions[0][0] == MessageConstants.MessageTypes[7])
             {
-                SendBuildList(Transmitions, tcpClient);
+                SendBuildList(transmissions, tcpClient);
             }
 
-            if (Transmitions[0][0] == MessageConstants.MessageTypes[8])
+            if (transmissions[0][0] == MessageConstants.MessageTypes[8])
             {
-                AddToBuildingBuildQueue(Transmitions, tcpClient);
+                AddToBuildingBuildQueue(transmissions, tcpClient);
             }
 
-            if (Transmitions[0][0] == MessageConstants.MessageTypes[9])
+            if (transmissions[0][0] == MessageConstants.MessageTypes[9])
             {
-                SendDefenceBuildList(Transmitions, tcpClient);
+                SendDefenceBuildList(transmissions, tcpClient);
             }
 
-            if (Transmitions[0][0] == MessageConstants.MessageTypes[10])
+            if (transmissions[0][0] == MessageConstants.MessageTypes[10])
             {
-                AddToDefenceBuildQueue(Transmitions, tcpClient);
+                AddToDefenceBuildQueue(transmissions, tcpClient);
             }
 
-            if (Transmitions[0][0] == MessageConstants.MessageTypes[11])
+            if (transmissions[0][0] == MessageConstants.MessageTypes[11])
             {
-                SendOffenceBuildList(Transmitions, tcpClient);
+                SendOffenceBuildList(transmissions, tcpClient);
             }
 
-            if (Transmitions[0][0] == MessageConstants.MessageTypes[12])
+            if (transmissions[0][0] == MessageConstants.MessageTypes[12])
             {
-                AddToOffenceBuildQueue(Transmitions, tcpClient);
+                AddToOffenceBuildQueue(transmissions, tcpClient);
             }
 
-            if (Transmitions[0][0] == MessageConstants.MessageTypes[13])
+            if (transmissions[0][0] == MessageConstants.MessageTypes[13])
             {
-                SendOffenceForAttack(Transmitions, tcpClient);
+                SendOffenceForAttack(transmissions, tcpClient);
             }
 
-            if (Transmitions[0][0] == MessageConstants.MessageTypes[14])
+            if (transmissions[0][0] == MessageConstants.MessageTypes[14])
             {
-                Attack(Transmitions, tcpClient);
+                Attack(transmissions, tcpClient);
             }
 
-            if (Transmitions[0][0] == MessageConstants.MessageTypes[15])
+            if (transmissions[0][0] == MessageConstants.MessageTypes[15])
             {
-                SendMessages(Transmitions, tcpClient);
+                SendMessages(transmissions, tcpClient);
             }
 
-            if (Transmitions[0][0] == MessageConstants.MessageTypes[16])
+            if (transmissions[0][0] == MessageConstants.MessageTypes[16])
             {
-                ReadMessage(Transmitions, tcpClient);
+                ReadMessage(transmissions, tcpClient);
             }
 
             tcpClient.Close();
@@ -441,13 +441,13 @@ namespace TerminalDecay5Server
             #endregion
         }
 
-        private void ReadMessage(List<List<string>> Transmitions, TcpClient tcpClient)
+        private void ReadMessage(List<List<string>> transmissions, TcpClient tcpClient)
         {
 
 
             string response = MessageConstants.MessageTypes[16] + MessageConstants.nextMessageToken;
 
-            Player pl = getPlayer(Transmitions[1][0]);
+            Player pl = getPlayer(transmissions[1][0]);
 
             int messageCount = 0;
 
@@ -456,7 +456,7 @@ namespace TerminalDecay5Server
                 if (item.recipientID == pl.PlayerID)
                 {
                     messageCount++;
-                    if (messageCount == Convert.ToInt32(Transmitions[2][0]) + 1)
+                    if (messageCount == Convert.ToInt32(transmissions[2][0]) + 1)
                     {
                         response += item.messageTitle + MessageConstants.splitMessageToken + item.senderID + MessageConstants.splitMessageToken + item.messageBody + MessageConstants.splitMessageToken + item.sentDate;
                         item.read = true;
@@ -475,14 +475,14 @@ namespace TerminalDecay5Server
 
         }
 
-        private void SendMessages(List<List<string>> Transmitions, TcpClient tcpClient)
+        private void SendMessages(List<List<string>> transmissions, TcpClient tcpClient)
         {
 
 
             string response = MessageConstants.MessageTypes[15] + MessageConstants.nextMessageToken;
 
 
-            Player pl = getPlayer(Transmitions[1][0]);
+            Player pl = getPlayer(transmissions[1][0]);
 
             List<Message> Mes = new List<Message>();
 
@@ -518,13 +518,13 @@ namespace TerminalDecay5Server
 
         }
 
-        private void Attack(List<List<string>> Transmitions, TcpClient tcpClient)
+        private void Attack(List<List<string>> transmissions, TcpClient tcpClient)
         {
             string response = MessageConstants.MessageTypes[14] + MessageConstants.nextMessageToken;
 
-            Player Attacker = getPlayer(Transmitions[0][1]);
-            Outpost AttackOp = getOutpost(Transmitions[1][0], Transmitions[1][1]);
-            Outpost DeffenceOp = getOutpost(Transmitions[1][2], Transmitions[1][3]);
+            Player Attacker = getPlayer(transmissions[0][1]);
+            Outpost AttackOp = getOutpost(transmissions[1][0], transmissions[1][1]);
+            Outpost DeffenceOp = getOutpost(transmissions[1][2], transmissions[1][3]);
 
             Int64 attackOff = 0;
             Int64 defenceOff = 0;
@@ -538,11 +538,11 @@ namespace TerminalDecay5Server
 
                     for (int i = 0; i < Cmn.OffenceType.Count; i++)
                     {
-                        if (Convert.ToInt32(Transmitions[2][i]) < AttackOp.Offence[i])
+                        if (Convert.ToInt32(transmissions[2][i]) < AttackOp.Offence[i])
                         {
                             ErrorResponse = "Not Enough Units";
                         }
-                        attackOff += Cmn.OffenceAttack[i] * Convert.ToInt32(Transmitions[2][i]);
+                        attackOff += Cmn.OffenceAttack[i] * Convert.ToInt32(transmissions[2][i]);
                     }
 
                     if (ErrorResponse == "")
@@ -755,14 +755,14 @@ namespace TerminalDecay5Server
 
         }
 
-        private void SendOffenceForAttack(List<List<string>> Transmitions, TcpClient tcpClient)
+        private void SendOffenceForAttack(List<List<string>> transmissions, TcpClient tcpClient)
         {
-            Player pl = getPlayer(Transmitions[0][1]);
+            Player pl = getPlayer(transmissions[0][1]);
             if (pl != null)
             {
                 string response = MessageConstants.MessageTypes[13] + MessageConstants.nextMessageToken;
 
-                response += SendOffenceOntile(Transmitions);
+                response += SendOffenceOntile(transmissions);
 
                 response += MessageConstants.messageCompleteToken;
                 NetworkStream clientStream = tcpClient.GetStream();
@@ -776,10 +776,10 @@ namespace TerminalDecay5Server
 
         }
 
-        private void SendOffenceBuildList(List<List<string>> Transmitions, TcpClient tcpClient)
+        private void SendOffenceBuildList(List<List<string>> transmissions, TcpClient tcpClient)
         {
             string response = MessageConstants.MessageTypes[11] + MessageConstants.nextMessageToken;
-            response += SendOffenceOntile(Transmitions);
+            response += SendOffenceOntile(transmissions);
             response += MessageConstants.nextMessageToken;
 
             foreach (List<long> d in Cmn.OffenceCost)
@@ -805,7 +805,7 @@ namespace TerminalDecay5Server
                 inProgress.Add(0);
             }
 
-            Player pl = getPlayer(Transmitions[0][1]);
+            Player pl = getPlayer(transmissions[0][1]);
 
             foreach (var item in universe.OffenceBuildQueue)
             {
@@ -844,11 +844,11 @@ namespace TerminalDecay5Server
             clientStream.Flush();
         }
 
-        private string SendOffenceOntile(List<List<string>> Transmitions)
+        private string SendOffenceOntile(List<List<string>> transmissions)
         {
             string response = "";
 
-            Outpost op = getOutpost(Transmitions[0][2], Transmitions[0][3]);
+            Outpost op = getOutpost(transmissions[0][2], transmissions[0][3]);
 
             if (op == null)
             {
@@ -867,34 +867,34 @@ namespace TerminalDecay5Server
 
         }
 
-        private void AddToDefenceBuildQueue(List<List<string>> Transmitions, TcpClient tcpClient)
+        private void AddToDefenceBuildQueue(List<List<string>> transmissions, TcpClient tcpClient)
         {
-            for (int i = 0; i < Transmitions[1].Count - 1; i++)
+            for (int i = 0; i < transmissions[1].Count - 1; i++)
             {
-                if (Convert.ToInt32(Transmitions[1][i]) > 0)
+                if (Convert.ToInt32(transmissions[1][i]) > 0)
                 {
-                    BuildQueueItem b = new BuildQueueItem(getPlayer(Transmitions[0][1]).PlayerID, getOutpost(Transmitions[2][0], Transmitions[2][1]).ID, Convert.ToInt32(Transmitions[1][i]), i, Cmn.DefenceCost[i]);
+                    BuildQueueItem b = new BuildQueueItem(getPlayer(transmissions[0][1]).PlayerID, getOutpost(transmissions[2][0], transmissions[2][1]).ID, Convert.ToInt32(transmissions[1][i]), i, Cmn.DefenceCost[i]);
                     universe.DefenceBuildQueue.Add(b);
                 }
             }
         }
 
-        private void AddToOffenceBuildQueue(List<List<string>> Transmitions, TcpClient tcpClient)
+        private void AddToOffenceBuildQueue(List<List<string>> transmissions, TcpClient tcpClient)
         {
-            for (int i = 0; i < Transmitions[1].Count - 1; i++)
+            for (int i = 0; i < transmissions[1].Count - 1; i++)
             {
-                if (Convert.ToInt32(Transmitions[1][i]) > 0)
+                if (Convert.ToInt32(transmissions[1][i]) > 0)
                 {
-                    BuildQueueItem b = new BuildQueueItem(getPlayer(Transmitions[0][1]).PlayerID, getOutpost(Transmitions[2][0], Transmitions[2][1]).ID, Convert.ToInt32(Transmitions[1][i]), i, Cmn.OffenceCost[i]);
+                    BuildQueueItem b = new BuildQueueItem(getPlayer(transmissions[0][1]).PlayerID, getOutpost(transmissions[2][0], transmissions[2][1]).ID, Convert.ToInt32(transmissions[1][i]), i, Cmn.OffenceCost[i]);
                     universe.OffenceBuildQueue.Add(b);
                 }
             }
         }
 
-        private void SendDefenceBuildList(List<List<string>> Transmitions, TcpClient tcpClient)
+        private void SendDefenceBuildList(List<List<string>> transmissions, TcpClient tcpClient)
         {
             string response = MessageConstants.MessageTypes[9] + MessageConstants.nextMessageToken;
-            response += SendDefencesOntile(Transmitions);
+            response += SendDefencesOntile(transmissions);
             response += MessageConstants.nextMessageToken;
 
             foreach (List<long> d in Cmn.DefenceCost)
@@ -920,7 +920,7 @@ namespace TerminalDecay5Server
                 inProgress.Add(0);
             }
 
-            Player pl = getPlayer(Transmitions[0][1]);
+            Player pl = getPlayer(transmissions[0][1]);
 
             foreach (var item in universe.DefenceBuildQueue)
             {
@@ -947,12 +947,12 @@ namespace TerminalDecay5Server
             clientStream.Flush();
         }
 
-        private string SendDefencesOntile(List<List<string>> Transmitions)
+        private string SendDefencesOntile(List<List<string>> transmissions)
         {
             string response = "";
             bool found = false;
 
-            Outpost op = getOutpost(Transmitions[0][2], Transmitions[0][3]);
+            Outpost op = getOutpost(transmissions[0][2], transmissions[0][3]);
 
             if (op == null)
             {
@@ -967,23 +967,23 @@ namespace TerminalDecay5Server
 
         }
 
-        private void AddToBuildingBuildQueue(List<List<string>> Transmitions, TcpClient tcpClient)
+        private void AddToBuildingBuildQueue(List<List<string>> transmissions, TcpClient tcpClient)
         {
 
-            for (int i = 0; i < Transmitions[1].Count - 1; i++)
+            for (int i = 0; i < transmissions[1].Count - 1; i++)
             {
-                if (Convert.ToInt32(Transmitions[1][i]) > 0)
+                if (Convert.ToInt32(transmissions[1][i]) > 0)
                 {
-                    BuildQueueItem b = new BuildQueueItem(getPlayer(Transmitions[0][1]).PlayerID, getOutpost(Transmitions[2][0], Transmitions[2][1]).ID, Convert.ToInt32(Transmitions[1][i]), i, Cmn.BuildCost[i]);
+                    BuildQueueItem b = new BuildQueueItem(getPlayer(transmissions[0][1]).PlayerID, getOutpost(transmissions[2][0], transmissions[2][1]).ID, Convert.ToInt32(transmissions[1][i]), i, Cmn.BuildCost[i]);
                     universe.BuildingBuildQueue.Add(b);
                 }
             }
         }
 
-        private void SendBuildList(List<List<string>> Transmitions, TcpClient tcpClient)
+        private void SendBuildList(List<List<string>> transmissions, TcpClient tcpClient)
         {
             string response = MessageConstants.MessageTypes[7] + MessageConstants.nextMessageToken;
-            response += SendBuildingsOntile(Transmitions);
+            response += SendBuildingsOntile(transmissions);
             response += MessageConstants.nextMessageToken;
 
             foreach (List<long> build in Cmn.BuildCost)
@@ -1011,7 +1011,7 @@ namespace TerminalDecay5Server
                 inProgress.Add(0);
             }
 
-            Player pl = getPlayer(Transmitions[0][1]);
+            Player pl = getPlayer(transmissions[0][1]);
 
             foreach (var item in universe.BuildingBuildQueue)
             {
@@ -1111,7 +1111,7 @@ namespace TerminalDecay5Server
             }
 
         }
-        
+
         private void CreateAccount(List<List<string>> message, TcpClient tcpClient)
         {
             bool makeaccount = true;
@@ -1240,10 +1240,17 @@ namespace TerminalDecay5Server
 
         private void SendMainMap(List<List<string>> message, TcpClient tcpClient)
         {
-
-            long playerid = getPlayer(message[0][1]).PlayerID;
-
+            long playerid = -1;
             string response = MessageConstants.MessageTypes[3] + MessageConstants.nextMessageToken;
+
+            try
+            {                
+                playerid = getPlayer(message[0][1]).PlayerID;
+            }
+            catch (Exception)
+            {
+                rejectConnection(3, "player token wrong",tcpClient);
+            }
 
             foreach (Outpost o in universe.outposts)
             {
@@ -1281,6 +1288,7 @@ namespace TerminalDecay5Server
 
             clientStream.Write(buffer, 0, buffer.Length);
             clientStream.Flush();
+
         }
 
         private void SendResTile(List<List<string>> message, TcpClient tcpClient)
@@ -1396,6 +1404,22 @@ namespace TerminalDecay5Server
         private static int getTileFromPosition(Position tile)
         {
             return tile.Y * 25 + tile.X;
+        }
+
+        private void rejectConnection(int mesmnum,string message, TcpClient tcpClient)
+        {
+            string response = MessageConstants.MessageTypes[mesmnum];
+            response += MessageConstants.nextMessageToken + "Logout" + MessageConstants.messageCompleteToken;
+
+            NetworkStream clientStream = tcpClient.GetStream();
+            ASCIIEncoding encoder = new ASCIIEncoding();
+
+            byte[] buffer = encoder.GetBytes(response);
+
+            clientStream.Write(buffer, 0, buffer.Length);
+            clientStream.Flush();
+
+            return;
         }
     }
 }

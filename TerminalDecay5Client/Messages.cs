@@ -44,18 +44,18 @@ namespace TerminalDecay5Client
             refreshMessages();
         }
 
-        private void renderMessages(List<List<string>> transmition)
+        private void renderMessages(List<List<string>> transmission)
         {
             lstMessages.Items.Clear();
 
-            foreach (var item in transmition[1])
+            foreach (var item in transmission[1])
             {
                 lstMessages.Items.Add(item);
             }
 
             ListContacts.Items.Clear();
 
-            foreach (var item in transmition[2])
+            foreach (var item in transmission[2])
             {
                 ListContacts.Items.Add(item);
             }
@@ -70,12 +70,12 @@ namespace TerminalDecay5Client
             sc.ServerRequest(renderSpecificMessage, 16, request);
         }
 
-        private void renderSpecificMessage(List<List<string>> transmition)
+        private void renderSpecificMessage(List<List<string>> transmission)
         {
-            if(transmition[1][0] != "")
+            if(transmission[1][0] != "")
             { 
-            txtTitle.Text = transmition[1][0] + " sent by: " + transmition[1][1] + " at:" + transmition[1][3];
-            txtMessage.Text = transmition[1][2];
+            txtTitle.Text = transmission[1][0] + " sent by: " + transmission[1][1] + " at:" + transmission[1][3];
+            txtMessage.Text = transmission[1][2];
             }
         }
         
