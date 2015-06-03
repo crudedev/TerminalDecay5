@@ -970,21 +970,66 @@ namespace TerminalDecay5Server
         private void AddToBuildingBuildQueue(List<List<string>> transmissions, TcpClient tcpClient)
         {
 
-            for (int i = 0; i < transmissions[1].Count - 1; i++)
+            try
             {
-                if (Convert.ToInt32(transmissions[1][i]) > 0)
-                {
-                    BuildQueueItem b = new BuildQueueItem(getPlayer(transmissions[0][1]).PlayerID, getOutpost(transmissions[2][0], transmissions[2][1]).ID, Convert.ToInt32(transmissions[1][i]), i, Cmn.BuildCost[i]);
-                    universe.BuildingBuildQueue.Add(b);
-                }
+                int playerid = getPlayer(transmissions[0][1]).PlayerID;
             }
+            catch (Exception)
+            {
+                rejectConnection(8, "player token wrong", tcpClient);
+                return;
+            }
+
+
+            string response = "";
+
+            if (getPlayer(transmissions[0][1]).PlayerID == getOutpost(transmissions[2][0], transmissions[2][1]).OwnerID)
+            {
+                for (int i = 0; i < transmissions[1].Count - 1; i++)
+                {
+                    if (Convert.ToInt32(transmissions[1][i]) > 0)
+                    {
+                        BuildQueueItem b = new BuildQueueItem(getPlayer(transmissions[0][1]).PlayerID, getOutpost(transmissions[2][0], transmissions[2][1]).ID, Convert.ToInt32(transmissions[1][i]), i, Cmn.BuildCost[i]);
+                        universe.BuildingBuildQueue.Add(b);
+                    }
+                }
+
+                response = "Success, added to queue";
+            }
+            else
+            {
+                response = "Player and outpost owner not the same";
+            }
+
+            response = MessageConstants.MessageTypes[8] + MessageConstants.splitMessageToken + response;
+            response += MessageConstants.messageCompleteToken;
+            NetworkStream clientStream = tcpClient.GetStream();
+            ASCIIEncoding encoder = new ASCIIEncoding();
+
+            byte[] buffer = encoder.GetBytes(response);
+
+            clientStream.Write(buffer, 0, buffer.Length);
+            clientStream.Flush();
+
         }
 
         private void SendBuildList(List<List<string>> transmissions, TcpClient tcpClient)
         {
             string response = MessageConstants.MessageTypes[7] + MessageConstants.nextMessageToken;
+
+            try
+            {
+                int playerid = getPlayer(transmissions[0][1]).PlayerID;
+            }
+            catch (Exception)
+            {
+                rejectConnection(7, "player token wrong", tcpClient);
+                return;
+            }
+
             response += SendBuildingsOntile(transmissions);
             response += MessageConstants.nextMessageToken;
+
 
             foreach (List<long> build in Cmn.BuildCost)
             {
@@ -1039,9 +1084,15 @@ namespace TerminalDecay5Server
         private void SendPlayerResources(List<List<string>> message, TcpClient tcpClient)
         {
 
-            Player pl = getPlayer(message[0][1]);
-            if (pl == null)
+            Player pl = new Player(); ;
+
+            try
             {
+                pl = getPlayer(message[0][1]);
+            }
+            catch (Exception)
+            {
+                rejectConnection(6, "player token wrong", tcpClient);
                 return;
             }
 
@@ -1244,12 +1295,13 @@ namespace TerminalDecay5Server
             string response = MessageConstants.MessageTypes[3] + MessageConstants.nextMessageToken;
 
             try
-            {                
+            {
                 playerid = getPlayer(message[0][1]).PlayerID;
             }
             catch (Exception)
             {
-                rejectConnection(3, "player token wrong",tcpClient);
+                rejectConnection(3, "player token wrong", tcpClient);
+                return;
             }
 
             foreach (Outpost o in universe.outposts)
@@ -1313,6 +1365,18 @@ namespace TerminalDecay5Server
         private void SendBuildTile(List<List<string>> message, TcpClient tcpClient)
         {
             string response = MessageConstants.MessageTypes[5] + MessageConstants.nextMessageToken;
+
+            long playerid = -1;
+
+            try
+            {
+                playerid = getPlayer(message[0][1]).PlayerID;
+            }
+            catch (Exception)
+            {
+                rejectConnection(5, "player token wrong", tcpClient);
+            }
+
             response += SendBuildingsOntile(message);
             response += SendDefenceOnTile(message);
             response += MessageConstants.messageCompleteToken;
@@ -1406,7 +1470,7 @@ namespace TerminalDecay5Server
             return tile.Y * 25 + tile.X;
         }
 
-        private void rejectConnection(int mesmnum,string message, TcpClient tcpClient)
+        private void rejectConnection(int mesmnum, string message, TcpClient tcpClient)
         {
             string response = MessageConstants.MessageTypes[mesmnum];
             response += MessageConstants.nextMessageToken + "Logout" + MessageConstants.messageCompleteToken;

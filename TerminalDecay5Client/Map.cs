@@ -251,7 +251,13 @@ namespace TerminalDecay5Client
 
         private void DisplayAttack(List<List<string>> transmission)
         {
+
             hideMenus();
+            if (transmission[1][0] == "-1")
+            {
+                MessageBox.Show("no outpost here");
+                return;
+            } 
             showAttackMenu(true);
 
             lblAttackScout.Text = "Scout: " + transmission[1][0];
@@ -306,17 +312,19 @@ namespace TerminalDecay5Client
 
             if (transmission[0][0] == MessageConstants.MessageTypes[5])
             {
-
-
-
+                
                 if (transmission[1][0] == "-1")
                 {
                     LblSidePanel.Text = "unoccipied land";
+                    _currentX = -1;
+                    _currentY = -1;
                 }
 
                 if (transmission[1][0] == "Enemy")
                 {
                     LblSidePanel.Text = "Land occupied by other forces";
+                    _currentX = -1;
+                    _currentY = -1;
                 }
             }
         }
@@ -326,13 +334,21 @@ namespace TerminalDecay5Client
             //show the build list
             ServerConnection sc = new ServerConnection();
             sc.ServerRequest(UpdateBuildPanel, 7, MessageConstants.splitMessageToken + Convert.ToString(playerToken) + MessageConstants.splitMessageToken + Convert.ToString(_currentX) + MessageConstants.splitMessageToken + Convert.ToString(_currentY));
-
-            hideMenus();
-            showBuildmenu(true);
+            
         }
 
         private void UpdateBuildPanel(List<List<string>> transmission)
         {
+                        hideMenus();
+            if(transmission[1][0] == "-1")
+            {
+                MessageBox.Show("no outpost here");                
+                return;
+            }
+
+
+
+            showBuildmenu(true);
             lblEmpty.Text = "Empty: " + transmission[1][1];
             LblFarm.Text = "farm: " + transmission[1][2];
             lblHabitat.Text = "habitat: " + transmission[1][3];
@@ -529,7 +545,7 @@ namespace TerminalDecay5Client
                 request += _currentX + MessageConstants.splitMessageToken + _currentY;
 
                 ServerConnection sc = new ServerConnection();
-                sc.ServerRequest(UpdateBuildPanel, 8, request);
+                sc.ServerRequest(ConfirmBuildQueue, 8, request);
 
             }
             catch (Exception)
@@ -547,6 +563,15 @@ namespace TerminalDecay5Client
 
         }
 
+        private void ConfirmBuildQueue(List<List<string>> transmission)
+        {
+
+
+
+            //ServerConnection sc = new ServerConnection();
+            //sc.ServerRequest(UpdateBuildPanel, 8, request);
+        }
+
         private void lblBuild_Click(object sender, EventArgs e)
         {
 
@@ -557,12 +582,19 @@ namespace TerminalDecay5Client
             //show the build list
             ServerConnection sc = new ServerConnection();
             sc.ServerRequest(UpdateBuildDefPanel, 9, MessageConstants.splitMessageToken + Convert.ToString(playerToken) + MessageConstants.splitMessageToken + Convert.ToString(_currentX) + MessageConstants.splitMessageToken + Convert.ToString(_currentY)); ;
-            hideMenus();
-            showDefenceMenu(true);
+            
+            
         }
 
         private void UpdateBuildDefPanel(List<List<string>> transmission)
         {
+            hideMenus();
+            if (transmission[1][0] == "-1")
+            {
+                MessageBox.Show("no outpost here");
+                return;
+            }
+            showDefenceMenu(true);
             lblPatrol.Text = "patrol: " + transmission[1][1];
             lblGunner.Text = "gunner: " + transmission[1][2];
             lblTurret.Text = "turret: " + transmission[1][3];
@@ -661,8 +693,6 @@ namespace TerminalDecay5Client
         {
             ServerConnection sc = new ServerConnection();
             sc.ServerRequest(UpdateBuildOffPanel, 11, MessageConstants.splitMessageToken + Convert.ToString(playerToken) + MessageConstants.splitMessageToken + Convert.ToString(_currentX) + MessageConstants.splitMessageToken + Convert.ToString(_currentY)); ;
-            hideMenus();
-            showOffenceMenu(true);
         }
 
         private void showOffenceMenu(bool show)
@@ -738,6 +768,15 @@ namespace TerminalDecay5Client
 
         private void UpdateBuildOffPanel(List<List<string>> transmission)
         {
+
+            hideMenus();
+            if (transmission[1][0] == "-1")
+            {
+                MessageBox.Show("no outpost here");
+                return;
+            }
+            showOffenceMenu(true);
+
             lblScout.Text = "scout: " + transmission[1][1];
             lblGunship.Text = "gunship: " + transmission[1][2];
             lblBomber.Text = "bomber: " + transmission[1][3];

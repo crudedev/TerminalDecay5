@@ -865,7 +865,7 @@ namespace TerminalDecay5Client
             // 
             // btnBuildDefence
             // 
-            this.btnBuildDefence.Location = new System.Drawing.Point(901, 548);
+            this.btnBuildDefence.Location = new System.Drawing.Point(901, 606);
             this.btnBuildDefence.Name = "btnBuildDefence";
             this.btnBuildDefence.Size = new System.Drawing.Size(119, 23);
             this.btnBuildDefence.TabIndex = 85;
