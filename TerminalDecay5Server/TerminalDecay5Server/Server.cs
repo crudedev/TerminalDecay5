@@ -444,6 +444,15 @@ namespace TerminalDecay5Server
         private void ReadMessage(List<List<string>> transmissions, TcpClient tcpClient)
         {
 
+            try
+            {
+                int playerid = getPlayer(transmissions[0][1]).PlayerID;
+            }
+            catch (Exception)
+            {
+                rejectConnection(15, "player token wrong", tcpClient);
+                return;
+            }
 
             string response = MessageConstants.MessageTypes[16] + MessageConstants.nextMessageToken;
 
@@ -477,12 +486,20 @@ namespace TerminalDecay5Server
 
         private void SendMessages(List<List<string>> transmissions, TcpClient tcpClient)
         {
-
+            try
+            {
+                int playerid = getPlayer(transmissions[0][1]).PlayerID;
+            }
+            catch (Exception)
+            {
+                rejectConnection(15, "player token wrong", tcpClient);
+                return;
+            }
 
             string response = MessageConstants.MessageTypes[15] + MessageConstants.nextMessageToken;
 
 
-            Player pl = getPlayer(transmissions[1][0]);
+            Player pl = getPlayer(transmissions[0][1]);
 
             List<Message> Mes = new List<Message>();
 
@@ -757,81 +774,119 @@ namespace TerminalDecay5Server
 
         private void SendOffenceForAttack(List<List<string>> transmissions, TcpClient tcpClient)
         {
-            Player pl = getPlayer(transmissions[0][1]);
-            if (pl != null)
+
+            try
             {
-                string response = MessageConstants.MessageTypes[13] + MessageConstants.nextMessageToken;
-
-                response += SendOffenceOntile(transmissions);
-
-                response += MessageConstants.messageCompleteToken;
-                NetworkStream clientStream = tcpClient.GetStream();
-                ASCIIEncoding encoder = new ASCIIEncoding();
-
-                byte[] buffer = encoder.GetBytes(response);
-
-                clientStream.Write(buffer, 0, buffer.Length);
-                clientStream.Flush();
+                int playerid = getPlayer(transmissions[0][1]).PlayerID;
             }
+            catch (Exception)
+            {
+                rejectConnection(13, "player token wrong", tcpClient);
+                return;
+            }
+
+
+            string response = MessageConstants.MessageTypes[13] + MessageConstants.nextMessageToken;
+
+            if (getPlayer(transmissions[0][1]).PlayerID == getOutpost(transmissions[2][0], transmissions[2][1]).OwnerID)
+            {
+                Player pl = getPlayer(transmissions[0][1]);
+                response += SendOffenceOntile(transmissions);
+            }
+            else
+            {
+                response += "Player and outpost owner not the same";
+            }
+
+            response += MessageConstants.messageCompleteToken;
+            NetworkStream clientStream = tcpClient.GetStream();
+            ASCIIEncoding encoder = new ASCIIEncoding();
+
+            byte[] buffer = encoder.GetBytes(response);
+
+            clientStream.Write(buffer, 0, buffer.Length);
+            clientStream.Flush();
 
         }
 
         private void SendOffenceBuildList(List<List<string>> transmissions, TcpClient tcpClient)
         {
-            string response = MessageConstants.MessageTypes[11] + MessageConstants.nextMessageToken;
-            response += SendOffenceOntile(transmissions);
-            response += MessageConstants.nextMessageToken;
 
-            foreach (List<long> d in Cmn.OffenceCost)
+            try
             {
-                foreach (long val in d)
+                int playerid = getPlayer(transmissions[0][1]).PlayerID;
+            }
+            catch (Exception)
+            {
+                rejectConnection(7, "player token wrong", tcpClient);
+                return;
+            }
+
+            string response = MessageConstants.MessageTypes[11] + MessageConstants.nextMessageToken;
+
+
+            if (getPlayer(transmissions[0][1]).PlayerID == getOutpost(transmissions[0][2], transmissions[0][3]).OwnerID)
+            {
+
+                response += SendOffenceOntile(transmissions);
+                response += MessageConstants.nextMessageToken;
+
+                foreach (List<long> d in Cmn.OffenceCost)
                 {
-                    response += val + MessageConstants.splitMessageToken;
+                    foreach (long val in d)
+                    {
+                        response += val + MessageConstants.splitMessageToken;
+                    }
+
+                    response += MessageConstants.nextMessageToken;
+                }
+
+                foreach (long prod in Cmn.OffenceAttack)
+                {
+                    response += prod + MessageConstants.splitMessageToken;
                 }
 
                 response += MessageConstants.nextMessageToken;
-            }
 
-            foreach (long prod in Cmn.OffenceAttack)
-            {
-                response += prod + MessageConstants.splitMessageToken;
-            }
-
-            response += MessageConstants.nextMessageToken;
-
-            List<long> inProgress = new List<long>();
-            foreach (var item in Cmn.OffenceType)
-            {
-                inProgress.Add(0);
-            }
-
-            Player pl = getPlayer(transmissions[0][1]);
-
-            foreach (var item in universe.OffenceBuildQueue)
-            {
-                if (item.PlayerId == pl.PlayerID)
+                List<long> inProgress = new List<long>();
+                foreach (var item in Cmn.OffenceType)
                 {
-                    inProgress[item.ItemType] = item.ItemTotal - item.Complete;
+                    inProgress.Add(0);
                 }
+
+                Player pl = getPlayer(transmissions[0][1]);
+
+                foreach (var item in universe.OffenceBuildQueue)
+                {
+                    if (item.PlayerId == pl.PlayerID)
+                    {
+                        inProgress[item.ItemType] = item.ItemTotal - item.Complete;
+                    }
+                }
+
+                foreach (var item in inProgress)
+                {
+                    response += item + MessageConstants.splitMessageToken;
+                }
+
+                response += MessageConstants.nextMessageToken;
+
+                foreach (var item in Cmn.OffenceAttack)
+                {
+                    response += item + MessageConstants.splitMessageToken;
+                }
+
+                response += MessageConstants.nextMessageToken;
+
+                foreach (var item in Cmn.OffenceAttack)
+                {
+                    response += item + MessageConstants.splitMessageToken;
+                }
+
             }
-
-            foreach (var item in inProgress)
+            else
             {
-                response += item + MessageConstants.splitMessageToken;
-            }
-
-            response += MessageConstants.nextMessageToken;
-
-            foreach (var item in Cmn.OffenceAttack)
-            {
-                response += item + MessageConstants.splitMessageToken;
-            }
-
-            response += MessageConstants.nextMessageToken;
-
-            foreach (var item in Cmn.OffenceAttack)
-            {
-                response += item + MessageConstants.splitMessageToken;
+                response += "Player and outpost owner not the same";
             }
 
             response += MessageConstants.messageCompleteToken;
@@ -869,26 +924,94 @@ namespace TerminalDecay5Server
 
         private void AddToDefenceBuildQueue(List<List<string>> transmissions, TcpClient tcpClient)
         {
-            for (int i = 0; i < transmissions[1].Count - 1; i++)
+
+            try
             {
-                if (Convert.ToInt32(transmissions[1][i]) > 0)
-                {
-                    BuildQueueItem b = new BuildQueueItem(getPlayer(transmissions[0][1]).PlayerID, getOutpost(transmissions[2][0], transmissions[2][1]).ID, Convert.ToInt32(transmissions[1][i]), i, Cmn.DefenceCost[i]);
-                    universe.DefenceBuildQueue.Add(b);
-                }
+                int playerid = getPlayer(transmissions[0][1]).PlayerID;
             }
+            catch (Exception)
+            {
+                rejectConnection(10, "player token wrong", tcpClient);
+                return;
+            }
+
+            string response = "";
+
+            if (getPlayer(transmissions[0][1]).PlayerID == getOutpost(transmissions[2][0], transmissions[2][1]).OwnerID)
+            {
+
+                for (int i = 0; i < transmissions[1].Count - 1; i++)
+                {
+                    if (Convert.ToInt32(transmissions[1][i]) > 0)
+                    {
+                        BuildQueueItem b = new BuildQueueItem(getPlayer(transmissions[0][1]).PlayerID, getOutpost(transmissions[2][0], transmissions[2][1]).ID, Convert.ToInt32(transmissions[1][i]), i, Cmn.DefenceCost[i]);
+                        universe.DefenceBuildQueue.Add(b);
+                    }
+                }
+
+                response = "Success, added to queue";
+            }
+            else
+            {
+                response = "Player and outpost owner not the same";
+            }
+
+            response = MessageConstants.MessageTypes[10] + MessageConstants.splitMessageToken + response;
+            response += MessageConstants.messageCompleteToken;
+            NetworkStream clientStream = tcpClient.GetStream();
+            ASCIIEncoding encoder = new ASCIIEncoding();
+
+            byte[] buffer = encoder.GetBytes(response);
+
+            clientStream.Write(buffer, 0, buffer.Length);
+            clientStream.Flush();
+
         }
 
         private void AddToOffenceBuildQueue(List<List<string>> transmissions, TcpClient tcpClient)
         {
-            for (int i = 0; i < transmissions[1].Count - 1; i++)
+
+            try
             {
-                if (Convert.ToInt32(transmissions[1][i]) > 0)
-                {
-                    BuildQueueItem b = new BuildQueueItem(getPlayer(transmissions[0][1]).PlayerID, getOutpost(transmissions[2][0], transmissions[2][1]).ID, Convert.ToInt32(transmissions[1][i]), i, Cmn.OffenceCost[i]);
-                    universe.OffenceBuildQueue.Add(b);
-                }
+                int playerid = getPlayer(transmissions[0][1]).PlayerID;
             }
+            catch (Exception)
+            {
+                rejectConnection(12, "player token wrong", tcpClient);
+                return;
+            }
+
+            string response = "";
+
+            if (getPlayer(transmissions[0][1]).PlayerID == getOutpost(transmissions[2][0], transmissions[2][1]).OwnerID)
+            {
+
+                for (int i = 0; i < transmissions[1].Count - 1; i++)
+                {
+                    if (Convert.ToInt32(transmissions[1][i]) > 0)
+                    {
+                        BuildQueueItem b = new BuildQueueItem(getPlayer(transmissions[0][1]).PlayerID, getOutpost(transmissions[2][0], transmissions[2][1]).ID, Convert.ToInt32(transmissions[1][i]), i, Cmn.OffenceCost[i]);
+                        universe.OffenceBuildQueue.Add(b);
+                    }
+                }
+
+                response = "Success, added to queue";
+            }
+            else
+            {
+                response = "Player and outpost owner not the same";
+            }
+
+            response = MessageConstants.MessageTypes[12] + MessageConstants.splitMessageToken + response;
+            response += MessageConstants.messageCompleteToken;
+            NetworkStream clientStream = tcpClient.GetStream();
+            ASCIIEncoding encoder = new ASCIIEncoding();
+
+            byte[] buffer = encoder.GetBytes(response);
+
+            clientStream.Write(buffer, 0, buffer.Length);
+            clientStream.Flush();
+
         }
 
         private void SendDefenceBuildList(List<List<string>> transmissions, TcpClient tcpClient)

@@ -27,7 +27,7 @@ namespace TerminalDecay5Client
 
         private void refreshMessages()
         {
-            string request = MessageConstants.nextMessageToken + playerToken.ToString() + MessageConstants.nextMessageToken;
+            string request = MessageConstants.splitMessageToken + playerToken.ToString() + MessageConstants.nextMessageToken;
 
             ServerConnection sc = new ServerConnection();
             sc.ServerRequest(renderMessages, 15, request);

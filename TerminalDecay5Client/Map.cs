@@ -566,10 +566,27 @@ namespace TerminalDecay5Client
         private void ConfirmBuildQueue(List<List<string>> transmission)
         {
 
+            MessageBox.Show(transmission[0][1]);
+
+            if(transmission[0][0] == MessageConstants.MessageTypes[8])
+            {
+                ServerConnection sc = new ServerConnection();
+                sc.ServerRequest(UpdateBuildPanel, 7, MessageConstants.splitMessageToken + Convert.ToString(playerToken) + MessageConstants.splitMessageToken + Convert.ToString(_currentX) + MessageConstants.splitMessageToken + Convert.ToString(_currentY));
+            }
+
+            if (transmission[0][0] == MessageConstants.MessageTypes[10])
+            {
+                ServerConnection sc = new ServerConnection();
+                sc.ServerRequest(UpdateBuildDefPanel, 9, MessageConstants.splitMessageToken + Convert.ToString(playerToken) + MessageConstants.splitMessageToken + Convert.ToString(_currentX) + MessageConstants.splitMessageToken + Convert.ToString(_currentY));
+            }
+
+            if (transmission[0][0] == MessageConstants.MessageTypes[12])
+            {
+                ServerConnection sc = new ServerConnection();
+                sc.ServerRequest(UpdateBuildOffPanel, 11, MessageConstants.splitMessageToken + Convert.ToString(playerToken) + MessageConstants.splitMessageToken + Convert.ToString(_currentX) + MessageConstants.splitMessageToken + Convert.ToString(_currentY));
+            }
 
 
-            //ServerConnection sc = new ServerConnection();
-            //sc.ServerRequest(UpdateBuildPanel, 8, request);
         }
 
         private void lblBuild_Click(object sender, EventArgs e)
@@ -670,9 +687,9 @@ namespace TerminalDecay5Client
 
                 request += MessageConstants.nextMessageToken;
                 request += _currentX + MessageConstants.splitMessageToken + _currentY;
+            ServerConnection sc = new ServerConnection();
+                sc.ServerRequest(ConfirmBuildQueue, 10, request);
 
-                ServerConnection sc = new ServerConnection();
-                sc.ServerRequest(UpdateBuildPanel, 10, request);
 
             }
             catch (Exception)
@@ -687,6 +704,8 @@ namespace TerminalDecay5Client
                 MessageBox.Show("Invalid Input");
 
             }
+            
+
         }
 
         private void BtnOffence_Click(object sender, EventArgs e)
@@ -877,7 +896,7 @@ namespace TerminalDecay5Client
                 request += _currentX + MessageConstants.splitMessageToken + _currentY;
 
                 ServerConnection sc = new ServerConnection();
-                sc.ServerRequest(UpdateBuildPanel, 12, request);
+                sc.ServerRequest(ConfirmBuildQueue, 12, request);
 
             }
             catch (Exception)
@@ -958,8 +977,9 @@ namespace TerminalDecay5Client
             {
                 frmMessage = new Messages();
             }
-            frmMessage.Show();
             frmMessage.Init(playerToken);
+            frmMessage.Show();
+            
         }
 
         private void CheckLoggedOut(List<List<string>> transmission)
