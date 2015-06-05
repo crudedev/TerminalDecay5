@@ -1,0 +1,5 @@
+C:\Users\D\Dropbox\GitHub\TerminalDecay5\TerminalDecay5Server\TerminalDecay5Server\bin\x64\Debug\TerminalDecay5Server.exe.config
+C:\Users\D\Dropbox\GitHub\TerminalDecay5\TerminalDecay5Server\TerminalDecay5Server\bin\x64\Debug\TerminalDecay5Server.exe
+C:\Users\D\Dropbox\GitHub\TerminalDecay5\TerminalDecay5Server\TerminalDecay5Server\bin\x64\Debug\TerminalDecay5Server.pdb
+C:\Users\D\Dropbox\GitHub\TerminalDecay5\TerminalDecay5Server\TerminalDecay5Server\obj\x64\Debug\TerminalDecay5Server.exe
+C:\Users\D\Dropbox\GitHub\TerminalDecay5\TerminalDecay5Server\TerminalDecay5Server\obj\x64\Debug\TerminalDecay5Server.pdb

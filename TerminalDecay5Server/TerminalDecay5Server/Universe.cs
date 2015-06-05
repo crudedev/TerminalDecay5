@@ -19,13 +19,65 @@ namespace TerminalDecay5Server
 
         public void InitUniverse()
         {
+
+            r = new Random();
             clusters = new List<Cluster>();
-            clusters.Add(new Cluster());
-            clusters[0].solarSystems = new List<SolarSystem>();
-            clusters[0].solarSystems.Add(new SolarSystem());
-            clusters[0].solarSystems[0].planets = new List<Planet>();
-            clusters[0].solarSystems[0].planets.Add(new Planet());
-            clusters[0].solarSystems[0].planets[0].mapTiles = new List<MapTile>();
+            for (int i = 0; i < 4; i++)
+            {
+                Cluster c = new Cluster();
+                c.solarSystems = new List<SolarSystem>();
+                for (int ii = 0; ii < 20; ii++)
+                {
+                    SolarSystem s = new SolarSystem();
+                    s.planets = new List<Planet>();
+                    for (int iii = 0; iii < 10; iii++)
+                    {
+                        Planet p = new Planet();
+
+                        p.mapTiles = new List<MapTile>();
+
+                        MapTile t;
+
+                        int x = 0;
+                        int y = 0;
+
+                        for (int iv = 0; iv < 625; iv++)
+                        {
+                            t = new MapTile();
+                            t.Resources[Cmn.Resource[Cmn.Renum.Metal]] = r.Next(20000);
+                            t.Resources[Cmn.Resource[Cmn.Renum.Food]] = r.Next(500);
+                            t.Resources[Cmn.Resource[Cmn.Renum.Water]] = r.Next(10000);
+
+                            t.MaxResources[Cmn.Resource[Cmn.Renum.Metal]] = t.Resources[Cmn.Resource[Cmn.Renum.Metal]];
+                            t.MaxResources[Cmn.Resource[Cmn.Renum.Food]] = t.Resources[Cmn.Resource[Cmn.Renum.Food]];
+                            t.MaxResources[Cmn.Resource[Cmn.Renum.Water]] = t.Resources[Cmn.Resource[Cmn.Renum.Water]];
+
+                            p.mapTiles.Add(t);
+                            t.position = new Position(x, y);
+
+                            x++;
+                            if (x == 25)
+                            {
+                                x = 0;
+                                y++;
+                            }
+                        }
+
+                        s.planets.Add(p);
+                    }
+
+
+                    c.solarSystems.Add(s);
+                }
+
+                clusters.Add(c); 
+
+            }
+            //clusters[0].solarSystems = new List<SolarSystem>();
+            //clusters[0].solarSystems.Add(new SolarSystem());
+            //clusters[0].solarSystems[0].planets = new List<Planet>();
+            //clusters[0].solarSystems[0].planets.Add(new Planet());
+            //clusters[0].solarSystems[0].planets[0].mapTiles = new List<MapTile>();
             
             BuildingBuildQueue = new List<BuildQueueItem>();
             DefenceBuildQueue = new List<BuildQueueItem>();
@@ -34,37 +86,35 @@ namespace TerminalDecay5Server
             players = new List<Player>();
             Messages = new List<Message>();
 
-            if (true)
-            {
-                MapTile t;
+            //if (true)
+            //{
+            //    MapTile t;
 
-                int x = 0;
-                int y = 0;
+            //    int x = 0;
+            //    int y = 0;
 
-                r = new Random();
+            //    for (int i = 0; i < 625; i++)
+            //    {
+            //        t = new MapTile();
+            //        t.Resources[Cmn.Resource[Cmn.Renum.Metal]] = r.Next(20000);
+            //        t.Resources[Cmn.Resource[Cmn.Renum.Food]] = r.Next(500);
+            //        t.Resources[Cmn.Resource[Cmn.Renum.Water]] = r.Next(10000);
 
-                for (int i = 0; i < 625; i++)
-                {
-                    t = new MapTile();
-                    t.Resources[Cmn.Resource[Cmn.Renum.Metal]] = r.Next(20000);
-                    t.Resources[Cmn.Resource[Cmn.Renum.Food]] = r.Next(500);
-                    t.Resources[Cmn.Resource[Cmn.Renum.Water]] = r.Next(10000);
+            //        t.MaxResources[Cmn.Resource[Cmn.Renum.Metal]] = t.Resources[Cmn.Resource[Cmn.Renum.Metal]];
+            //        t.MaxResources[Cmn.Resource[Cmn.Renum.Food]] = t.Resources[Cmn.Resource[Cmn.Renum.Food]];
+            //        t.MaxResources[Cmn.Resource[Cmn.Renum.Water]] = t.Resources[Cmn.Resource[Cmn.Renum.Water]];
 
-                    t.MaxResources[Cmn.Resource[Cmn.Renum.Metal]] = t.Resources[Cmn.Resource[Cmn.Renum.Metal]];
-                    t.MaxResources[Cmn.Resource[Cmn.Renum.Food]] = t.Resources[Cmn.Resource[Cmn.Renum.Food]];
-                    t.MaxResources[Cmn.Resource[Cmn.Renum.Water]] = t.Resources[Cmn.Resource[Cmn.Renum.Water]];
+            //        clusters[0].solarSystems[0].planets[0].mapTiles.Add(t);
+            //        t.position = new Position(x, y);
 
-                    clusters[0].solarSystems[0].planets[0].mapTiles.Add(t);
-                    t.position = new Position(x, y);
-
-                    x++;
-                    if (x == 25)
-                    {
-                        x = 0;
-                        y++;
-                    }
-                }
-            }
+            //        x++;
+            //        if (x == 25)
+            //        {
+            //            x = 0;
+            //            y++;
+            //        }
+            //    }
+            //}
         }
 
         public Universe()
