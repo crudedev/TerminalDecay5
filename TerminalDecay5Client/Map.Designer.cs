@@ -123,12 +123,6 @@ namespace TerminalDecay5Client
             this.lblGunner = new System.Windows.Forms.Label();
             this.txtPatrol = new System.Windows.Forms.TextBox();
             this.lblPatrol = new System.Windows.Forms.Label();
-            this.lblDestroyerDefence = new System.Windows.Forms.Label();
-            this.lblFrigateDefence = new System.Windows.Forms.Label();
-            this.lblBomberDefence = new System.Windows.Forms.Label();
-            this.lblGunshipDefence = new System.Windows.Forms.Label();
-            this.lblScoutDefence = new System.Windows.Forms.Label();
-            this.lblOffenceDefence = new System.Windows.Forms.Label();
             this.lblCostDestroyer = new System.Windows.Forms.Label();
             this.lblCostFrigate = new System.Windows.Forms.Label();
             this.lblCostBomber = new System.Windows.Forms.Label();
@@ -164,8 +158,6 @@ namespace TerminalDecay5Client
             this.lblGunshipAttack = new System.Windows.Forms.Label();
             this.lblScoutAttack = new System.Windows.Forms.Label();
             this.lblOffenceAttack = new System.Windows.Forms.Label();
-            this.lblBattleshipDeffence = new System.Windows.Forms.Label();
-            this.lblCarrierDefence = new System.Windows.Forms.Label();
             this.lblCostBattleship = new System.Windows.Forms.Label();
             this.lblCostCarrier = new System.Windows.Forms.Label();
             this.lblBattleshipBuild = new System.Windows.Forms.Label();
@@ -665,7 +657,7 @@ namespace TerminalDecay5Client
             // lblProductionFabricator
             // 
             this.lblProductionFabricator.AutoSize = true;
-            this.lblProductionFabricator.Location = new System.Drawing.Point(757, 499);
+            this.lblProductionFabricator.Location = new System.Drawing.Point(802, 499);
             this.lblProductionFabricator.Name = "lblProductionFabricator";
             this.lblProductionFabricator.Size = new System.Drawing.Size(58, 13);
             this.lblProductionFabricator.TabIndex = 54;
@@ -675,7 +667,7 @@ namespace TerminalDecay5Client
             // lblProductionSolar
             // 
             this.lblProductionSolar.AutoSize = true;
-            this.lblProductionSolar.Location = new System.Drawing.Point(757, 444);
+            this.lblProductionSolar.Location = new System.Drawing.Point(802, 444);
             this.lblProductionSolar.Name = "lblProductionSolar";
             this.lblProductionSolar.Size = new System.Drawing.Size(58, 13);
             this.lblProductionSolar.TabIndex = 53;
@@ -685,7 +677,7 @@ namespace TerminalDecay5Client
             // lblProductionFarm
             // 
             this.lblProductionFarm.AutoSize = true;
-            this.lblProductionFarm.Location = new System.Drawing.Point(757, 398);
+            this.lblProductionFarm.Location = new System.Drawing.Point(802, 398);
             this.lblProductionFarm.Name = "lblProductionFarm";
             this.lblProductionFarm.Size = new System.Drawing.Size(58, 13);
             this.lblProductionFarm.TabIndex = 52;
@@ -695,7 +687,7 @@ namespace TerminalDecay5Client
             // lblProductionHabitat
             // 
             this.lblProductionHabitat.AutoSize = true;
-            this.lblProductionHabitat.Location = new System.Drawing.Point(757, 354);
+            this.lblProductionHabitat.Location = new System.Drawing.Point(802, 354);
             this.lblProductionHabitat.Name = "lblProductionHabitat";
             this.lblProductionHabitat.Size = new System.Drawing.Size(58, 13);
             this.lblProductionHabitat.TabIndex = 51;
@@ -705,7 +697,7 @@ namespace TerminalDecay5Client
             // lblProductionWell
             // 
             this.lblProductionWell.AutoSize = true;
-            this.lblProductionWell.Location = new System.Drawing.Point(757, 308);
+            this.lblProductionWell.Location = new System.Drawing.Point(802, 308);
             this.lblProductionWell.Name = "lblProductionWell";
             this.lblProductionWell.Size = new System.Drawing.Size(58, 13);
             this.lblProductionWell.TabIndex = 50;
@@ -715,7 +707,7 @@ namespace TerminalDecay5Client
             // lblProductionMine
             // 
             this.lblProductionMine.AutoSize = true;
-            this.lblProductionMine.Location = new System.Drawing.Point(757, 263);
+            this.lblProductionMine.Location = new System.Drawing.Point(802, 263);
             this.lblProductionMine.Name = "lblProductionMine";
             this.lblProductionMine.Size = new System.Drawing.Size(58, 13);
             this.lblProductionMine.TabIndex = 49;
@@ -725,7 +717,7 @@ namespace TerminalDecay5Client
             // lblProduction
             // 
             this.lblProduction.AutoSize = true;
-            this.lblProduction.Location = new System.Drawing.Point(757, 161);
+            this.lblProduction.Location = new System.Drawing.Point(811, 161);
             this.lblProduction.Name = "lblProduction";
             this.lblProduction.Size = new System.Drawing.Size(61, 13);
             this.lblProduction.TabIndex = 48;
@@ -1100,66 +1092,6 @@ namespace TerminalDecay5Client
             this.lblPatrol.Text = "patrol:";
             this.lblPatrol.Visible = false;
             // 
-            // lblDestroyerDefence
-            // 
-            this.lblDestroyerDefence.AutoSize = true;
-            this.lblDestroyerDefence.Location = new System.Drawing.Point(820, 416);
-            this.lblDestroyerDefence.Name = "lblDestroyerDefence";
-            this.lblDestroyerDefence.Size = new System.Drawing.Size(46, 13);
-            this.lblDestroyerDefence.TabIndex = 139;
-            this.lblDestroyerDefence.Text = "defence";
-            this.lblDestroyerDefence.Visible = false;
-            // 
-            // lblFrigateDefence
-            // 
-            this.lblFrigateDefence.AutoSize = true;
-            this.lblFrigateDefence.Location = new System.Drawing.Point(820, 370);
-            this.lblFrigateDefence.Name = "lblFrigateDefence";
-            this.lblFrigateDefence.Size = new System.Drawing.Size(46, 13);
-            this.lblFrigateDefence.TabIndex = 138;
-            this.lblFrigateDefence.Text = "defence";
-            this.lblFrigateDefence.Visible = false;
-            // 
-            // lblBomberDefence
-            // 
-            this.lblBomberDefence.AutoSize = true;
-            this.lblBomberDefence.Location = new System.Drawing.Point(820, 326);
-            this.lblBomberDefence.Name = "lblBomberDefence";
-            this.lblBomberDefence.Size = new System.Drawing.Size(46, 13);
-            this.lblBomberDefence.TabIndex = 137;
-            this.lblBomberDefence.Text = "defence";
-            this.lblBomberDefence.Visible = false;
-            // 
-            // lblGunshipDefence
-            // 
-            this.lblGunshipDefence.AutoSize = true;
-            this.lblGunshipDefence.Location = new System.Drawing.Point(820, 280);
-            this.lblGunshipDefence.Name = "lblGunshipDefence";
-            this.lblGunshipDefence.Size = new System.Drawing.Size(46, 13);
-            this.lblGunshipDefence.TabIndex = 136;
-            this.lblGunshipDefence.Text = "defence";
-            this.lblGunshipDefence.Visible = false;
-            // 
-            // lblScoutDefence
-            // 
-            this.lblScoutDefence.AutoSize = true;
-            this.lblScoutDefence.Location = new System.Drawing.Point(820, 235);
-            this.lblScoutDefence.Name = "lblScoutDefence";
-            this.lblScoutDefence.Size = new System.Drawing.Size(46, 13);
-            this.lblScoutDefence.TabIndex = 135;
-            this.lblScoutDefence.Text = "defence";
-            this.lblScoutDefence.Visible = false;
-            // 
-            // lblOffenceDefence
-            // 
-            this.lblOffenceDefence.AutoSize = true;
-            this.lblOffenceDefence.Location = new System.Drawing.Point(820, 159);
-            this.lblOffenceDefence.Name = "lblOffenceDefence";
-            this.lblOffenceDefence.Size = new System.Drawing.Size(80, 13);
-            this.lblOffenceDefence.TabIndex = 134;
-            this.lblOffenceDefence.Text = "Defence Points";
-            this.lblOffenceDefence.Visible = false;
-            // 
             // lblCostDestroyer
             // 
             this.lblCostDestroyer.AutoSize = true;
@@ -1449,7 +1381,7 @@ namespace TerminalDecay5Client
             // lblDestoyerAttack
             // 
             this.lblDestoyerAttack.AutoSize = true;
-            this.lblDestoyerAttack.Location = new System.Drawing.Point(757, 416);
+            this.lblDestoyerAttack.Location = new System.Drawing.Point(802, 416);
             this.lblDestoyerAttack.Name = "lblDestoyerAttack";
             this.lblDestoyerAttack.Size = new System.Drawing.Size(58, 13);
             this.lblDestoyerAttack.TabIndex = 104;
@@ -1459,7 +1391,7 @@ namespace TerminalDecay5Client
             // lblFrigateAttack
             // 
             this.lblFrigateAttack.AutoSize = true;
-            this.lblFrigateAttack.Location = new System.Drawing.Point(757, 370);
+            this.lblFrigateAttack.Location = new System.Drawing.Point(802, 370);
             this.lblFrigateAttack.Name = "lblFrigateAttack";
             this.lblFrigateAttack.Size = new System.Drawing.Size(58, 13);
             this.lblFrigateAttack.TabIndex = 103;
@@ -1469,7 +1401,7 @@ namespace TerminalDecay5Client
             // lblBomberAttack
             // 
             this.lblBomberAttack.AutoSize = true;
-            this.lblBomberAttack.Location = new System.Drawing.Point(757, 326);
+            this.lblBomberAttack.Location = new System.Drawing.Point(802, 326);
             this.lblBomberAttack.Name = "lblBomberAttack";
             this.lblBomberAttack.Size = new System.Drawing.Size(58, 13);
             this.lblBomberAttack.TabIndex = 102;
@@ -1479,7 +1411,7 @@ namespace TerminalDecay5Client
             // lblGunshipAttack
             // 
             this.lblGunshipAttack.AutoSize = true;
-            this.lblGunshipAttack.Location = new System.Drawing.Point(757, 280);
+            this.lblGunshipAttack.Location = new System.Drawing.Point(802, 280);
             this.lblGunshipAttack.Name = "lblGunshipAttack";
             this.lblGunshipAttack.Size = new System.Drawing.Size(58, 13);
             this.lblGunshipAttack.TabIndex = 101;
@@ -1489,7 +1421,7 @@ namespace TerminalDecay5Client
             // lblScoutAttack
             // 
             this.lblScoutAttack.AutoSize = true;
-            this.lblScoutAttack.Location = new System.Drawing.Point(757, 235);
+            this.lblScoutAttack.Location = new System.Drawing.Point(802, 235);
             this.lblScoutAttack.Name = "lblScoutAttack";
             this.lblScoutAttack.Size = new System.Drawing.Size(58, 13);
             this.lblScoutAttack.TabIndex = 100;
@@ -1499,32 +1431,12 @@ namespace TerminalDecay5Client
             // lblOffenceAttack
             // 
             this.lblOffenceAttack.AutoSize = true;
-            this.lblOffenceAttack.Location = new System.Drawing.Point(757, 159);
+            this.lblOffenceAttack.Location = new System.Drawing.Point(811, 161);
             this.lblOffenceAttack.Name = "lblOffenceAttack";
-            this.lblOffenceAttack.Size = new System.Drawing.Size(61, 13);
+            this.lblOffenceAttack.Size = new System.Drawing.Size(73, 13);
             this.lblOffenceAttack.TabIndex = 99;
-            this.lblOffenceAttack.Text = "Production:";
+            this.lblOffenceAttack.Text = "Attack Points:";
             this.lblOffenceAttack.Visible = false;
-            // 
-            // lblBattleshipDeffence
-            // 
-            this.lblBattleshipDeffence.AutoSize = true;
-            this.lblBattleshipDeffence.Location = new System.Drawing.Point(820, 508);
-            this.lblBattleshipDeffence.Name = "lblBattleshipDeffence";
-            this.lblBattleshipDeffence.Size = new System.Drawing.Size(46, 13);
-            this.lblBattleshipDeffence.TabIndex = 153;
-            this.lblBattleshipDeffence.Text = "defence";
-            this.lblBattleshipDeffence.Visible = false;
-            // 
-            // lblCarrierDefence
-            // 
-            this.lblCarrierDefence.AutoSize = true;
-            this.lblCarrierDefence.Location = new System.Drawing.Point(820, 462);
-            this.lblCarrierDefence.Name = "lblCarrierDefence";
-            this.lblCarrierDefence.Size = new System.Drawing.Size(46, 13);
-            this.lblCarrierDefence.TabIndex = 152;
-            this.lblCarrierDefence.Text = "defence";
-            this.lblCarrierDefence.Visible = false;
             // 
             // lblCostBattleship
             // 
@@ -1627,7 +1539,7 @@ namespace TerminalDecay5Client
             // lblBattleshipAttack
             // 
             this.lblBattleshipAttack.AutoSize = true;
-            this.lblBattleshipAttack.Location = new System.Drawing.Point(757, 508);
+            this.lblBattleshipAttack.Location = new System.Drawing.Point(802, 508);
             this.lblBattleshipAttack.Name = "lblBattleshipAttack";
             this.lblBattleshipAttack.Size = new System.Drawing.Size(58, 13);
             this.lblBattleshipAttack.TabIndex = 141;
@@ -1637,7 +1549,7 @@ namespace TerminalDecay5Client
             // lblCarrierAttack
             // 
             this.lblCarrierAttack.AutoSize = true;
-            this.lblCarrierAttack.Location = new System.Drawing.Point(757, 462);
+            this.lblCarrierAttack.Location = new System.Drawing.Point(802, 462);
             this.lblCarrierAttack.Name = "lblCarrierAttack";
             this.lblCarrierAttack.Size = new System.Drawing.Size(58, 13);
             this.lblCarrierAttack.TabIndex = 140;
@@ -1864,8 +1776,6 @@ namespace TerminalDecay5Client
             this.Controls.Add(this.LblSelectedBase);
             this.Controls.Add(this.btnOffenceBuild);
             this.Controls.Add(this.BtnOffence);
-            this.Controls.Add(this.lblBattleshipDeffence);
-            this.Controls.Add(this.lblCarrierDefence);
             this.Controls.Add(this.lblCostBattleship);
             this.Controls.Add(this.lblCostCarrier);
             this.Controls.Add(this.lblBattleshipBuild);
@@ -1878,12 +1788,6 @@ namespace TerminalDecay5Client
             this.Controls.Add(this.label57);
             this.Controls.Add(this.lblBattleshipAttack);
             this.Controls.Add(this.lblCarrierAttack);
-            this.Controls.Add(this.lblDestroyerDefence);
-            this.Controls.Add(this.lblFrigateDefence);
-            this.Controls.Add(this.lblBomberDefence);
-            this.Controls.Add(this.lblGunshipDefence);
-            this.Controls.Add(this.lblScoutDefence);
-            this.Controls.Add(this.lblOffenceDefence);
             this.Controls.Add(this.lblCostDestroyer);
             this.Controls.Add(this.lblCostFrigate);
             this.Controls.Add(this.lblCostBomber);
@@ -2112,12 +2016,6 @@ namespace TerminalDecay5Client
         private Label lblGunner;
         private TextBox txtPatrol;
         private Label lblPatrol;
-        private Label lblDestroyerDefence;
-        private Label lblFrigateDefence;
-        private Label lblBomberDefence;
-        private Label lblGunshipDefence;
-        private Label lblScoutDefence;
-        private Label lblOffenceDefence;
         private Label lblCostDestroyer;
         private Label lblCostFrigate;
         private Label lblCostBomber;
@@ -2153,8 +2051,6 @@ namespace TerminalDecay5Client
         private Label lblGunshipAttack;
         private Label lblScoutAttack;
         private Label lblOffenceAttack;
-        private Label lblBattleshipDeffence;
-        private Label lblCarrierDefence;
         private Label lblCostBattleship;
         private Label lblCostCarrier;
         private Label lblBattleshipBuild;

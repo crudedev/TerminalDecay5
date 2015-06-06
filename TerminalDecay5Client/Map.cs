@@ -23,6 +23,12 @@ namespace TerminalDecay5Client
         private int _targetX;
         private int _targetY;
 
+        private int _currentPlanet = 0;
+        private int _currentSolarSystem = 0;
+        private int _currentCluster = 0;
+
+
+
         Messages frmMessage = new Messages();
 
         public Map()
@@ -255,7 +261,7 @@ namespace TerminalDecay5Client
             hideMenus();
             if (transmission[1][0] == "-1")
             {
-                MessageBox.Show("no outpost here");
+                MessageBox.Show("You don't own an outpost here");
                 return;
             } 
             showAttackMenu(true);
@@ -342,7 +348,7 @@ namespace TerminalDecay5Client
                         hideMenus();
             if(transmission[1][0] == "-1")
             {
-                MessageBox.Show("no outpost here");                
+                MessageBox.Show("You don't own an outpost here");                
                 return;
             }
 
@@ -608,7 +614,7 @@ namespace TerminalDecay5Client
             hideMenus();
             if (transmission[1][0] == "-1")
             {
-                MessageBox.Show("no outpost here");
+                MessageBox.Show("You don't own an outpost here");
                 return;
             }
             showDefenceMenu(true);
@@ -722,7 +728,6 @@ namespace TerminalDecay5Client
             lblOffFuture.Visible = show;
             lblOffCost.Visible = show;
             lblOffenceAttack.Visible = show;
-            lblOffenceDefence.Visible = show;
 
             lblScout.Visible = show;
             lblGunship.Visible = show;
@@ -756,14 +761,6 @@ namespace TerminalDecay5Client
             lblCarrierAttack.Visible = show;
             lblBattleshipAttack.Visible = show;
 
-            lblScoutDefence.Visible = show;
-            lblGunshipDefence.Visible = show;
-            lblBomberDefence.Visible = show;
-            lblFrigateDefence.Visible = show;
-            lblDestroyerDefence.Visible = show;
-            lblCarrierDefence.Visible = show;
-            lblBattleshipDeffence.Visible = show;
-
             txtScout.Visible = show;
             txtGunship.Visible = show;
             txtBomber.Visible = show;
@@ -791,18 +788,18 @@ namespace TerminalDecay5Client
             hideMenus();
             if (transmission[1][0] == "-1")
             {
-                MessageBox.Show("no outpost here");
+                MessageBox.Show("You don't own an outpost here");
                 return;
             }
             showOffenceMenu(true);
 
-            lblScout.Text = "scout: " + transmission[1][1];
-            lblGunship.Text = "gunship: " + transmission[1][2];
-            lblBomber.Text = "bomber: " + transmission[1][3];
-            lblFrigate.Text = "frigate: " + transmission[1][4];
-            lblDestroyer.Text = "destroyer: " + transmission[1][5];
-            lblCarrier.Text = "carrier:" + transmission[1][6];
-            lblBattleship.Text = "battleship:" + transmission[1][7];
+            lblScout.Text = "scout: " + transmission[1][0];
+            lblGunship.Text = "gunship: " + transmission[1][1];
+            lblBomber.Text = "bomber: " + transmission[1][2];
+            lblFrigate.Text = "frigate: " + transmission[1][3];
+            lblDestroyer.Text = "destroyer: " + transmission[1][4];
+            lblCarrier.Text = "carrier:" + transmission[1][5];
+            lblBattleship.Text = "battleship:" + transmission[1][6];
 
             lblCostScout.Text = updateBuildPanelCostString(transmission, 3);
             lblCostGunship.Text = updateBuildPanelCostString(transmission, 4);
@@ -847,13 +844,13 @@ namespace TerminalDecay5Client
                 nonEmptyValue = -1;
             }
 
-            lblScoutBuild.Text = transmission[11][0];
-            lblGunshipBuild.Text = transmission[11][1];
-            lblBomberBuild.Text = transmission[11][2];
-            lblFrigateBuild.Text = transmission[11][3];
-            lblDestroyerBuild.Text = transmission[11][4];
-            lblCarrierBuild.Text = transmission[11][5];
-            lblBattleshipBuild.Text = transmission[11][6];
+            lblScoutBuild.Text = transmission[10][0];
+            lblGunshipBuild.Text = transmission[10][1];
+            lblBomberBuild.Text = transmission[10][2];
+            lblFrigateBuild.Text = transmission[10][3];
+            lblDestroyerBuild.Text = transmission[10][4];
+            lblCarrierBuild.Text = transmission[10][5];
+            lblBattleshipBuild.Text = transmission[10][6];
 
             lblScoutAttack.Text = transmission[12][0];
             lblGunshipAttack.Text = transmission[12][1];
