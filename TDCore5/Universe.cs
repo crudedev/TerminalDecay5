@@ -22,10 +22,12 @@ namespace TDCore5
 
             r = new Random();
             clusters = new List<Cluster>();
-            for (int i = 0; i < 1; i++)
+            for (int i = 0; i < 5; i++)
             {
                 Cluster c = new Cluster();
                 c.solarSystems = new List<SolarSystem>();
+                c.position = new Position(r.Next(25), r.Next(25));
+                c.ClusterType = r.Next(10);
 
                 for (int ii = 0; ii < 10; ii++)
                 {
@@ -38,6 +40,8 @@ namespace TDCore5
                     {
                         Planet p = new Planet();
 
+                        p.planetType = r.Next(10);
+                        p.position = new Position(r.Next(25), r.Next(25));
                         p.mapTiles = new List<MapTile>();
 
                         MapTile t;

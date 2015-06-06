@@ -191,6 +191,8 @@ namespace TerminalDecay5Client
             this.btnSendAttack = new System.Windows.Forms.Button();
             this.BtnMessages = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
+            this.button4 = new System.Windows.Forms.Button();
+            this.button5 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.MapCanvas)).BeginInit();
             this.SuspendLayout();
             // 
@@ -1755,7 +1757,7 @@ namespace TerminalDecay5Client
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(12, 121);
+            this.button3.Location = new System.Drawing.Point(12, 120);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(75, 23);
             this.button3.TabIndex = 174;
@@ -1763,10 +1765,32 @@ namespace TerminalDecay5Client
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
+            // button4
+            // 
+            this.button4.Location = new System.Drawing.Point(12, 171);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(75, 23);
+            this.button4.TabIndex = 175;
+            this.button4.Text = "button4";
+            this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.button4_Click);
+            // 
+            // button5
+            // 
+            this.button5.Location = new System.Drawing.Point(12, 218);
+            this.button5.Name = "button5";
+            this.button5.Size = new System.Drawing.Size(75, 23);
+            this.button5.TabIndex = 176;
+            this.button5.Text = "button5";
+            this.button5.UseVisualStyleBackColor = true;
+            this.button5.Click += new System.EventHandler(this.button5_Click);
+            // 
             // Map
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.ClientSize = new System.Drawing.Size(1880, 831);
+            this.Controls.Add(this.button5);
+            this.Controls.Add(this.button4);
             this.Controls.Add(this.button3);
             this.Controls.Add(this.BtnMessages);
             this.Controls.Add(this.btnSendAttack);
@@ -2096,6 +2120,8 @@ namespace TerminalDecay5Client
         private Button btnSendAttack;
         private Button BtnMessages;
         private Button button3;
+        private Button button4;
+        private Button button5;
     }
 }
 

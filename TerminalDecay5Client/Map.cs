@@ -1030,27 +1030,27 @@ namespace TerminalDecay5Client
                     switch (l[2])
                     {
                         case "0":
-                            c = Color.FromArgb(245, 234, 111);
+                            c = Color.FromArgb(0, 153, 3);
                             break;
 
                         case "1":
-                            c = Color.FromArgb(252, 248, 0);
+                            c = Color.FromArgb(151, 189, 0);
                             break;
 
                         case "2":
-                            c = Color.FromArgb(252, 88, 0);
+                            c = Color.FromArgb(24, 3, 255);
                             break;
 
                         case "3":
-                            c = Color.FromArgb(222, 59, 27);
+                            c = Color.FromArgb(255, 3, 7);
                             break;
 
                         case "4":
-                            c = Color.FromArgb(157, 238, 242);
+                            c = Color.FromArgb(255, 3, 150);
                             break;
 
                         case "5":
-                            c = Color.FromArgb(120, 198, 250);
+                            c = Color.FromArgb(3, 137, 250);
                             break;
 
                         case "6":
@@ -1058,23 +1058,23 @@ namespace TerminalDecay5Client
                             break;
 
                         case "7":
-                            c = Color.FromArgb(221, 255, 0);
+                            c = Color.FromArgb(143, 155, 0);
                             break;
 
                         case "8":
-                            c = Color.FromArgb(255, 226, 61);
+                            c = Color.FromArgb(255, 226, 166);
                             break;
 
                         case "9":
-                            c = Color.FromArgb(245, 234, 211);
+                            c = Color.FromArgb(106, 138, 166);
                             break;
 
                         case "10":
-                            c = Color.FromArgb(245, 234, 211);
+                            c = Color.FromArgb(140, 118, 52);
                             break;
 
                         default:
-                            c = Color.FromArgb(225, 224, 111);
+                            c = Color.FromArgb(130, 80, 10);
                             break;
                     }
 
@@ -1092,6 +1092,117 @@ namespace TerminalDecay5Client
                 }
             }
             MapCanvas.Image = MapImage;
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            ServerConnection sc = new ServerConnection();
+            sc.ServerRequest(RenderSolarMap, 18, MessageConstants.splitMessageToken + Convert.ToString(playerToken));
+            hideMenus();
+        }
+        private void RenderUniverse(List<List<string>> transmission)
+        {
+            CurrentView = 3;
+            CheckLoggedOut(transmission);
+
+            Bitmap MapImage = new Bitmap(MapCanvas.Width, MapCanvas.Height);
+
+            Graphics mapgraph = Graphics.FromImage(MapImage);
+
+            Bitmap maptile = new Bitmap(26, 26);
+            Graphics tilegraph = Graphics.FromImage(maptile);
+
+            Color c = Color.Black;
+            SolidBrush b = new SolidBrush(c);
+            for (int x = 0; x < 25; x++)
+            {
+                for (int y = 0; y < 25; y++)
+                {
+                    maptile = new Bitmap(26, 26);
+                    tilegraph = Graphics.FromImage(maptile);
+                    tilegraph.FillRectangle(b, 0, 0, 25, 25);
+                    mapgraph.DrawImage(maptile, new Point(x * 26, y * 26));
+                }
+            }
+
+            foreach (List<string> l in transmission)
+            {
+                if (l.Count == 3)
+                {
+                    c = Color.White;
+
+                    switch (l[2])
+                    {
+                        case "0":
+                            c = Color.FromArgb(189, 189, 189);
+                            break;
+
+                        case "1":
+                            c = Color.FromArgb(151, 151, 151);
+                            break;
+
+                        case "2":
+                            c = Color.FromArgb(255, 255, 255);
+                            break;
+
+                        case "3":
+                            c = Color.FromArgb(200, 200, 200);
+                            break;
+
+                        case "4":
+                            c = Color.FromArgb(220, 220, 220);
+                            break;
+
+                        case "5":
+                            c = Color.FromArgb(240, 240, 240);
+                            break;
+
+                        case "6":
+                            c = Color.FromArgb(190, 190, 190);
+                            break;
+
+                        case "7":
+                            c = Color.FromArgb(180, 180, 180);
+                            break;
+
+                        case "8":
+                            c = Color.FromArgb(226, 226, 226);
+                            break;
+
+                        case "9":
+                            c = Color.FromArgb(205, 205, 205);
+                            break;
+
+                        case "10":
+                            c = Color.FromArgb(222, 222, 222);
+                            break;
+
+                        default:
+                            c = Color.FromArgb(240, 240, 240);
+                            break;
+                    }
+
+                    maptile = new Bitmap(26, 26);
+                    tilegraph = Graphics.FromImage(maptile);
+                    b = new SolidBrush(c);
+                    tilegraph.FillRectangle(b, 0, 0, 25, 25);
+                    mapgraph.DrawImage(maptile, new Point(Convert.ToInt32(l[0]) * 26, Convert.ToInt32(l[1]) * 26));
+
+                    maptile = new Bitmap(10, 10);
+                    tilegraph = Graphics.FromImage(maptile);
+                    b = new SolidBrush(c);
+                    tilegraph.FillRectangle(b, 0, 0, 25, 25);
+                    mapgraph.DrawImage(maptile, new Point(Convert.ToInt32(l[0]) * 26, Convert.ToInt32(l[1]) * 26));
+                }
+            }
+            MapCanvas.Image = MapImage;
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            ServerConnection sc = new ServerConnection();
+            sc.ServerRequest(RenderUniverse, 19, MessageConstants.splitMessageToken + Convert.ToString(playerToken));
+            hideMenus();
         }
     }
 }

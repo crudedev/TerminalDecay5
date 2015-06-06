@@ -441,11 +441,86 @@ namespace TerminalDecay5Server
                 SendSolarMap(transmissions, tcpClient);
             }
 
+            if (transmissions[0][0] == MessageConstants.MessageTypes[18])
+            {
+                SendClusterMap(transmissions, tcpClient);
+            }
+
+            if (transmissions[0][0] == MessageConstants.MessageTypes[19])
+            {
+                SendUniverseMap(transmissions, tcpClient);
+            }
+
             tcpClient.Close();
             client = null;
 
             #endregion
         }
+
+        private void SendUniverseMap(List<List<string>> message, TcpClient tcpClient)
+        {
+            long playerid = -1;
+            string response = MessageConstants.MessageTypes[19] + MessageConstants.nextMessageToken;
+
+            try
+            {
+                playerid = getPlayer(message[0][1]).PlayerID;
+            }
+            catch (Exception)
+            {
+                rejectConnection(17, "player token wrong", tcpClient);
+                return;
+            }
+
+            foreach (Cluster c in universe.clusters)
+            {
+                response += c.position.X + MessageConstants.splitMessageToken + c.position.Y + MessageConstants.splitMessageToken + c.ClusterType + MessageConstants.nextMessageToken;
+            }
+
+            response += MessageConstants.messageCompleteToken;
+
+            NetworkStream clientStream = tcpClient.GetStream();
+            ASCIIEncoding encoder = new ASCIIEncoding();
+
+            byte[] buffer = encoder.GetBytes(response);
+
+            clientStream.Write(buffer, 0, buffer.Length);
+            clientStream.Flush();
+
+        }
+
+        private void SendClusterMap(List<List<string>> message, TcpClient tcpClient)
+        {
+            long playerid = -1;
+            string response = MessageConstants.MessageTypes[18] + MessageConstants.nextMessageToken;
+
+            try
+            {
+                playerid = getPlayer(message[0][1]).PlayerID;
+            }
+            catch (Exception)
+            {
+                rejectConnection(17, "player token wrong", tcpClient);
+                return;
+            }
+
+            foreach (SolarSystem s in universe.clusters[0].solarSystems)
+            {
+                response += s.position.X + MessageConstants.splitMessageToken + s.position.Y + MessageConstants.splitMessageToken + s.SolarSystemType + MessageConstants.nextMessageToken;
+            }
+
+            response += MessageConstants.messageCompleteToken;
+
+            NetworkStream clientStream = tcpClient.GetStream();
+            ASCIIEncoding encoder = new ASCIIEncoding();
+
+            byte[] buffer = encoder.GetBytes(response);
+
+            clientStream.Write(buffer, 0, buffer.Length);
+            clientStream.Flush();
+
+        }
+
 
         private void SendSolarMap(List<List<string>> message, TcpClient tcpClient)
         {
@@ -462,9 +537,9 @@ namespace TerminalDecay5Server
                 return;
             }
 
-            foreach (SolarSystem s in universe.clusters[0].solarSystems)
+            foreach (Planet p in universe.clusters[0].solarSystems[0].planets)
             {
-                response += s.position.X + MessageConstants.splitMessageToken + s.position.Y + MessageConstants.splitMessageToken + s.SolarSystemType + MessageConstants.nextMessageToken;
+                response += p.position.X + MessageConstants.splitMessageToken + p.position.Y + MessageConstants.splitMessageToken + p.planetType + MessageConstants.nextMessageToken;
             }
 
             response += MessageConstants.messageCompleteToken;

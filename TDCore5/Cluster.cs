@@ -13,6 +13,8 @@ namespace TDCore5
         public List<SolarSystem> solarSystems;
         public Position position;
 
+        public int ClusterType;
+
 
         public Cluster()
         {

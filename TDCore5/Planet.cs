@@ -14,6 +14,8 @@ namespace TDCore5
         public List<MapTile> mapTiles;
         public Position position;
 
+        public int planetType;
+
         public Planet()
         {
 

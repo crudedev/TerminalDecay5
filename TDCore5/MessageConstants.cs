@@ -32,6 +32,8 @@ namespace TDCore5
             MessageTypes.Add(15, "GetMessagesagvsik.p#75wgj");
             MessageTypes.Add(16, "ReadMessageajl623dcrioxmk");
             MessageTypes.Add(17, "ViewSolarMap^&^&%**%d.1sa");
+            MessageTypes.Add(18, "ViewClusterMapxxdjgrymn,4");
+            MessageTypes.Add(19, "ViewUniverse,4dk,meiu8hg6");
         }
 
     }
