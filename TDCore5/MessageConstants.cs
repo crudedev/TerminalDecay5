@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace TerminalDecay5Server
+namespace TDCore5
 {
     public class MessageConstants
     {
@@ -31,6 +31,7 @@ namespace TerminalDecay5Server
             MessageTypes.Add(14, "SendAttacku>|&sf65ff%%!!!");
             MessageTypes.Add(15, "GetMessagesagvsik.p#75wgj");
             MessageTypes.Add(16, "ReadMessageajl623dcrioxmk");
+            MessageTypes.Add(17, "ViewSolarMap^&^&%**%d.1sa");
         }
 
     }

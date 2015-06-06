@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using TerminalDecay5Server;
+using TDCore5;
 
 namespace TerminalDecay5Client
 {

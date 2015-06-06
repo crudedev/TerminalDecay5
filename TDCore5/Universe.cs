@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 
-namespace TerminalDecay5Server
+namespace TDCore5
 {
     [Serializable()]
     public class Universe : ISerializable
@@ -22,14 +22,18 @@ namespace TerminalDecay5Server
 
             r = new Random();
             clusters = new List<Cluster>();
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < 1; i++)
             {
                 Cluster c = new Cluster();
                 c.solarSystems = new List<SolarSystem>();
-                for (int ii = 0; ii < 20; ii++)
+
+                for (int ii = 0; ii < 10; ii++)
                 {
                     SolarSystem s = new SolarSystem();
                     s.planets = new List<Planet>();
+                    s.position = new Position(r.Next(25), r.Next(25));
+                    s.SolarSystemType = r.Next(10);
+                        
                     for (int iii = 0; iii < 10; iii++)
                     {
                         Planet p = new Planet();
@@ -73,11 +77,6 @@ namespace TerminalDecay5Server
                 clusters.Add(c); 
 
             }
-            //clusters[0].solarSystems = new List<SolarSystem>();
-            //clusters[0].solarSystems.Add(new SolarSystem());
-            //clusters[0].solarSystems[0].planets = new List<Planet>();
-            //clusters[0].solarSystems[0].planets.Add(new Planet());
-            //clusters[0].solarSystems[0].planets[0].mapTiles = new List<MapTile>();
             
             BuildingBuildQueue = new List<BuildQueueItem>();
             DefenceBuildQueue = new List<BuildQueueItem>();
@@ -86,35 +85,6 @@ namespace TerminalDecay5Server
             players = new List<Player>();
             Messages = new List<Message>();
 
-            //if (true)
-            //{
-            //    MapTile t;
-
-            //    int x = 0;
-            //    int y = 0;
-
-            //    for (int i = 0; i < 625; i++)
-            //    {
-            //        t = new MapTile();
-            //        t.Resources[Cmn.Resource[Cmn.Renum.Metal]] = r.Next(20000);
-            //        t.Resources[Cmn.Resource[Cmn.Renum.Food]] = r.Next(500);
-            //        t.Resources[Cmn.Resource[Cmn.Renum.Water]] = r.Next(10000);
-
-            //        t.MaxResources[Cmn.Resource[Cmn.Renum.Metal]] = t.Resources[Cmn.Resource[Cmn.Renum.Metal]];
-            //        t.MaxResources[Cmn.Resource[Cmn.Renum.Food]] = t.Resources[Cmn.Resource[Cmn.Renum.Food]];
-            //        t.MaxResources[Cmn.Resource[Cmn.Renum.Water]] = t.Resources[Cmn.Resource[Cmn.Renum.Water]];
-
-            //        clusters[0].solarSystems[0].planets[0].mapTiles.Add(t);
-            //        t.position = new Position(x, y);
-
-            //        x++;
-            //        if (x == 25)
-            //        {
-            //            x = 0;
-            //            y++;
-            //        }
-            //    }
-            //}
         }
 
         public Universe()

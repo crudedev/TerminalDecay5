@@ -5,7 +5,7 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TerminalDecay5Server
+namespace TDCore5
 {
     [Serializable()]
     public class Cluster : ISerializable

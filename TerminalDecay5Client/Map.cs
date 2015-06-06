@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
-using TerminalDecay5Server;
+using TDCore5;
 
 namespace TerminalDecay5Client
 {
@@ -263,7 +263,7 @@ namespace TerminalDecay5Client
             {
                 MessageBox.Show("You don't own an outpost here");
                 return;
-            } 
+            }
             showAttackMenu(true);
 
             lblAttackScout.Text = "Scout: " + transmission[1][0];
@@ -318,7 +318,7 @@ namespace TerminalDecay5Client
 
             if (transmission[0][0] == MessageConstants.MessageTypes[5])
             {
-                
+
                 if (transmission[1][0] == "-1")
                 {
                     LblSidePanel.Text = "unoccipied land";
@@ -340,15 +340,15 @@ namespace TerminalDecay5Client
             //show the build list
             ServerConnection sc = new ServerConnection();
             sc.ServerRequest(UpdateBuildPanel, 7, MessageConstants.splitMessageToken + Convert.ToString(playerToken) + MessageConstants.splitMessageToken + Convert.ToString(_currentX) + MessageConstants.splitMessageToken + Convert.ToString(_currentY));
-            
+
         }
 
         private void UpdateBuildPanel(List<List<string>> transmission)
         {
-                        hideMenus();
-            if(transmission[1][0] == "-1")
+            hideMenus();
+            if (transmission[1][0] == "-1")
             {
-                MessageBox.Show("You don't own an outpost here");                
+                MessageBox.Show("You don't own an outpost here");
                 return;
             }
 
@@ -574,7 +574,7 @@ namespace TerminalDecay5Client
 
             MessageBox.Show(transmission[0][1]);
 
-            if(transmission[0][0] == MessageConstants.MessageTypes[8])
+            if (transmission[0][0] == MessageConstants.MessageTypes[8])
             {
                 ServerConnection sc = new ServerConnection();
                 sc.ServerRequest(UpdateBuildPanel, 7, MessageConstants.splitMessageToken + Convert.ToString(playerToken) + MessageConstants.splitMessageToken + Convert.ToString(_currentX) + MessageConstants.splitMessageToken + Convert.ToString(_currentY));
@@ -605,8 +605,8 @@ namespace TerminalDecay5Client
             //show the build list
             ServerConnection sc = new ServerConnection();
             sc.ServerRequest(UpdateBuildDefPanel, 9, MessageConstants.splitMessageToken + Convert.ToString(playerToken) + MessageConstants.splitMessageToken + Convert.ToString(_currentX) + MessageConstants.splitMessageToken + Convert.ToString(_currentY)); ;
-            
-            
+
+
         }
 
         private void UpdateBuildDefPanel(List<List<string>> transmission)
@@ -693,7 +693,7 @@ namespace TerminalDecay5Client
 
                 request += MessageConstants.nextMessageToken;
                 request += _currentX + MessageConstants.splitMessageToken + _currentY;
-            ServerConnection sc = new ServerConnection();
+                ServerConnection sc = new ServerConnection();
                 sc.ServerRequest(ConfirmBuildQueue, 10, request);
 
 
@@ -710,7 +710,7 @@ namespace TerminalDecay5Client
                 MessageBox.Show("Invalid Input");
 
             }
-            
+
 
         }
 
@@ -976,7 +976,7 @@ namespace TerminalDecay5Client
             }
             frmMessage.Init(playerToken);
             frmMessage.Show();
-            
+
         }
 
         private void CheckLoggedOut(List<List<string>> transmission)
@@ -987,6 +987,111 @@ namespace TerminalDecay5Client
                 this.Close();
                 return;
             }
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            ServerConnection sc = new ServerConnection();
+            sc.ServerRequest(RenderSolarMap, 17, MessageConstants.splitMessageToken + Convert.ToString(playerToken));
+            hideMenus();
+        }
+
+        private void RenderSolarMap(List<List<string>> transmission)
+        {
+            CurrentView = 3;
+            CheckLoggedOut(transmission);
+
+            Bitmap MapImage = new Bitmap(MapCanvas.Width, MapCanvas.Height);
+
+            Graphics mapgraph = Graphics.FromImage(MapImage);
+
+            Bitmap maptile = new Bitmap(26, 26);
+            Graphics tilegraph = Graphics.FromImage(maptile);
+
+            Color c = Color.Black;
+            SolidBrush b = new SolidBrush(c);
+            for (int x = 0; x < 25; x++)
+            {
+                for (int y = 0; y < 25; y++)
+                {
+                    maptile = new Bitmap(26, 26);
+                    tilegraph = Graphics.FromImage(maptile);
+                    tilegraph.FillRectangle(b, 0, 0, 25, 25);
+                    mapgraph.DrawImage(maptile, new Point(x * 26, y * 26));
+                }
+            }
+
+            foreach (List<string> l in transmission)
+            {
+                if (l.Count == 3)
+                {
+                    c = Color.White;
+
+                    switch (l[2])
+                    {
+                        case "0":
+                            c = Color.FromArgb(245, 234, 111);
+                            break;
+
+                        case "1":
+                            c = Color.FromArgb(252, 248, 0);
+                            break;
+
+                        case "2":
+                            c = Color.FromArgb(252, 88, 0);
+                            break;
+
+                        case "3":
+                            c = Color.FromArgb(222, 59, 27);
+                            break;
+
+                        case "4":
+                            c = Color.FromArgb(157, 238, 242);
+                            break;
+
+                        case "5":
+                            c = Color.FromArgb(120, 198, 250);
+                            break;
+
+                        case "6":
+                            c = Color.FromArgb(238, 247, 136);
+                            break;
+
+                        case "7":
+                            c = Color.FromArgb(221, 255, 0);
+                            break;
+
+                        case "8":
+                            c = Color.FromArgb(255, 226, 61);
+                            break;
+
+                        case "9":
+                            c = Color.FromArgb(245, 234, 211);
+                            break;
+
+                        case "10":
+                            c = Color.FromArgb(245, 234, 211);
+                            break;
+
+                        default:
+                            c = Color.FromArgb(225, 224, 111);
+                            break;
+                    }
+
+                    maptile = new Bitmap(26, 26);
+                    tilegraph = Graphics.FromImage(maptile);
+                    b = new SolidBrush(c);
+                    tilegraph.FillRectangle(b, 0, 0, 25, 25);
+                    mapgraph.DrawImage(maptile, new Point(Convert.ToInt32(l[0]) * 26, Convert.ToInt32(l[1]) * 26));
+
+                    maptile = new Bitmap(10, 10);
+                    tilegraph = Graphics.FromImage(maptile);
+                    b = new SolidBrush(c);
+                    tilegraph.FillRectangle(b, 0, 0, 25, 25);
+                    mapgraph.DrawImage(maptile, new Point(Convert.ToInt32(l[0]) * 26, Convert.ToInt32(l[1]) * 26));
+                }
+            }
+            MapCanvas.Image = MapImage;
         }
     }
 }

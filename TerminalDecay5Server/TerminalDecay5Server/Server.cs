@@ -4,6 +4,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
+using TDCore5;
 
 namespace TerminalDecay5Server
 {
@@ -435,10 +436,47 @@ namespace TerminalDecay5Server
                 ReadMessage(transmissions, tcpClient);
             }
 
+            if (transmissions[0][0] == MessageConstants.MessageTypes[17])
+            {
+                SendSolarMap(transmissions, tcpClient);
+            }
+
             tcpClient.Close();
             client = null;
 
             #endregion
+        }
+
+        private void SendSolarMap(List<List<string>> message, TcpClient tcpClient)
+        {
+            long playerid = -1;
+            string response = MessageConstants.MessageTypes[17] + MessageConstants.nextMessageToken;
+
+            try
+            {
+                playerid = getPlayer(message[0][1]).PlayerID;
+            }
+            catch (Exception)
+            {
+                rejectConnection(17, "player token wrong", tcpClient);
+                return;
+            }
+
+            foreach (SolarSystem s in universe.clusters[0].solarSystems)
+            {
+                response += s.position.X + MessageConstants.splitMessageToken + s.position.Y + MessageConstants.splitMessageToken + s.SolarSystemType + MessageConstants.nextMessageToken;
+            }
+
+            response += MessageConstants.messageCompleteToken;
+
+            NetworkStream clientStream = tcpClient.GetStream();
+            ASCIIEncoding encoder = new ASCIIEncoding();
+
+            byte[] buffer = encoder.GetBytes(response);
+
+            clientStream.Write(buffer, 0, buffer.Length);
+            clientStream.Flush();
+
         }
 
         private void ReadMessage(List<List<string>> transmissions, TcpClient tcpClient)

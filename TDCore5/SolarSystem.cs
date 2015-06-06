@@ -5,13 +5,15 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TerminalDecay5Server
+namespace TDCore5
 {
     [Serializable()]
     public class SolarSystem : ISerializable
     {
         public List<Planet> planets;
         public Position position;
+
+        public int SolarSystemType;
 
         public SolarSystem()
         {

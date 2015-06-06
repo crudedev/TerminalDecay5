@@ -2,7 +2,7 @@
 using System.Collections.Generic;using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 
-namespace TerminalDecay5Server
+namespace TDCore5
 {
     [Serializable()]
     public class Player : ISerializable

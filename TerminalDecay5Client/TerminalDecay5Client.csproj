@@ -106,9 +106,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\TerminalDecay5Server\TerminalDecay5Server\TerminalDecay5Server.csproj">
-      <Project>{6b372401-8681-4e5e-bfeb-a7439c5b611b}</Project>
-      <Name>TerminalDecay5Server</Name>
+    <ProjectReference Include="..\TDCore5\TDCore5.csproj">
+      <Project>{28e4eecb-afd8-422d-a4bb-3c106a367b01}</Project>
+      <Name>TDCore5</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

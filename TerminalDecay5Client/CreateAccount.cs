@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
-using TerminalDecay5Server;
+using TDCore5;
 
 namespace TerminalDecay5Client
 {

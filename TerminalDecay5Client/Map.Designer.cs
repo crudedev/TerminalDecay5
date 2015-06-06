@@ -190,6 +190,7 @@ namespace TerminalDecay5Client
             this.txtAttackScout = new System.Windows.Forms.TextBox();
             this.btnSendAttack = new System.Windows.Forms.Button();
             this.BtnMessages = new System.Windows.Forms.Button();
+            this.button3 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.MapCanvas)).BeginInit();
             this.SuspendLayout();
             // 
@@ -208,7 +209,7 @@ namespace TerminalDecay5Client
             this.MapCanvas.Image = ((System.Drawing.Image)(resources.GetObject("MapCanvas.Image")));
             this.MapCanvas.Location = new System.Drawing.Point(127, 47);
             this.MapCanvas.Name = "MapCanvas";
-            this.MapCanvas.Size = new System.Drawing.Size(678, 591);
+            this.MapCanvas.Size = new System.Drawing.Size(709, 645);
             this.MapCanvas.TabIndex = 1;
             this.MapCanvas.TabStop = false;
             this.MapCanvas.Click += new System.EventHandler(this.MapCanvas_Click);
@@ -279,7 +280,7 @@ namespace TerminalDecay5Client
             // 
             // BtnBuild
             // 
-            this.BtnBuild.Location = new System.Drawing.Point(805, 47);
+            this.BtnBuild.Location = new System.Drawing.Point(864, 47);
             this.BtnBuild.Name = "BtnBuild";
             this.BtnBuild.Size = new System.Drawing.Size(75, 23);
             this.BtnBuild.TabIndex = 9;
@@ -726,7 +727,7 @@ namespace TerminalDecay5Client
             // 
             // BtnDef
             // 
-            this.BtnDef.Location = new System.Drawing.Point(886, 47);
+            this.BtnDef.Location = new System.Drawing.Point(945, 47);
             this.BtnDef.Name = "BtnDef";
             this.BtnDef.Size = new System.Drawing.Size(100, 23);
             this.BtnDef.TabIndex = 55;
@@ -1558,7 +1559,7 @@ namespace TerminalDecay5Client
             // 
             // BtnOffence
             // 
-            this.BtnOffence.Location = new System.Drawing.Point(992, 47);
+            this.BtnOffence.Location = new System.Drawing.Point(1051, 47);
             this.BtnOffence.Name = "BtnOffence";
             this.BtnOffence.Size = new System.Drawing.Size(100, 23);
             this.BtnOffence.TabIndex = 154;
@@ -1581,7 +1582,7 @@ namespace TerminalDecay5Client
             // LblSelectedBase
             // 
             this.LblSelectedBase.AutoSize = true;
-            this.LblSelectedBase.Location = new System.Drawing.Point(12, 137);
+            this.LblSelectedBase.Location = new System.Drawing.Point(9, 363);
             this.LblSelectedBase.Name = "LblSelectedBase";
             this.LblSelectedBase.Size = new System.Drawing.Size(76, 13);
             this.LblSelectedBase.TabIndex = 156;
@@ -1589,7 +1590,7 @@ namespace TerminalDecay5Client
             // 
             // BtnAttack
             // 
-            this.BtnAttack.Location = new System.Drawing.Point(1098, 47);
+            this.BtnAttack.Location = new System.Drawing.Point(1157, 47);
             this.BtnAttack.Name = "BtnAttack";
             this.BtnAttack.Size = new System.Drawing.Size(62, 23);
             this.BtnAttack.TabIndex = 157;
@@ -1752,10 +1753,21 @@ namespace TerminalDecay5Client
             this.BtnMessages.UseVisualStyleBackColor = true;
             this.BtnMessages.Click += new System.EventHandler(this.BtnMessages_Click);
             // 
+            // button3
+            // 
+            this.button3.Location = new System.Drawing.Point(12, 121);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(75, 23);
+            this.button3.TabIndex = 174;
+            this.button3.Text = "button3";
+            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
+            // 
             // Map
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.ClientSize = new System.Drawing.Size(1880, 831);
+            this.Controls.Add(this.button3);
             this.Controls.Add(this.BtnMessages);
             this.Controls.Add(this.btnSendAttack);
             this.Controls.Add(this.txtAttackBattleship);
@@ -2083,6 +2095,7 @@ namespace TerminalDecay5Client
         private TextBox txtAttackScout;
         private Button btnSendAttack;
         private Button BtnMessages;
+        private Button button3;
     }
 }
 
