@@ -16,6 +16,8 @@ namespace TDCore5
 
         public int planetType;
 
+        public int PlanetID;
+
         public Planet()
         {
 

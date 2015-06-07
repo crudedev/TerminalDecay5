@@ -15,6 +15,8 @@ namespace TDCore5
 
         public int SolarSystemType;
 
+        public int SolarSystemID;
+
         public SolarSystem()
         {
 

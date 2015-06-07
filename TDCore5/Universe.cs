@@ -28,6 +28,7 @@ namespace TDCore5
                 c.solarSystems = new List<SolarSystem>();
                 c.position = new Position(r.Next(25), r.Next(25));
                 c.ClusterType = r.Next(10);
+                c.ClusterID = i;
 
                 for (int ii = 0; ii < 10; ii++)
                 {
@@ -35,6 +36,7 @@ namespace TDCore5
                     s.planets = new List<Planet>();
                     s.position = new Position(r.Next(25), r.Next(25));
                     s.SolarSystemType = r.Next(10);
+                    s.SolarSystemID = ii;
                         
                     for (int iii = 0; iii < 10; iii++)
                     {
@@ -43,6 +45,8 @@ namespace TDCore5
                         p.planetType = r.Next(10);
                         p.position = new Position(r.Next(25), r.Next(25));
                         p.mapTiles = new List<MapTile>();
+
+                        p.PlanetID = iii;
 
                         MapTile t;
 

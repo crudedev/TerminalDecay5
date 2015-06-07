@@ -218,7 +218,7 @@ namespace TerminalDecay5Client
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(12, 67);
+            this.button2.Location = new System.Drawing.Point(12, 233);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 2;
@@ -1757,7 +1757,7 @@ namespace TerminalDecay5Client
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(12, 120);
+            this.button3.Location = new System.Drawing.Point(12, 174);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(75, 23);
             this.button3.TabIndex = 174;
@@ -1767,7 +1767,7 @@ namespace TerminalDecay5Client
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(12, 171);
+            this.button4.Location = new System.Drawing.Point(12, 119);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(75, 23);
             this.button4.TabIndex = 175;
@@ -1777,7 +1777,7 @@ namespace TerminalDecay5Client
             // 
             // button5
             // 
-            this.button5.Location = new System.Drawing.Point(12, 218);
+            this.button5.Location = new System.Drawing.Point(10, 75);
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(75, 23);
             this.button5.TabIndex = 176;

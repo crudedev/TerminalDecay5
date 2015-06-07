@@ -15,6 +15,8 @@ namespace TDCore5
 
         public int ClusterType;
 
+        public int ClusterID;
+
 
         public Cluster()
         {

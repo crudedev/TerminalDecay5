@@ -500,14 +500,34 @@ namespace TerminalDecay5Server
             }
             catch (Exception)
             {
-                rejectConnection(17, "player token wrong", tcpClient);
+                rejectConnection(18, "player token wrong", tcpClient);
                 return;
             }
 
-            foreach (SolarSystem s in universe.clusters[0].solarSystems)
+            Cluster SelectedCluster = new Cluster();
+            foreach (Cluster item in universe.clusters)
+            {
+                if (item.position.X == Convert.ToInt32(message[0][2]) && item.position.Y == Convert.ToInt32(message[0][3]))
+                {
+                    SelectedCluster = item;
+                }
+            }
+
+            if (SelectedCluster == null)
+            {
+                SelectedCluster = universe.clusters[0];
+            }
+
+            response += SelectedCluster.ClusterID + MessageConstants.nextMessageToken;
+
+
+
+            foreach (SolarSystem s in SelectedCluster.solarSystems)
             {
                 response += s.position.X + MessageConstants.splitMessageToken + s.position.Y + MessageConstants.splitMessageToken + s.SolarSystemType + MessageConstants.nextMessageToken;
             }
+
+
 
             response += MessageConstants.messageCompleteToken;
 
@@ -520,7 +540,6 @@ namespace TerminalDecay5Server
             clientStream.Flush();
 
         }
-
 
         private void SendSolarMap(List<List<string>> message, TcpClient tcpClient)
         {
@@ -536,6 +555,7 @@ namespace TerminalDecay5Server
                 rejectConnection(17, "player token wrong", tcpClient);
                 return;
             }
+
 
             foreach (Planet p in universe.clusters[0].solarSystems[0].planets)
             {
@@ -1454,6 +1474,10 @@ namespace TerminalDecay5Server
 
                 o.Tiles.Add(v);
 
+                o.ClusterID = 0;
+                o.SolarSystemID = 0;
+                o.PlanetID = 0;
+
                 o.Buildings[Cmn.BuildType[Cmn.BldTenum.Mine]] = 1;
                 o.Buildings[Cmn.BuildType[Cmn.BldTenum.Farm]] = 2;
                 o.Buildings[Cmn.BuildType[Cmn.BldTenum.Habitat]] = 1;
@@ -1540,32 +1564,47 @@ namespace TerminalDecay5Server
                 return;
             }
 
-            foreach (Outpost o in universe.outposts)
+            int planetId = 0;
+
+            foreach (Planet item in universe.clusters[Convert.ToInt32(message[0][4])].solarSystems[Convert.ToInt32(message[0][5])].planets)
             {
-                foreach (Position p in o.Tiles)
+                if (item.position.X == Convert.ToInt32(message[0][2]) && item.position.Y == Convert.ToInt32(message[0][3]))
                 {
-                    response += p.X + MessageConstants.splitMessageToken + p.Y + MessageConstants.splitMessageToken + o.OwnerID + MessageConstants.splitMessageToken;
-                    if (playerid == o.OwnerID)
-                    {
-                        response += "mine";
-                    }
-                    else
-                    {
-                        response += "foe";
-                    }
-
-                    long def = 0;
-                    for (int index = 0; index < Cmn.DefenceType.Count; index++)
-                    {
-                        def += o.Defence[index] * Cmn.DefenceAttack[index];
-                    }
-
-                    response += MessageConstants.splitMessageToken + def.ToString();
-
-
-                    response += MessageConstants.nextMessageToken;
+                    planetId = item.PlanetID;
                 }
             }
+
+
+            foreach (Outpost o in universe.outposts)
+            {
+                if (o.ClusterID.ToString() == message[0][4] && o.SolarSystemID.ToString() == message[0][5] && o.PlanetID == planetId)
+                {
+                    foreach (Position p in o.Tiles)
+                    {
+                        response += p.X + MessageConstants.splitMessageToken + p.Y + MessageConstants.splitMessageToken + o.OwnerID + MessageConstants.splitMessageToken;
+                        if (playerid == o.OwnerID)
+                        {
+                            response += "mine";
+                        }
+                        else
+                        {
+                            response += "foe";
+                        }
+
+                        long def = 0;
+                        for (int index = 0; index < Cmn.DefenceType.Count; index++)
+                        {
+                            def += o.Defence[index] * Cmn.DefenceAttack[index];
+                        }
+
+                        response += MessageConstants.splitMessageToken + def.ToString();
+
+
+                        response += MessageConstants.nextMessageToken;
+                    }
+                }
+            }
+
 
             response += MessageConstants.messageCompleteToken;
 

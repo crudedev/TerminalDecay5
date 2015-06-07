@@ -16,6 +16,9 @@ namespace TerminalDecay5Client
         //0 = resource;
         //1 = buildview;
         //2 = attackView
+        //3 = solarsystem view
+        //4 = cluster view
+        //5 = universe view
 
         private int _currentX;
         private int _currentY;
@@ -224,7 +227,7 @@ namespace TerminalDecay5Client
                 if (m.Button == MouseButtons.Left)
                 {
                     ServerConnection sc = new ServerConnection();
-                    sc.ServerRequest(UpdateSidePanel, 4, MessageConstants.splitMessageToken + Convert.ToString(playerToken) + MessageConstants.splitMessageToken + Convert.ToString(mx) + MessageConstants.splitMessageToken + Convert.ToString(my) + MessageConstants.splitMessageToken);
+                    sc.ServerRequest(UpdateSidePanel, 4, MessageConstants.splitMessageToken + Convert.ToString(playerToken) + MessageConstants.splitMessageToken + Convert.ToString(mx) + MessageConstants.splitMessageToken + Convert.ToString(my) + MessageConstants.messageCompleteToken);
                 }
             }
 
@@ -235,7 +238,7 @@ namespace TerminalDecay5Client
                     _currentX = mx;
                     _currentY = my;
                     ServerConnection sc = new ServerConnection();
-                    sc.ServerRequest(UpdateSidePanel, 5, MessageConstants.splitMessageToken + Convert.ToString(playerToken) + MessageConstants.splitMessageToken + Convert.ToString(mx) + MessageConstants.splitMessageToken + Convert.ToString(my) + MessageConstants.splitMessageToken);
+                    sc.ServerRequest(UpdateSidePanel, 5, MessageConstants.splitMessageToken + Convert.ToString(playerToken) + MessageConstants.splitMessageToken + Convert.ToString(mx) + MessageConstants.splitMessageToken + Convert.ToString(my) + MessageConstants.messageCompleteToken);
                 }
             }
 
@@ -248,8 +251,42 @@ namespace TerminalDecay5Client
 
                     //get the current offence in that place now, and allow them to use it;
                     ServerConnection sc = new ServerConnection();
-                    sc.ServerRequest(DisplayAttack, 13, MessageConstants.splitMessageToken + Convert.ToString(playerToken) + MessageConstants.splitMessageToken + Convert.ToString(_currentX) + MessageConstants.splitMessageToken + Convert.ToString(_currentY) + MessageConstants.splitMessageToken);
+                    sc.ServerRequest(DisplayAttack, 13, MessageConstants.splitMessageToken + Convert.ToString(playerToken) + MessageConstants.splitMessageToken + Convert.ToString(_currentX) + MessageConstants.splitMessageToken + Convert.ToString(_currentY) + MessageConstants.messageCompleteToken);
 
+                }
+            }
+
+
+            if (CurrentView == 3)
+            {
+                if (m.Button == MouseButtons.Left)
+                {
+                    _currentX = mx;
+                    _currentY = my;
+                    ServerConnection sc = new ServerConnection();
+                    sc.ServerRequest(RenderMainMap, 3, MessageConstants.splitMessageToken + Convert.ToString(playerToken) + MessageConstants.splitMessageToken + Convert.ToString(mx) + MessageConstants.splitMessageToken + Convert.ToString(my) + MessageConstants.splitMessageToken + _currentCluster + MessageConstants.splitMessageToken +_currentSolarSystem + MessageConstants.messageCompleteToken);
+                }
+            }
+
+            if (CurrentView == 4)
+            {
+                if (m.Button == MouseButtons.Left)
+                {
+                    _currentX = mx;
+                    _currentY = my;
+                    ServerConnection sc = new ServerConnection();
+                    sc.ServerRequest(RenderSolarMap, 17, MessageConstants.splitMessageToken + Convert.ToString(playerToken) + MessageConstants.splitMessageToken + Convert.ToString(mx) + MessageConstants.splitMessageToken + Convert.ToString(my) + MessageConstants.splitMessageToken + _currentCluster + MessageConstants.messageCompleteToken);
+                }
+            }
+
+            if (CurrentView == 5)
+            {
+                if (m.Button == MouseButtons.Left)
+                {
+                    _currentX = mx;
+                    _currentY = my;
+                    ServerConnection sc = new ServerConnection();
+                    sc.ServerRequest(RenderClusterMap, 18, MessageConstants.splitMessageToken + Convert.ToString(playerToken) + MessageConstants.splitMessageToken + Convert.ToString(mx) + MessageConstants.splitMessageToken + Convert.ToString(my) + MessageConstants.messageCompleteToken);
                 }
             }
 
@@ -991,6 +1028,7 @@ namespace TerminalDecay5Client
 
         private void button3_Click(object sender, EventArgs e)
         {
+            CurrentView = 3;
             ServerConnection sc = new ServerConnection();
             sc.ServerRequest(RenderSolarMap, 17, MessageConstants.splitMessageToken + Convert.ToString(playerToken));
             hideMenus();
@@ -1030,7 +1068,7 @@ namespace TerminalDecay5Client
                     switch (l[2])
                     {
                         case "0":
-                            c = Color.FromArgb(0, 153, 3);
+                            c = Color.FromArgb(255, 255, 3);
                             break;
 
                         case "1":
@@ -1038,19 +1076,19 @@ namespace TerminalDecay5Client
                             break;
 
                         case "2":
-                            c = Color.FromArgb(24, 3, 255);
+                            c = Color.FromArgb(255, 255, 255);
                             break;
 
                         case "3":
-                            c = Color.FromArgb(255, 3, 7);
+                            c = Color.FromArgb(255, 255, 255);
                             break;
 
                         case "4":
-                            c = Color.FromArgb(255, 3, 150);
+                            c = Color.FromArgb(255, 255, 150);
                             break;
 
                         case "5":
-                            c = Color.FromArgb(3, 137, 250);
+                            c = Color.FromArgb(3, 3, 250);
                             break;
 
                         case "6":
@@ -1058,23 +1096,23 @@ namespace TerminalDecay5Client
                             break;
 
                         case "7":
-                            c = Color.FromArgb(143, 155, 0);
+                            c = Color.FromArgb(143, 155, 255);
                             break;
 
                         case "8":
-                            c = Color.FromArgb(255, 226, 166);
+                            c = Color.FromArgb(255, 255, 166);
                             break;
 
                         case "9":
-                            c = Color.FromArgb(106, 138, 166);
+                            c = Color.FromArgb(106, 106, 166);
                             break;
 
                         case "10":
-                            c = Color.FromArgb(140, 118, 52);
+                            c = Color.FromArgb(140, 140, 52);
                             break;
 
                         default:
-                            c = Color.FromArgb(130, 80, 10);
+                            c = Color.FromArgb(130, 130, 10);
                             break;
                     }
 
@@ -1084,11 +1122,101 @@ namespace TerminalDecay5Client
                     tilegraph.FillRectangle(b, 0, 0, 25, 25);
                     mapgraph.DrawImage(maptile, new Point(Convert.ToInt32(l[0]) * 26, Convert.ToInt32(l[1]) * 26));
 
-                    maptile = new Bitmap(10, 10);
+                }
+            }
+            MapCanvas.Image = MapImage;
+        }
+
+        private void RenderClusterMap(List<List<string>> transmission)
+        {
+            CurrentView = 4;
+            CheckLoggedOut(transmission);
+
+            _currentCluster = Convert.ToInt32(transmission[1][0]);
+
+            Bitmap MapImage = new Bitmap(MapCanvas.Width, MapCanvas.Height);
+
+            Graphics mapgraph = Graphics.FromImage(MapImage);
+
+            Bitmap maptile = new Bitmap(26, 26);
+            Graphics tilegraph = Graphics.FromImage(maptile);
+
+            Color c = Color.Black;
+            SolidBrush b = new SolidBrush(c);
+            for (int x = 0; x < 25; x++)
+            {
+                for (int y = 0; y < 25; y++)
+                {
+                    maptile = new Bitmap(26, 26);
+                    tilegraph = Graphics.FromImage(maptile);
+                    tilegraph.FillRectangle(b, 0, 0, 25, 25);
+                    mapgraph.DrawImage(maptile, new Point(x * 26, y * 26));
+                }
+            }
+
+            foreach (List<string> l in transmission)
+            {
+                if (l.Count == 3)
+                {
+                    c = Color.White;
+
+                    switch (l[2])
+                    {
+                        case "0":
+                            c = Color.FromArgb(255, 255, 3);
+                            break;
+
+                        case "1":
+                            c = Color.FromArgb(151, 189, 0);
+                            break;
+
+                        case "2":
+                            c = Color.FromArgb(255, 255, 255);
+                            break;
+
+                        case "3":
+                            c = Color.FromArgb(255, 255, 255);
+                            break;
+
+                        case "4":
+                            c = Color.FromArgb(255, 255, 150);
+                            break;
+
+                        case "5":
+                            c = Color.FromArgb(3, 3, 250);
+                            break;
+
+                        case "6":
+                            c = Color.FromArgb(238, 247, 136);
+                            break;
+
+                        case "7":
+                            c = Color.FromArgb(143, 155, 255);
+                            break;
+
+                        case "8":
+                            c = Color.FromArgb(255, 255, 166);
+                            break;
+
+                        case "9":
+                            c = Color.FromArgb(106, 106, 166);
+                            break;
+
+                        case "10":
+                            c = Color.FromArgb(140, 140, 52);
+                            break;
+
+                        default:
+                            c = Color.FromArgb(130, 130, 10);
+                            break;
+                    }
+
+                    maptile = new Bitmap(26, 26);
                     tilegraph = Graphics.FromImage(maptile);
                     b = new SolidBrush(c);
                     tilegraph.FillRectangle(b, 0, 0, 25, 25);
                     mapgraph.DrawImage(maptile, new Point(Convert.ToInt32(l[0]) * 26, Convert.ToInt32(l[1]) * 26));
+
                 }
             }
             MapCanvas.Image = MapImage;
@@ -1096,13 +1224,13 @@ namespace TerminalDecay5Client
 
         private void button4_Click(object sender, EventArgs e)
         {
+            CurrentView = 4;
             ServerConnection sc = new ServerConnection();
-            sc.ServerRequest(RenderSolarMap, 18, MessageConstants.splitMessageToken + Convert.ToString(playerToken));
+            sc.ServerRequest(RenderClusterMap, 18, MessageConstants.splitMessageToken + Convert.ToString(playerToken) + MessageConstants.splitMessageToken + _currentX + MessageConstants.splitMessageToken + _currentY);
             hideMenus();
         }
         private void RenderUniverse(List<List<string>> transmission)
         {
-            CurrentView = 3;
             CheckLoggedOut(transmission);
 
             Bitmap MapImage = new Bitmap(MapCanvas.Width, MapCanvas.Height);
@@ -1187,12 +1315,6 @@ namespace TerminalDecay5Client
                     b = new SolidBrush(c);
                     tilegraph.FillRectangle(b, 0, 0, 25, 25);
                     mapgraph.DrawImage(maptile, new Point(Convert.ToInt32(l[0]) * 26, Convert.ToInt32(l[1]) * 26));
-
-                    maptile = new Bitmap(10, 10);
-                    tilegraph = Graphics.FromImage(maptile);
-                    b = new SolidBrush(c);
-                    tilegraph.FillRectangle(b, 0, 0, 25, 25);
-                    mapgraph.DrawImage(maptile, new Point(Convert.ToInt32(l[0]) * 26, Convert.ToInt32(l[1]) * 26));
                 }
             }
             MapCanvas.Image = MapImage;
@@ -1200,6 +1322,7 @@ namespace TerminalDecay5Client
 
         private void button5_Click(object sender, EventArgs e)
         {
+            CurrentView = 5;
             ServerConnection sc = new ServerConnection();
             sc.ServerRequest(RenderUniverse, 19, MessageConstants.splitMessageToken + Convert.ToString(playerToken));
             hideMenus();
