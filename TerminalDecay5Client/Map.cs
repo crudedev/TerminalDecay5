@@ -1229,6 +1229,7 @@ namespace TerminalDecay5Client
             sc.ServerRequest(RenderClusterMap, 18, MessageConstants.splitMessageToken + Convert.ToString(playerToken) + MessageConstants.splitMessageToken + _currentX + MessageConstants.splitMessageToken + _currentY);
             hideMenus();
         }
+
         private void RenderUniverse(List<List<string>> transmission)
         {
             CheckLoggedOut(transmission);

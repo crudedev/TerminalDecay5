@@ -85,6 +85,10 @@ namespace TDCore5
                 clusters.Add(c); 
 
             }
+
+            BirthAI();
+
+
             
             BuildingBuildQueue = new List<BuildQueueItem>();
             DefenceBuildQueue = new List<BuildQueueItem>();
@@ -93,6 +97,62 @@ namespace TDCore5
             players = new List<Player>();
             Messages = new List<Message>();
 
+        }
+
+        public void BirthAI()
+        {
+
+                Player newp = new Player();
+                newp.Name = "Darla";
+                newp.Email = "fdsajh;sdaf;hjladsfkjhlasdfkjhlasdflkjhqweropuxcjklh,aseiusdaf,lbmnasdiufjhasdfkasd.,mnzxdck.jh;sdrflgsdfmng.,mzxdf";
+                newp.Password = "fdsajh;sdaf;hjladsfkjhlasdfkjhlasdflkjhqweropuxcjklh,aseiusdaf,lbmnasdiufjhasdfkasd.,mnzxdck.jh;sdrflgsdfmng.,mzxdf";
+
+                newp.PlayerID = players.Count;
+
+                newp.Resources[Cmn.Resource[Cmn.Renum.Food]] = 1000;
+                newp.Resources[Cmn.Resource[Cmn.Renum.Metal]] = 10000;
+                newp.Resources[Cmn.Resource[Cmn.Renum.Population]] = 100;
+                newp.Resources[Cmn.Resource[Cmn.Renum.Power]] = 3000;
+                newp.Resources[Cmn.Resource[Cmn.Renum.Water]] = 1000;
+
+                players.Add(newp);
+
+                if (outposts == null)
+                {
+                    outposts = new List<Outpost>();
+                }
+
+                Outpost o = new Outpost();
+                o.Capacity = 25;
+                o.ID = outposts.Count;
+                o.OwnerID = newp.PlayerID;
+
+                Position v = new Position();
+                Random r = new Random();
+                v.X = r.Next(3, 22);
+                v.Y = r.Next(3, 22);
+
+                o.Tiles = new List<Position>();
+
+                o.Tiles.Add(v);
+
+                o.ClusterID = 0;
+                o.SolarSystemID = 0;
+                o.PlanetID = 0;
+
+                o.Buildings[Cmn.BuildType[Cmn.BldTenum.Mine]] = 1;
+                o.Buildings[Cmn.BuildType[Cmn.BldTenum.Farm]] = 2;
+                o.Buildings[Cmn.BuildType[Cmn.BldTenum.Habitat]] = 1;
+                o.Buildings[Cmn.BuildType[Cmn.BldTenum.SolarPLant]] = 1;
+                o.Buildings[Cmn.BuildType[Cmn.BldTenum.Well]] = 1;
+                o.Buildings[Cmn.BuildType[Cmn.BldTenum.Fabricator]] = 2;
+
+                o.Defence[Cmn.DefenceType[Cmn.DefTenum.Patrol]] = 5;
+                o.Defence[Cmn.DefenceType[Cmn.DefTenum.Gunner]] = 2;
+
+                o.Offence[Cmn.OffenceType[Cmn.OffTenum.Scout]] = 5;
+
+                outposts.Add(o);
         }
 
         public Universe()
