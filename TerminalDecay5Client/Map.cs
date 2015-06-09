@@ -157,6 +157,7 @@ namespace TerminalDecay5Client
 
             Color PlayerColor = Color.Green;
             Color FoeColor = Color.Red;
+            Color OtherColor = Color.Blue;
 
             Color c = Color.Gray;
             SolidBrush b = new SolidBrush(c);
@@ -181,9 +182,14 @@ namespace TerminalDecay5Client
                         c = PlayerColor;
                     }
 
-                    if (l[3] == "foe")
+                    if (l[3] == "AI")
                     {
                         c = FoeColor;
+                    }
+
+                    if (l[3] == "otherPlayer")
+                    {
+                        c = OtherColor;
                     }
 
                     maptile = new Bitmap(26, 26);

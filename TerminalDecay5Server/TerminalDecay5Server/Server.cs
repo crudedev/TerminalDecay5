@@ -17,10 +17,14 @@ namespace TerminalDecay5Server
         private Timer _serverTick;
         private Timer _serverSave;
 
+        private Player AIID;
+
         public void Serve()
         {
             Cmn.Init();
             universe.InitUniverse();
+
+            BirthAI();
 
             string path = "C:\\TDSave\\642df721-6d96-4851-895e-d0e84ad925e2.loldongs";
 
@@ -1588,7 +1592,14 @@ namespace TerminalDecay5Server
                         }
                         else
                         {
-                            response += "foe";
+                            if (o.OwnerID == AIID.PlayerID)
+                            {
+                                response += "AI";
+                            }
+                            else
+                            {
+                                response += "otherPlayer";
+                            }
                         }
 
                         long def = 0;
@@ -1759,6 +1770,69 @@ namespace TerminalDecay5Server
             clientStream.Flush();
 
             return;
+        }
+
+        public void BirthAI()
+        {
+
+            AIID = new Player();
+            AIID.Name = "Darla";
+            AIID.Email = "fdsajh;sdaf;hjladsfkjhlasdfkjhlasdflkjhqweropuxcjklh,aseiusdaf,lbmnasdiufjhasdfkasd.,mnzxdck.jh;sdrflgsdfmng.,mzxdf";
+            AIID.Password = "fdsajh;sdaf;hjladsfkjhlasdfkjhlasdflkjhqweropuxcjklh,aseiusdaf,lbmnasdiufjhasdfkasd.,mnzxdck.jh;sdrflgsdfmng.,mzxdf";
+
+            AIID.PlayerID = universe.players.Count;
+
+            AIID.Resources[Cmn.Resource[Cmn.Renum.Food]] = 1000;
+            AIID.Resources[Cmn.Resource[Cmn.Renum.Metal]] = 10000;
+            AIID.Resources[Cmn.Resource[Cmn.Renum.Population]] = 100;
+            AIID.Resources[Cmn.Resource[Cmn.Renum.Power]] = 3000;
+            AIID.Resources[Cmn.Resource[Cmn.Renum.Water]] = 1000;
+
+            universe.players.Add(AIID);
+
+            for (int i = 0; i < 10; i++)
+            {
+                AddAIOutpost();
+            }
+        }
+
+        public void AddAIOutpost()
+        {
+            if (universe.outposts == null)
+            {
+                universe.outposts = new List<Outpost>();
+            }
+
+            Outpost o = new Outpost();
+            o.Capacity = 25;
+            o.ID = universe.outposts.Count;
+            o.OwnerID = AIID.PlayerID;
+
+            Position v = new Position();
+            v.X = universe.r.Next(3, 22);
+            v.Y = universe.r.Next(3, 22);
+
+            o.Tiles = new List<Position>();
+
+            o.Tiles.Add(v);
+
+            o.ClusterID = 0;
+            o.SolarSystemID = 0;
+            o.PlanetID = 0;
+
+            o.Buildings[Cmn.BuildType[Cmn.BldTenum.Mine]] = 1;
+            o.Buildings[Cmn.BuildType[Cmn.BldTenum.Farm]] = 2;
+            o.Buildings[Cmn.BuildType[Cmn.BldTenum.Habitat]] = 1;
+            o.Buildings[Cmn.BuildType[Cmn.BldTenum.SolarPLant]] = 1;
+            o.Buildings[Cmn.BuildType[Cmn.BldTenum.Well]] = 1;
+            o.Buildings[Cmn.BuildType[Cmn.BldTenum.Fabricator]] = 2;
+
+            o.Defence[Cmn.DefenceType[Cmn.DefTenum.Patrol]] = 5;
+            o.Defence[Cmn.DefenceType[Cmn.DefTenum.Gunner]] = 2;
+
+            o.Offence[Cmn.OffenceType[Cmn.OffTenum.Scout]] = 5;
+
+            universe.outposts.Add(o);
         }
     }
 }
