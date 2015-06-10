@@ -856,11 +856,11 @@ namespace TerminalDecay5Server
 
                             if (sign > 500)
                             {
-                                death = death + remove;
+                                death += remove;
                             }
                             else
                             {
-                                death = death - remove;
+                                death -= remove;
                             }
 
                             DeffenceOp.Defence[item.Value] = DeffenceOp.Defence[item.Value] - Convert.ToInt64(death);
@@ -869,6 +869,61 @@ namespace TerminalDecay5Server
                                 DeffenceOp.Defence[item.Value] = 0;
                             }
                         }
+
+
+                        // here is where you take dem resources
+
+
+
+                        // calculate the damage for buildings
+                        long totalbuild = 0;
+                        foreach (var item in DeffenceOp.Buildings)
+                        {
+                            totalbuild += item;
+                        }
+
+                        float loss = totalbuild * (deffenceDeath / 3);
+
+                        if (loss < 1 && totalbuild !=0)
+                        {
+                            loss = 1;    
+                        }
+
+
+                        
+                        for (int i = Convert.ToInt32(loss); i > 0; i--)
+                        {
+                            int t = universe.r.Next(Cmn.BuildType.Count);
+                          
+                            if(DeffenceOp.Buildings[t] > 0)
+                            {
+                                DeffenceOp.Buildings[t]--;
+                            }
+                            else
+                            {
+                                loss++;
+                                bool empty = true;
+                                foreach (var item in DeffenceOp.Buildings)
+                                {
+                                    if (item > 0)
+                                    {
+                                        empty = false;
+                                    }
+                                }
+                                if(empty)
+                                {
+                                    break;
+                                }
+                            }
+                             
+                        }
+
+
+
+                        //calcualte the damage for resources
+
+                        //calcualte a % of those resources to return
+
 
 
                         Message temp = new Message(-1, Attacker.PlayerID, "Attacking Another Player", AttackerMessage);
