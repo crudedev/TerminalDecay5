@@ -1007,7 +1007,10 @@ namespace TerminalDecay5Client
 
         private void ResultsOfAttack(List<List<string>> transmission)
         {
-
+            if(transmission[0][1] == "Error")
+            {
+                MessageBox.Show(transmission[0][2]);
+            }
         }
 
         private void BtnMessages_Click(object sender, EventArgs e)

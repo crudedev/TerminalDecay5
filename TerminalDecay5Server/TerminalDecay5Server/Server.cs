@@ -55,6 +55,10 @@ namespace TerminalDecay5Server
         {
             Universe u = (Universe)ob;
 
+
+            Dictionary<int, long> popcap;
+            popcap = new Dictionary<int, long>();
+
             #region add resoureces from buildings
 
             foreach (Outpost outpost in u.outposts)
@@ -96,7 +100,26 @@ namespace TerminalDecay5Server
 
                     }
                 }
+                u.players[outpost.OwnerID].Resources[Cmn.Resource[Cmn.Renum.Population]] += u.players[outpost.OwnerID].Resources[Cmn.Resource[Cmn.Renum.Population]] / 10;
+                u.players[outpost.OwnerID].Resources[Cmn.Resource[Cmn.Renum.Population]] += 1;
+
+                if(!popcap.ContainsKey(outpost.OwnerID))
+                {
+                    popcap.Add(outpost.OwnerID, 0);
+                }
+
+                popcap[outpost.OwnerID] +=  outpost.Buildings[Cmn.BuildType[Cmn.BldTenum.Habitat]] * 50;
+
             }
+
+            foreach (var item in popcap)
+            {
+                if(u.players[item.Key].Resources[0] > item.Value)
+                {
+                    u.players[item.Key].Resources[0] -= u.players[item.Key].Resources[0] / 10;
+                }
+            }
+
             #endregion
 
             #region update teh map
@@ -583,7 +606,7 @@ namespace TerminalDecay5Server
 
             try
             {
-                int playerid = getPlayer(transmissions[0][1]).PlayerID;
+                int playerid = getPlayer(transmissions[1][0]).PlayerID;
             }
             catch (Exception)
             {
@@ -606,6 +629,7 @@ namespace TerminalDecay5Server
                     {
                         response += item.messageTitle + MessageConstants.splitMessageToken + item.senderID + MessageConstants.splitMessageToken + item.messageBody + MessageConstants.splitMessageToken + item.sentDate;
                         item.read = true;
+                        break;
                     }
                 }
             }
@@ -692,7 +716,8 @@ namespace TerminalDecay5Server
 
                     for (int i = 0; i < Cmn.OffenceType.Count; i++)
                     {
-                        if (Convert.ToInt32(transmissions[2][i]) < AttackOp.Offence[i])
+
+                        if (Convert.ToInt32(transmissions[2][i]) > AttackOp.Offence[i])
                         {
                             ErrorResponse = "Not Enough Units";
                         }
@@ -959,6 +984,7 @@ namespace TerminalDecay5Server
             }
 
             response += MessageConstants.messageCompleteToken;
+            response = MessageConstants.MessageTypes[14] + MessageConstants.splitMessageToken + response;
             NetworkStream clientStream = tcpClient.GetStream();
             ASCIIEncoding encoder = new ASCIIEncoding();
 
@@ -1057,7 +1083,7 @@ namespace TerminalDecay5Server
                 {
                     if (item.PlayerId == pl.PlayerID)
                     {
-                        inProgress[item.ItemType] = item.ItemTotal - item.Complete;
+                        inProgress[item.ItemType] += item.ItemTotal - item.Complete;
                     }
                 }
 
