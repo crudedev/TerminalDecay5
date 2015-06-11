@@ -871,10 +871,6 @@ namespace TerminalDecay5Server
                         }
 
 
-                        // here is where you take dem resources
-
-
-
                         // calculate the damage for buildings
                         long totalbuild = 0;
                         foreach (var item in DeffenceOp.Buildings)
@@ -884,18 +880,18 @@ namespace TerminalDecay5Server
 
                         float loss = totalbuild * (deffenceDeath / 3);
 
-                        if (loss < 1 && totalbuild !=0)
+                        if (loss < 1 && totalbuild != 0)
                         {
-                            loss = 1;    
+                            loss = 1;
                         }
 
 
-                        
+
                         for (int i = Convert.ToInt32(loss); i > 0; i--)
                         {
                             int t = universe.r.Next(Cmn.BuildType.Count);
-                          
-                            if(DeffenceOp.Buildings[t] > 0)
+
+                            if (DeffenceOp.Buildings[t] > 0)
                             {
                                 DeffenceOp.Buildings[t]--;
                             }
@@ -910,20 +906,29 @@ namespace TerminalDecay5Server
                                         empty = false;
                                     }
                                 }
-                                if(empty)
+                                if (empty)
                                 {
                                     break;
                                 }
                             }
-                             
+
                         }
 
 
+                        if (result <= 1)
+                        {
+                            float removeRes = result / 2;
 
-                        //calcualte the damage for resources
+                            foreach (var item in Cmn.Resource)
+                            {
+                                universe.players[Attacker.PlayerID].Resources[item.Value] += Convert.ToInt32(universe.players[DeffenceOp.PlanetID].Resources[item.Value] * removeRes);
 
-                        //calcualte a % of those resources to return
-
+                                AttackerMessage += " Gained "+ item.Key + ": " + Convert.ToString(Convert.ToInt32(universe.players[DeffenceOp.PlanetID].Resources[item.Value] * removeRes));
+                                DeffenceMessage += " Lost " + item.Key + ": " + Convert.ToString(Convert.ToInt32(universe.players[DeffenceOp.PlanetID].Resources[item.Value] * removeRes));
+                                universe.players[DeffenceOp.PlanetID].Resources[item.Value] -= Convert.ToInt32(universe.players[DeffenceOp.PlanetID].Resources[item.Value] * removeRes);
+                            }
+                        }
+                        
 
 
                         Message temp = new Message(-1, Attacker.PlayerID, "Attacking Another Player", AttackerMessage);
@@ -980,7 +985,7 @@ namespace TerminalDecay5Server
 
             string response = MessageConstants.MessageTypes[13] + MessageConstants.nextMessageToken;
 
-            if (getPlayer(transmissions[0][1]).PlayerID == getOutpost(transmissions[2][0], transmissions[2][1]).OwnerID)
+            if (getPlayer(transmissions[0][1]).PlayerID == getOutpost(transmissions[0][2], transmissions[0][3]).OwnerID)
             {
                 Player pl = getPlayer(transmissions[0][1]);
                 response += SendOffenceOntile(transmissions);
