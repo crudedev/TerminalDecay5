@@ -103,18 +103,18 @@ namespace TerminalDecay5Server
                 u.players[outpost.OwnerID].Resources[Cmn.Resource[Cmn.Renum.Population]] += u.players[outpost.OwnerID].Resources[Cmn.Resource[Cmn.Renum.Population]] / 10;
                 u.players[outpost.OwnerID].Resources[Cmn.Resource[Cmn.Renum.Population]] += 1;
 
-                if(!popcap.ContainsKey(outpost.OwnerID))
+                if (!popcap.ContainsKey(outpost.OwnerID))
                 {
                     popcap.Add(outpost.OwnerID, 0);
                 }
 
-                popcap[outpost.OwnerID] +=  outpost.Buildings[Cmn.BuildType[Cmn.BldTenum.Habitat]] * 50;
+                popcap[outpost.OwnerID] += outpost.Buildings[Cmn.BuildType[Cmn.BldTenum.Habitat]] * 50;
 
             }
 
             foreach (var item in popcap)
             {
-                if(u.players[item.Key].Resources[0] > item.Value)
+                if (u.players[item.Key].Resources[0] > item.Value)
                 {
                     u.players[item.Key].Resources[0] -= u.players[item.Key].Resources[0] / 10;
                 }
@@ -907,10 +907,10 @@ namespace TerminalDecay5Server
 
                         if (loss < 1 && totalbuild != 0)
                         {
-                            loss = 1;
+                            loss = 2;
                         }
 
-
+                        bool basedeath = false;
 
                         for (int i = Convert.ToInt32(loss); i > 0; i--)
                         {
@@ -922,39 +922,52 @@ namespace TerminalDecay5Server
                             }
                             else
                             {
-                                loss++;
+                                i++;
                                 bool empty = true;
                                 foreach (var item in DeffenceOp.Buildings)
                                 {
                                     if (item > 0)
                                     {
                                         empty = false;
+                                        break;
                                     }
                                 }
                                 if (empty)
                                 {
-                                    break;
+                                     basedeath = true; 
+                                    break;                                 
                                 }
                             }
 
+                        }
+
+                        if (totalbuild <=0)
+                        {
+                            basedeath = true;                            
                         }
 
 
                         if (result <= 1)
                         {
-                            float removeRes = result / 2;
+                            float removeRes = deffenceDeath / 2;
 
                             foreach (var item in Cmn.Resource)
                             {
                                 universe.players[Attacker.PlayerID].Resources[item.Value] += Convert.ToInt32(universe.players[DeffenceOp.PlanetID].Resources[item.Value] * removeRes);
 
-                                AttackerMessage += " Gained "+ item.Key + ": " + Convert.ToString(Convert.ToInt32(universe.players[DeffenceOp.PlanetID].Resources[item.Value] * removeRes));
+                                AttackerMessage += " Gained " + item.Key + ": " + Convert.ToString(Convert.ToInt32(universe.players[DeffenceOp.PlanetID].Resources[item.Value] * removeRes));
                                 DeffenceMessage += " Lost " + item.Key + ": " + Convert.ToString(Convert.ToInt32(universe.players[DeffenceOp.PlanetID].Resources[item.Value] * removeRes));
                                 universe.players[DeffenceOp.PlanetID].Resources[item.Value] -= Convert.ToInt32(universe.players[DeffenceOp.PlanetID].Resources[item.Value] * removeRes);
                             }
                         }
-                        
 
+                        if (basedeath)
+                        {
+                            AttackerMessage += Environment.NewLine + " Base Destroyed Shard Retrieved";
+                            DeffenceMessage += Environment.NewLine + "Our Base Was Lost";
+                            AttackOp.CoreShards++;
+                            universe.outposts.Remove(DeffenceOp);
+                        }
 
                         Message temp = new Message(-1, Attacker.PlayerID, "Attacking Another Player", AttackerMessage);
                         universe.Messages.Add(temp);
@@ -1579,7 +1592,8 @@ namespace TerminalDecay5Server
                 o.Defence[Cmn.DefenceType[Cmn.DefTenum.Gunner]] = 2;
 
                 o.Offence[Cmn.OffenceType[Cmn.OffTenum.Scout]] = 5;
-
+                o.Offence[Cmn.OffenceType[Cmn.OffTenum.Battleship]] = 500;
+                
                 universe.outposts.Add(o);
 
                 string reply = MessageConstants.MessageTypes[1] + MessageConstants.nextMessageToken + "AccountCreated" + MessageConstants.nextMessageToken;

@@ -75,7 +75,7 @@ namespace TerminalDecay5Client
         private void button1_Click(object sender, EventArgs e)
         {
             ServerConnection sc = new ServerConnection();
-            sc.ServerRequest(RenderResMap, 0, MessageConstants.splitMessageToken + Convert.ToString(playerToken));
+            sc.ServerRequest(RenderResMap, 0, MessageConstants.splitMessageToken + Convert.ToString(playerToken) + MessageConstants.splitMessageToken + Convert.ToString(_currentX) + MessageConstants.splitMessageToken + Convert.ToString(_currentY) + MessageConstants.splitMessageToken + _currentCluster + MessageConstants.splitMessageToken + _currentSolarSystem + MessageConstants.messageCompleteToken);
             hideMenus();
         }
 

@@ -21,6 +21,8 @@ namespace TDCore5
         public int SolarSystemID;
         public int PlanetID;
 
+        public int CoreShards;
+
         public Outpost()
         {
             Buildings = new List<long>();
