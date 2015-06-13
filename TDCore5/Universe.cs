@@ -10,6 +10,7 @@ namespace TDCore5
     {
         public List<Cluster> clusters;
         public List<Outpost> outposts;
+        public List<Outpost> deadOutposts;
         public List<BuildQueueItem> BuildingBuildQueue;
         public List<BuildQueueItem> DefenceBuildQueue;
         public List<BuildQueueItem> OffenceBuildQueue;
@@ -91,6 +92,7 @@ namespace TDCore5
             DefenceBuildQueue = new List<BuildQueueItem>();
             OffenceBuildQueue = new List<BuildQueueItem>();
             outposts = new List<Outpost>();
+            deadOutposts = new List<Outpost>();
             players = new List<Player>();
             Messages = new List<Message>();
 

@@ -55,6 +55,13 @@ namespace TerminalDecay5Server
         {
             Universe u = (Universe)ob;
 
+            if (u.deadOutposts.Count > 0)
+            {
+                foreach (var item in u.deadOutposts)
+                {
+                    u.outposts.Remove(item);
+                }
+            }
 
             Dictionary<int, long> popcap;
             popcap = new Dictionary<int, long>();
@@ -934,16 +941,16 @@ namespace TerminalDecay5Server
                                 }
                                 if (empty)
                                 {
-                                     basedeath = true; 
-                                    break;                                 
+                                    basedeath = true;
+                                    break;
                                 }
                             }
 
                         }
 
-                        if (totalbuild <=0)
+                        if (totalbuild <= 0)
                         {
-                            basedeath = true;                            
+                            basedeath = true;
                         }
 
 
@@ -966,7 +973,7 @@ namespace TerminalDecay5Server
                             AttackerMessage += Environment.NewLine + " Base Destroyed Shard Retrieved";
                             DeffenceMessage += Environment.NewLine + "Our Base Was Lost";
                             AttackOp.CoreShards++;
-                            universe.outposts.Remove(DeffenceOp);
+
                         }
 
                         Message temp = new Message(-1, Attacker.PlayerID, "Attacking Another Player", AttackerMessage);
@@ -1498,7 +1505,7 @@ namespace TerminalDecay5Server
             {
                 string Message = MessageConstants.MessageTypes[0] + MessageConstants.nextMessageToken;
 
-                foreach (MapTile m in universe.clusters[0].solarSystems[0].planets[0].mapTiles)
+                foreach (MapTile m in universe.clusters[Convert.ToInt32(message[0][4])].solarSystems[Convert.ToInt32(message[0][3])].planets[Convert.ToInt32(message[0][2])].mapTiles)
                 {
                     Message = Message + Convert.ToString(m.position.X) + MessageConstants.splitMessageToken + Convert.ToString(m.position.Y) + MessageConstants.splitMessageToken + m.Resources[Cmn.Resource[Cmn.Renum.Metal]] + MessageConstants.splitMessageToken + m.Resources[Cmn.Resource[Cmn.Renum.Food]] + MessageConstants.splitMessageToken + m.Resources[Cmn.Resource[Cmn.Renum.Water]];
                     Message = Message + MessageConstants.nextMessageToken;
@@ -1593,7 +1600,7 @@ namespace TerminalDecay5Server
 
                 o.Offence[Cmn.OffenceType[Cmn.OffTenum.Scout]] = 5;
                 o.Offence[Cmn.OffenceType[Cmn.OffTenum.Battleship]] = 500;
-                
+
                 universe.outposts.Add(o);
 
                 string reply = MessageConstants.MessageTypes[1] + MessageConstants.nextMessageToken + "AccountCreated" + MessageConstants.nextMessageToken;
