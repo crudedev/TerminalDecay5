@@ -1803,7 +1803,7 @@ namespace TerminalDecay5Client
             // Map
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-            this.ClientSize = new System.Drawing.Size(1880, 831);
+            this.ClientSize = new System.Drawing.Size(1498, 831);
             this.Controls.Add(this.button6);
             this.Controls.Add(this.button5);
             this.Controls.Add(this.button4);

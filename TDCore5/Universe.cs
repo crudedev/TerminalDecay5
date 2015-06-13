@@ -17,6 +17,7 @@ namespace TDCore5
         public List<Player> players;
         public Random r;
         public List<Message> Messages;
+        public List<TroopMovement> TroopMovements;
 
         public void InitUniverse()
         {
@@ -95,6 +96,7 @@ namespace TDCore5
             deadOutposts = new List<Outpost>();
             players = new List<Player>();
             Messages = new List<Message>();
+            TroopMovements = new List<TroopMovement>();
 
         }
 

@@ -51,6 +51,8 @@
     <Compile Include="Position.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SolarSystem.cs" />
+    <Compile Include="TroopMovement.cs" />
+    <Compile Include="UniversalAddress.cs" />
     <Compile Include="Universe.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -1357,7 +1357,13 @@ namespace TerminalDecay5Client
 
         private void renderHome(List<List<string>> transmission)
         {
+            _currentCluster = Convert.ToInt32(transmission[1][0]);
+            _currentSolarSystem = Convert.ToInt32(transmission[1][1]);
+            _currentX = Convert.ToInt32(transmission[1][2]);
+            _currentY = Convert.ToInt32(transmission[1][3]);
 
+            ServerConnection sc = new ServerConnection();
+            sc.ServerRequest(RenderMainMap, 3, MessageConstants.splitMessageToken + Convert.ToString(playerToken) + MessageConstants.splitMessageToken + Convert.ToString(_currentX) + MessageConstants.splitMessageToken + Convert.ToString(_currentY) + MessageConstants.splitMessageToken + _currentCluster + MessageConstants.splitMessageToken + _currentSolarSystem + MessageConstants.messageCompleteToken);
         }
     }
 }

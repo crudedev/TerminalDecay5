@@ -13,9 +13,7 @@ namespace TDCore5
         public string EmpireName;
         public string Email;
 
-        public int HomeCluster;
-        public int HomeSolarSystem;
-        public int HomePlanet;
+        public UniversalAddress home;
 
         public List<long> Resources;
 

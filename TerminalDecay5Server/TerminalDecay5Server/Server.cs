@@ -512,11 +512,11 @@ namespace TerminalDecay5Server
 
             string response = MessageConstants.MessageTypes[20] + MessageConstants.nextMessageToken;
 
-            response += Convert.ToString(player.HomeCluster);
-            response += MessageConstants.splitMessageToken + Convert.ToString(player.HomeSolarSystem);
-            response += MessageConstants.splitMessageToken + Convert.ToString(universe.clusters[player.HomeCluster].solarSystems[player.HomeSolarSystem].planets[player.HomePlanet].position.X);
-            response += MessageConstants.splitMessageToken + Convert.ToString(universe.clusters[player.HomeCluster].solarSystems[player.HomeSolarSystem].planets[player.HomePlanet].position.Y);
-            
+            response += Convert.ToString(player.home.ClusterID);
+            response += MessageConstants.splitMessageToken + Convert.ToString(player.home.SolarSytemID);
+            response += MessageConstants.splitMessageToken + Convert.ToString(universe.clusters[player.home.ClusterID].solarSystems[player.home.SolarSytemID].planets[player.home.PlanetID].position.X);
+            response += MessageConstants.splitMessageToken + Convert.ToString(universe.clusters[player.home.ClusterID].solarSystems[player.home.SolarSytemID].planets[player.home.PlanetID].position.Y);
+
             response += MessageConstants.messageCompleteToken;
 
             NetworkStream clientStream = tcpClient.GetStream();
@@ -748,10 +748,7 @@ namespace TerminalDecay5Server
             Player Attacker = getPlayer(transmissions[0][1]);
             Outpost AttackOp = getOutpost(transmissions[1][0], transmissions[1][1]);
             Outpost DeffenceOp = getOutpost(transmissions[1][2], transmissions[1][3]);
-
-            Int64 attackOff = 0;
-            Int64 defenceOff = 0;
-
+            
             string ErrorResponse = "";
 
             if (Attacker != null && AttackOp != null && DeffenceOp != null)
@@ -765,293 +762,344 @@ namespace TerminalDecay5Server
                         if (Convert.ToInt32(transmissions[2][i]) > AttackOp.Offence[i])
                         {
                             ErrorResponse = "Not Enough Units";
-                        }
-                        attackOff += Cmn.OffenceAttack[i] * Convert.ToInt32(transmissions[2][i]);
+                        }                       
                     }
 
                     if (ErrorResponse == "")
                     {
 
-                        for (int i = 0; i < Cmn.DefenceType.Count; i++)
+                        TroopMovement t = new TroopMovement();
+                        t.Offence = new List<long>();
+                        for (int i = 0; i < Cmn.OffenceType.Count; i++)
                         {
-                            defenceOff += Cmn.DefenceAttack[i] * DeffenceOp.Defence[i];
+                            t.Offence.Add(Convert.ToInt32(transmissions[2][i]));
                         }
 
-                        string AttackerMessage = "";
-                        string DeffenceMessage = "";
-
-                        float result = defenceOff / attackOff;
-
-                        float attackDeath = 0;
-                        float deffenceDeath = 0;
-
-                        if (result <= 1)
-                        {
-                            if (result <= 1)
-                            {
-                                deffenceDeath = 0.10f;
-                                attackDeath = 0.20f;
-                                AttackerMessage = "A closely faught battle";
-                                DeffenceMessage = "A closely faught battle";
-                            }
-
-                            if (result < 0.83)
-                            {
-                                deffenceDeath = 0.20f;
-                                attackDeath = 0.15f;
-                                AttackerMessage = "A close victory";
-                                DeffenceMessage = "A minor defeat";
-                            }
-
-                            if (result < 0.66)
-                            {
-                                deffenceDeath = 0.3f;
-                                attackDeath = 0.15f;
-                                AttackerMessage = "Victory";
-                                DeffenceMessage = "Defeat";
-                            }
-
-                            if (result < 0.5)
-                            {
-                                deffenceDeath = 0.4f;
-                                attackDeath = 0.1f;
-                                AttackerMessage = "An impressive victiory";
-                                DeffenceMessage = "A miserable defeat";
-                            }
-
-                            if (result < 0.2)
-                            {
-                                deffenceDeath = 0.6f;
-                                attackDeath = 0.1f;
-                                AttackerMessage = "A triumphant victiory";
-                                DeffenceMessage = "A crushing defeat";
-                            }
-
-                            if (result < 0.1)
-                            {
-                                deffenceDeath = 1;
-                                attackDeath = 0.05f;
-                                AttackerMessage = "Total victiory";
-                                DeffenceMessage = "Total defeat";
-                            }
-                        }
-                        else
-                        {
-                            if (result >= 1)
-                            {
-                                attackDeath = 0.10f;
-                                deffenceDeath = 0.20f;
-                                AttackerMessage = "A closely faught battle";
-                                DeffenceMessage = "A closely faught battle";
-                            }
-
-                            if (result > 1.2)
-                            {
-                                attackDeath = 0.25f;
-                                deffenceDeath = 0.15f;
-                                AttackerMessage = "A minor defeat";
-                                DeffenceMessage = "A close victory";
-                            }
-
-                            if (result > 1.5)
-                            {
-                                attackDeath = 0.3f;
-                                deffenceDeath = 0.2f;
-                                AttackerMessage = "Defeat";
-                                DeffenceMessage = "Victory";
-                            }
-
-                            if (result > 2)
-                            {
-                                attackDeath = 0.4f;
-                                deffenceDeath = 0.1f;
-                                AttackerMessage = "A miserable defeat";
-                                DeffenceMessage = "An impressive victiory";
-                            }
-
-                            if (result > 5)
-                            {
-                                attackDeath = 0.8f;
-                                deffenceDeath = 0.05f;
-                                AttackerMessage = "A crushing defeat";
-                                DeffenceMessage = "A triumphant victiory";
-                            }
-
-                            if (result > 10)
-                            {
-                                attackDeath = 1;
-                                deffenceDeath = 0f;
-                                AttackerMessage = "Total defeat";
-                                DeffenceMessage = "Total victiory";
-                            }
-                        }
-
-                        foreach (var item in Cmn.OffenceType)
-                        {
-                            float death = AttackOp.Offence[item.Value];
-                            death = death * attackDeath;
-
-                            int sign = universe.r.Next(1000);
-                            float remove = death * 0.3f;
-                            remove = universe.r.Next(Convert.ToInt32(remove));
-
-                            if (sign > 500)
-                            {
-                                death = death + remove;
-                            }
-                            else
-                            {
-                                death = death - remove;
-                            }
-
-                            if (death < 1 && death > 0)
-                            {
-                                death = 1;
-                            }
-
-                            AttackOp.Offence[item.Value] = AttackOp.Offence[item.Value] - Convert.ToInt64(death);
-                            if (AttackOp.Offence[item.Value] < 0)
-                            {
-                                AttackOp.Offence[item.Value] = 0;
-                            }
-                        }
-
-                        foreach (var item in Cmn.DefenceType)
-                        {
-                            float death = DeffenceOp.Defence[item.Value];
-                            death = death * deffenceDeath;
-
-                            int sign = universe.r.Next(1000);
-                            float remove = universe.r.Next(Convert.ToInt32(death * 0.3));
-
-                            if (sign > 500)
-                            {
-                                death += remove;
-                            }
-                            else
-                            {
-                                death -= remove;
-                            }
-
-                            DeffenceOp.Defence[item.Value] = DeffenceOp.Defence[item.Value] - Convert.ToInt64(death);
-                            if (DeffenceOp.Defence[item.Value] < 0)
-                            {
-                                DeffenceOp.Defence[item.Value] = 0;
-                            }
-                        }
-
-
-                        // calculate the damage for buildings
-                        long totalbuild = 0;
-                        foreach (var item in DeffenceOp.Buildings)
-                        {
-                            totalbuild += item;
-                        }
-
-                        float loss = totalbuild * (deffenceDeath / 3);
-
-                        if (loss < 1 && totalbuild != 0)
-                        {
-                            loss = 2;
-                        }
-
-                        bool basedeath = false;
-
-                        for (int i = Convert.ToInt32(loss); i > 0; i--)
-                        {
-                            int t = universe.r.Next(Cmn.BuildType.Count);
-
-                            if (DeffenceOp.Buildings[t] > 0)
-                            {
-                                DeffenceOp.Buildings[t]--;
-                            }
-                            else
-                            {
-                                i++;
-                                bool empty = true;
-                                foreach (var item in DeffenceOp.Buildings)
-                                {
-                                    if (item > 0)
-                                    {
-                                        empty = false;
-                                        break;
-                                    }
-                                }
-                                if (empty)
-                                {
-                                    basedeath = true;
-                                    break;
-                                }
-                            }
-
-                        }
-
-                        if (totalbuild <= 0)
-                        {
-                            basedeath = true;
-                        }
-
-
-                        if (result <= 1)
-                        {
-                            float removeRes = deffenceDeath / 2;
-
-                            foreach (var item in Cmn.Resource)
-                            {
-                                universe.players[Attacker.PlayerID].Resources[item.Value] += Convert.ToInt32(universe.players[DeffenceOp.PlanetID].Resources[item.Value] * removeRes);
-
-                                AttackerMessage += " Gained " + item.Key + ": " + Convert.ToString(Convert.ToInt32(universe.players[DeffenceOp.PlanetID].Resources[item.Value] * removeRes));
-                                DeffenceMessage += " Lost " + item.Key + ": " + Convert.ToString(Convert.ToInt32(universe.players[DeffenceOp.PlanetID].Resources[item.Value] * removeRes));
-                                universe.players[DeffenceOp.PlanetID].Resources[item.Value] -= Convert.ToInt32(universe.players[DeffenceOp.PlanetID].Resources[item.Value] * removeRes);
-                            }
-                        }
-
-                        if (basedeath)
-                        {
-                            AttackerMessage += Environment.NewLine + " Base Destroyed Shard Retrieved";
-                            DeffenceMessage += Environment.NewLine + "Our Base Was Lost";
-                            AttackOp.CoreShards++;
-
-                        }
-
-                        Message temp = new Message(-1, Attacker.PlayerID, "Attacking Another Player", AttackerMessage);
-                        universe.Messages.Add(temp);
-                        temp = new Message(-1, DeffenceOp.OwnerID, "Attacked by Another Player", DeffenceMessage);
-                        universe.Messages.Add(temp);
-
-                        response = "Success" + MessageConstants.splitMessageToken + AttackerMessage;
-
-
+                        t.OriginOutpost = AttackOp;
+                        t.DestinationOutpost = DeffenceOp;
+                        t.MovementType = Cmn.MovType.Attack;
+                        
+                        universe.TroopMovements.Add(t);
+                        
+                    }
+                    else
+                    {
+                        ErrorResponse = "Identity of players conflicts with owners of bases";
                     }
 
                 }
                 else
                 {
-                    ErrorResponse = "Identity of players conflicts with owners of bases";
+                    ErrorResponse = "Cannot find bases";
                 }
 
+                if (ErrorResponse != "")
+                {
+                    response = "Error" + MessageConstants.splitMessageToken + ErrorResponse;
+                }
+
+                response += MessageConstants.messageCompleteToken;
+                response = MessageConstants.MessageTypes[14] + MessageConstants.splitMessageToken + response;
+                NetworkStream clientStream = tcpClient.GetStream();
+                ASCIIEncoding encoder = new ASCIIEncoding();
+
+                byte[] buffer = encoder.GetBytes(response);
+
+                clientStream.Write(buffer, 0, buffer.Length);
+                clientStream.Flush();
+
+            }
+        }
+
+        public void CalculateBattle(TroopMovement t)
+        {
+            long attackOff = 0;
+            long defenceOff = 0;
+
+            for (int i = 0; i < Cmn.DefenceType.Count; i++)
+            {
+                defenceOff += Cmn.DefenceAttack[i] * t.DestinationOutpost.Defence[i];
+                defenceOff += Cmn.OffenceAttack[i] * (t.DestinationOutpost.Offence[i]/2);
+            }
+
+            for (int i = 0; i < Cmn.OffenceType.Count; i++)
+            {
+                attackOff += Cmn.OffenceAttack[i] * t.Offence[i];
+            }
+
+            string AttackerMessage = "";
+            string DeffenceMessage = "";
+
+            float result = defenceOff / attackOff;
+
+            float attackDeath = 0;
+            float deffenceDeath = 0;
+
+            if (result <= 1)
+            {
+                if (result <= 1)
+                {
+                    deffenceDeath = 0.10f;
+                    attackDeath = 0.20f;
+                    AttackerMessage = "A closely faught battle";
+                    DeffenceMessage = "A closely faught battle";
+                }
+
+                if (result < 0.83)
+                {
+                    deffenceDeath = 0.20f;
+                    attackDeath = 0.15f;
+                    AttackerMessage = "A close victory";
+                    DeffenceMessage = "A minor defeat";
+                }
+
+                if (result < 0.66)
+                {
+                    deffenceDeath = 0.3f;
+                    attackDeath = 0.15f;
+                    AttackerMessage = "Victory";
+                    DeffenceMessage = "Defeat";
+                }
+
+                if (result < 0.5)
+                {
+                    deffenceDeath = 0.4f;
+                    attackDeath = 0.1f;
+                    AttackerMessage = "An impressive victiory";
+                    DeffenceMessage = "A miserable defeat";
+                }
+
+                if (result < 0.2)
+                {
+                    deffenceDeath = 0.6f;
+                    attackDeath = 0.1f;
+                    AttackerMessage = "A triumphant victiory";
+                    DeffenceMessage = "A crushing defeat";
+                }
+
+                if (result < 0.1)
+                {
+                    deffenceDeath = 1;
+                    attackDeath = 0.05f;
+                    AttackerMessage = "Total victiory";
+                    DeffenceMessage = "Total defeat";
+                }
             }
             else
             {
-                ErrorResponse = "Cannot find bases";
+                if (result >= 1)
+                {
+                    attackDeath = 0.10f;
+                    deffenceDeath = 0.20f;
+                    AttackerMessage = "A closely faught battle";
+                    DeffenceMessage = "A closely faught battle";
+                }
+
+                if (result > 1.2)
+                {
+                    attackDeath = 0.25f;
+                    deffenceDeath = 0.15f;
+                    AttackerMessage = "A minor defeat";
+                    DeffenceMessage = "A close victory";
+                }
+
+                if (result > 1.5)
+                {
+                    attackDeath = 0.3f;
+                    deffenceDeath = 0.2f;
+                    AttackerMessage = "Defeat";
+                    DeffenceMessage = "Victory";
+                }
+
+                if (result > 2)
+                {
+                    attackDeath = 0.4f;
+                    deffenceDeath = 0.1f;
+                    AttackerMessage = "A miserable defeat";
+                    DeffenceMessage = "An impressive victiory";
+                }
+
+                if (result > 5)
+                {
+                    attackDeath = 0.8f;
+                    deffenceDeath = 0.05f;
+                    AttackerMessage = "A crushing defeat";
+                    DeffenceMessage = "A triumphant victiory";
+                }
+
+                if (result > 10)
+                {
+                    attackDeath = 1;
+                    deffenceDeath = 0f;
+                    AttackerMessage = "Total defeat";
+                    DeffenceMessage = "Total victiory";
+                }
             }
 
-            if (ErrorResponse != "")
+            foreach (var item in Cmn.OffenceType)
             {
-                response = "Error" + MessageConstants.splitMessageToken + ErrorResponse;
+                float death = t.Offence[item.Value];
+                death = death * attackDeath;
+
+                int sign = universe.r.Next(1000);
+                float remove = death * 0.3f;
+                remove = universe.r.Next(Convert.ToInt32(remove));
+
+                if (sign > 500)
+                {
+                    death = death + remove;
+                }
+                else
+                {
+                    death = death - remove;
+                }
+
+                if (death < 1 && death > 0)
+                {
+                    death = 1;
+                }
+
+                t.Offence[item.Value] = t.Offence[item.Value] - Convert.ToInt64(death);
+                if (t.Offence[item.Value] < 0)
+                {
+                    t.Offence[item.Value] = 0;
+                }
             }
 
-            response += MessageConstants.messageCompleteToken;
-            response = MessageConstants.MessageTypes[14] + MessageConstants.splitMessageToken + response;
-            NetworkStream clientStream = tcpClient.GetStream();
-            ASCIIEncoding encoder = new ASCIIEncoding();
+            foreach (var item in Cmn.DefenceType)
+            {
+                float death = t.DestinationOutpost.Defence[item.Value];
+                death = death * deffenceDeath;
 
-            byte[] buffer = encoder.GetBytes(response);
+                int sign = universe.r.Next(1000);
+                float remove = universe.r.Next(Convert.ToInt32(death * 0.3));
 
-            clientStream.Write(buffer, 0, buffer.Length);
-            clientStream.Flush();
+                if (sign > 500)
+                {
+                    death += remove;
+                }
+                else
+                {
+                    death -= remove;
+                }
+
+                t.DestinationOutpost.Defence[item.Value] = t.DestinationOutpost.Defence[item.Value] - Convert.ToInt64(death);
+                if (t.DestinationOutpost.Defence[item.Value] < 0)
+                {
+                    t.DestinationOutpost.Defence[item.Value] = 0;
+                }
+            }
+
+            foreach (var item in Cmn.OffenceType)
+            {
+                float death = t.DestinationOutpost.Offence[item.Value];
+                death = death * deffenceDeath;
+
+                int sign = universe.r.Next(1000);
+                float remove = universe.r.Next(Convert.ToInt32(death * 0.3));
+
+                if (sign > 500)
+                {
+                    death += remove;
+                }
+                else
+                {
+                    death -= remove;
+                }
+
+                t.DestinationOutpost.Offence[item.Value] = t.DestinationOutpost.Offence[item.Value] - Convert.ToInt64(death);
+                if (t.DestinationOutpost.Offence[item.Value] < 0)
+                {
+                    t.DestinationOutpost.Offence[item.Value] = 0;
+                }
+            }
+
+
+            // calculate the damage for buildings
+            long totalbuild = 0;
+            foreach (var item in t.DestinationOutpost.Buildings)
+            {
+                totalbuild += item;
+            }
+
+            float loss = totalbuild * (deffenceDeath / 3);
+
+            if (loss < 1 && totalbuild != 0)
+            {
+                loss = 2;
+            }
+
+            bool basedeath = false;
+
+            for (int i = Convert.ToInt32(loss); i > 0; i--)
+            {
+                int temp = universe.r.Next(Cmn.BuildType.Count);
+
+                if (t.DestinationOutpost.Buildings[temp] > 0)
+                {
+                    t.DestinationOutpost.Buildings[temp]--;
+                }
+                else
+                {
+                    i++;
+                    bool empty = true;
+                    foreach (var item in t.DestinationOutpost.Buildings)
+                    {
+                        if (item > 0)
+                        {
+                            empty = false;
+                            break;
+                        }
+                    }
+                    if (empty)
+                    {
+                        basedeath = true;
+                        break;
+                    }
+                }
+
+            }
+
+            if (totalbuild <= 0)
+            {
+                basedeath = true;
+            }
+
+
+            if (result <= 1)
+            {
+                float removeRes = deffenceDeath / 2;
+
+                foreach (var item in Cmn.Resource)
+                {
+                    universe.players[t.OriginOutpost.OwnerID].Resources[item.Value] += Convert.ToInt32(universe.players[t.DestinationOutpost.PlanetID].Resources[item.Value] * removeRes);
+
+                    AttackerMessage += " Gained " + item.Key + ": " + Convert.ToString(Convert.ToInt32(universe.players[t.DestinationOutpost.OwnerID].Resources[item.Value] * removeRes));
+                    DeffenceMessage += " Lost " + item.Key + ": " + Convert.ToString(Convert.ToInt32(universe.players[t.DestinationOutpost.OwnerID].Resources[item.Value] * removeRes));
+                    universe.players[t.DestinationOutpost.OwnerID].Resources[item.Value] -= Convert.ToInt32(universe.players[t.DestinationOutpost.OwnerID].Resources[item.Value] * removeRes);
+                }
+            }
+
+            if (basedeath)
+            {
+                AttackerMessage += Environment.NewLine + " Base Destroyed Shard Retrieved";
+                DeffenceMessage += Environment.NewLine + "Our Base Was Lost";
+                t.OriginOutpost.CoreShards++;
+
+            }
+
+            Message tempMessage = new Message(-1, t.OriginOutpost.OwnerID, "Attacking Another Player", AttackerMessage);
+            universe.Messages.Add(tempMessage);
+            tempMessage = new Message(-1, t.DestinationOutpost.OwnerID, "Attacked by Another Player", DeffenceMessage);
+            universe.Messages.Add(tempMessage);
+
+           // response = "Success" + MessageConstants.splitMessageToken + AttackerMessage;
+
 
         }
+
+
+
 
         private void SendOffenceForAttack(List<List<string>> transmissions, TcpClient tcpClient)
         {
@@ -1626,9 +1674,11 @@ namespace TerminalDecay5Server
                 o.SolarSystemID = 0;
                 o.PlanetID = 0;
 
-                newp.HomeCluster = o.ClusterID;
-                newp.HomeSolarSystem = o.SolarSystemID;
-                newp.HomePlanet = o.PlanetID;
+                newp.home = new UniversalAddress();
+
+                newp.home.ClusterID = o.ClusterID;
+                newp.home.SolarSytemID = o.SolarSystemID;
+                newp.home.PlanetID = o.PlanetID;
 
                 o.Buildings[Cmn.BuildType[Cmn.BldTenum.Mine]] = 1;
                 o.Buildings[Cmn.BuildType[Cmn.BldTenum.Farm]] = 2;

@@ -63,6 +63,15 @@ namespace TDCore5
 
         public static List<long> OffenceAttack;
 
+        public enum MovType
+        {
+            Attack = 0,
+            Reinforcement = 1,
+            Loan = 2            
+        }
+
+        public static Dictionary<MovType, int> MovementType;
+
         public static void Init()
         {
             Resource = new Dictionary<Renum, int>
