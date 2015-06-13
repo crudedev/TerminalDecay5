@@ -13,6 +13,10 @@ namespace TDCore5
         public string EmpireName;
         public string Email;
 
+        public int HomeCluster;
+        public int HomeSolarSystem;
+        public int HomePlanet;
+
         public List<long> Resources;
 
         public Guid token;

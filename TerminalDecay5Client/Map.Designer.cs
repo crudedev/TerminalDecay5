@@ -193,6 +193,7 @@ namespace TerminalDecay5Client
             this.button3 = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
             this.button5 = new System.Windows.Forms.Button();
+            this.button6 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.MapCanvas)).BeginInit();
             this.SuspendLayout();
             // 
@@ -200,9 +201,9 @@ namespace TerminalDecay5Client
             // 
             this.button1.Location = new System.Drawing.Point(12, 12);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.Size = new System.Drawing.Size(102, 23);
             this.button1.TabIndex = 0;
-            this.button1.Text = "button1";
+            this.button1.Text = "Resource View";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Visible = false;
             this.button1.Click += new System.EventHandler(this.button1_Click);
@@ -219,7 +220,7 @@ namespace TerminalDecay5Client
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(12, 233);
+            this.button2.Location = new System.Drawing.Point(12, 740);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 2;
@@ -1759,7 +1760,7 @@ namespace TerminalDecay5Client
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(12, 174);
+            this.button3.Location = new System.Drawing.Point(12, 681);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(75, 23);
             this.button3.TabIndex = 174;
@@ -1770,7 +1771,7 @@ namespace TerminalDecay5Client
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(12, 119);
+            this.button4.Location = new System.Drawing.Point(12, 626);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(75, 23);
             this.button4.TabIndex = 175;
@@ -1783,16 +1784,27 @@ namespace TerminalDecay5Client
             // 
             this.button5.Location = new System.Drawing.Point(10, 75);
             this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(75, 23);
+            this.button5.Size = new System.Drawing.Size(104, 23);
             this.button5.TabIndex = 176;
-            this.button5.Text = "button5";
+            this.button5.Text = "Universe";
             this.button5.UseVisualStyleBackColor = true;
             this.button5.Click += new System.EventHandler(this.button5_Click);
+            // 
+            // button6
+            // 
+            this.button6.Location = new System.Drawing.Point(10, 156);
+            this.button6.Name = "button6";
+            this.button6.Size = new System.Drawing.Size(104, 23);
+            this.button6.TabIndex = 177;
+            this.button6.Text = "Home";
+            this.button6.UseVisualStyleBackColor = true;
+            this.button6.Click += new System.EventHandler(this.button6_Click);
             // 
             // Map
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.ClientSize = new System.Drawing.Size(1880, 831);
+            this.Controls.Add(this.button6);
             this.Controls.Add(this.button5);
             this.Controls.Add(this.button4);
             this.Controls.Add(this.button3);
@@ -2126,6 +2138,7 @@ namespace TerminalDecay5Client
         private Button button3;
         private Button button4;
         private Button button5;
+        private Button button6;
     }
 }
 

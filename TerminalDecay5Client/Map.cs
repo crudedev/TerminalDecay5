@@ -1346,5 +1346,18 @@ namespace TerminalDecay5Client
             sc.ServerRequest(RenderUniverse, 19, MessageConstants.splitMessageToken + Convert.ToString(playerToken));
             hideMenus();
         }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            CurrentView = 3;
+            ServerConnection sc = new ServerConnection();
+            sc.ServerRequest(renderHome, 20, MessageConstants.splitMessageToken + Convert.ToString(playerToken));
+            hideMenus();
+        }
+
+        private void renderHome(List<List<string>> transmission)
+        {
+
+        }
     }
 }

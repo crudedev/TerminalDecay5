@@ -485,10 +485,48 @@ namespace TerminalDecay5Server
                 SendUniverseMap(transmissions, tcpClient);
             }
 
+            if (transmissions[0][0] == MessageConstants.MessageTypes[20])
+            {
+                SendHomePlanet(transmissions, tcpClient);
+            }
+
             tcpClient.Close();
             client = null;
 
             #endregion
+        }
+
+        private void SendHomePlanet(List<List<string>> message, TcpClient tcpClient)
+        {
+
+            Player player;
+            try
+            {
+                player = getPlayer(message[0][1]);
+            }
+            catch (Exception)
+            {
+                rejectConnection(3, "player token wrong", tcpClient);
+                return;
+            }
+
+            string response = MessageConstants.MessageTypes[20] + MessageConstants.nextMessageToken;
+
+            response += Convert.ToString(player.HomeCluster);
+            response += MessageConstants.splitMessageToken + Convert.ToString(player.HomeSolarSystem);
+            response += MessageConstants.splitMessageToken + Convert.ToString(universe.clusters[player.HomeCluster].solarSystems[player.HomeSolarSystem].planets[player.HomePlanet].position.X);
+            response += MessageConstants.splitMessageToken + Convert.ToString(universe.clusters[player.HomeCluster].solarSystems[player.HomeSolarSystem].planets[player.HomePlanet].position.Y);
+            
+            response += MessageConstants.messageCompleteToken;
+
+            NetworkStream clientStream = tcpClient.GetStream();
+            ASCIIEncoding encoder = new ASCIIEncoding();
+
+            byte[] buffer = encoder.GetBytes(response);
+
+            clientStream.Write(buffer, 0, buffer.Length);
+            clientStream.Flush();
+
         }
 
         private void SendUniverseMap(List<List<string>> message, TcpClient tcpClient)
@@ -1587,6 +1625,10 @@ namespace TerminalDecay5Server
                 o.ClusterID = 0;
                 o.SolarSystemID = 0;
                 o.PlanetID = 0;
+
+                newp.HomeCluster = o.ClusterID;
+                newp.HomeSolarSystem = o.SolarSystemID;
+                newp.HomePlanet = o.PlanetID;
 
                 o.Buildings[Cmn.BuildType[Cmn.BldTenum.Mine]] = 1;
                 o.Buildings[Cmn.BuildType[Cmn.BldTenum.Farm]] = 2;
