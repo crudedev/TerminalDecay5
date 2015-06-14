@@ -53,7 +53,10 @@ namespace TerminalDecay5Server
 
         static void RunUniverse(object ob)
         {
+
             Universe u = (Universe)ob;
+
+            u.CurrentTick++;
 
             if (u.deadOutposts.Count > 0)
             {
@@ -773,11 +776,21 @@ namespace TerminalDecay5Server
                         for (int i = 0; i < Cmn.OffenceType.Count; i++)
                         {
                             t.Offence.Add(Convert.ToInt32(transmissions[2][i]));
+                            AttackOp.Offence[i] -= Convert.ToInt32(transmissions[2][i]);
                         }
 
                         t.OriginOutpost = AttackOp;
                         t.DestinationOutpost = DeffenceOp;
                         t.MovementType = Cmn.MovType.Attack;
+
+                        t.StartTick = universe.CurrentTick;
+
+                        int dx = DeffenceOp.Tiles[0].X - AttackOp.Tiles[0].X;
+                        int dy = DeffenceOp.Tiles[0].Y - AttackOp.Tiles[0].Y;
+
+                        double dist = Math.Sqrt(dx * dx + dy * dy);
+
+                        t.Duration = Convert.ToInt32(dist) + t.StartTick;
                         
                         universe.TroopMovements.Add(t);
                         

@@ -18,9 +18,12 @@ namespace TDCore5
         public Random r;
         public List<Message> Messages;
         public List<TroopMovement> TroopMovements;
+                
+        public int CurrentTick = 0;
 
         public void InitUniverse()
         {
+            CurrentTick = 0;
 
             r = new Random();
             clusters = new List<Cluster>();

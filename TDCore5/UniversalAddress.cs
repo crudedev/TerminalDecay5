@@ -11,5 +11,6 @@ namespace TDCore5
         public int ClusterID;
         public int SolarSytemID;
         public int PlanetID;
+        int tickNumber;
     }
 }
