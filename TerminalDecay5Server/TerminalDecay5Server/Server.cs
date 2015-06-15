@@ -751,7 +751,7 @@ namespace TerminalDecay5Server
             Player Attacker = getPlayer(transmissions[0][1]);
             Outpost AttackOp = getOutpost(transmissions[1][0], transmissions[1][1]);
             Outpost DeffenceOp = getOutpost(transmissions[1][2], transmissions[1][3]);
-            
+
             string ErrorResponse = "";
 
             if (Attacker != null && AttackOp != null && DeffenceOp != null)
@@ -765,7 +765,7 @@ namespace TerminalDecay5Server
                         if (Convert.ToInt32(transmissions[2][i]) > AttackOp.Offence[i])
                         {
                             ErrorResponse = "Not Enough Units";
-                        }                       
+                        }
                     }
 
                     if (ErrorResponse == "")
@@ -791,9 +791,9 @@ namespace TerminalDecay5Server
                         double dist = Math.Sqrt(dx * dx + dy * dy);
 
                         t.Duration = Convert.ToInt32(dist) + t.StartTick;
-                        
+
                         universe.TroopMovements.Add(t);
-                        
+
                     }
                     else
                     {
@@ -832,7 +832,7 @@ namespace TerminalDecay5Server
             for (int i = 0; i < Cmn.DefenceType.Count; i++)
             {
                 defenceOff += Cmn.DefenceAttack[i] * t.DestinationOutpost.Defence[i];
-                defenceOff += Cmn.OffenceAttack[i] * (t.DestinationOutpost.Offence[i]/2);
+                defenceOff += Cmn.OffenceAttack[i] * (t.DestinationOutpost.Offence[i] / 2);
             }
 
             for (int i = 0; i < Cmn.OffenceType.Count; i++)
@@ -1085,7 +1085,7 @@ namespace TerminalDecay5Server
 
                 foreach (var item in Cmn.Resource)
                 {
-                    universe.players[t.OriginOutpost.OwnerID].Resources[item.Value] += Convert.ToInt32(universe.players[t.DestinationOutpost.PlanetID].Resources[item.Value] * removeRes);
+                    universe.players[t.OriginOutpost.OwnerID].Resources[item.Value] += Convert.ToInt32(universe.players[t.DestinationOutpost.Home.PlanetID].Resources[item.Value] * removeRes);
 
                     AttackerMessage += " Gained " + item.Key + ": " + Convert.ToString(Convert.ToInt32(universe.players[t.DestinationOutpost.OwnerID].Resources[item.Value] * removeRes));
                     DeffenceMessage += " Lost " + item.Key + ": " + Convert.ToString(Convert.ToInt32(universe.players[t.DestinationOutpost.OwnerID].Resources[item.Value] * removeRes));
@@ -1106,7 +1106,7 @@ namespace TerminalDecay5Server
             tempMessage = new Message(-1, t.DestinationOutpost.OwnerID, "Attacked by Another Player", DeffenceMessage);
             universe.Messages.Add(tempMessage);
 
-           // response = "Success" + MessageConstants.splitMessageToken + AttackerMessage;
+            // response = "Success" + MessageConstants.splitMessageToken + AttackerMessage;
 
 
         }
@@ -1683,15 +1683,15 @@ namespace TerminalDecay5Server
 
                 o.Tiles.Add(v);
 
-                o.ClusterID = 0;
-                o.SolarSystemID = 0;
-                o.PlanetID = 0;
+                o.Home = new UniversalAddress();
+                o.Home.ClusterID = 0;
+                o.Home.SolarSytemID = 0;
+                o.Home.PlanetID = 0;
 
                 newp.home = new UniversalAddress();
 
-                newp.home.ClusterID = o.ClusterID;
-                newp.home.SolarSytemID = o.SolarSystemID;
-                newp.home.PlanetID = o.PlanetID;
+
+                newp.home = o.Home;
 
                 o.Buildings[Cmn.BuildType[Cmn.BldTenum.Mine]] = 1;
                 o.Buildings[Cmn.BuildType[Cmn.BldTenum.Farm]] = 2;
@@ -1793,7 +1793,7 @@ namespace TerminalDecay5Server
 
             foreach (Outpost o in universe.outposts)
             {
-                if (o.ClusterID.ToString() == message[0][4] && o.SolarSystemID.ToString() == message[0][5] && o.PlanetID == planetId)
+                if (o.Home.ClusterID.ToString() == message[0][4] && o.Home.SolarSytemID.ToString() == message[0][5] && o.Home.PlanetID == planetId)
                 {
                     foreach (Position p in o.Tiles)
                     {
@@ -1825,6 +1825,17 @@ namespace TerminalDecay5Server
 
                         response += MessageConstants.nextMessageToken;
                     }
+                }
+            }
+
+            //send the movements here
+
+            foreach (var item in universe.TroopMovements)
+            {
+                if (item.OriginOutpost.Home.ClusterID.ToString() == message[0][4] && item.OriginOutpost.Home.SolarSytemID.ToString() == message[0][5] && item.OriginOutpost.Home.PlanetID == planetId)
+                {
+                    response += MessageConstants.nextMessageToken;
+                    response += item.OriginOutpost.Tiles[0].X + MessageConstants.splitMessageToken + item.OriginOutpost.Tiles[0].Y + MessageConstants.splitMessageToken + item.DestinationOutpost.Tiles[0].X + MessageConstants.splitMessageToken + item.DestinationOutpost.Tiles[0].Y + MessageConstants.splitMessageToken + item.StartTick + MessageConstants.splitMessageToken + item.Duration + MessageConstants.splitMessageToken + universe.CurrentTick;
                 }
             }
 
@@ -2028,9 +2039,10 @@ namespace TerminalDecay5Server
 
             o.Tiles.Add(v);
 
-            o.ClusterID = 0;
-            o.SolarSystemID = 0;
-            o.PlanetID = 0;
+            o.Home = new UniversalAddress();
+            o.Home.ClusterID = 0;
+            o.Home.SolarSytemID = 0;
+            o.Home.PlanetID = 0;
 
             o.Buildings[Cmn.BuildType[Cmn.BldTenum.Mine]] = 1;
             o.Buildings[Cmn.BuildType[Cmn.BldTenum.Farm]] = 2;

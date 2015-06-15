@@ -17,9 +17,7 @@ namespace TDCore5
         public List<long> Defence;
         public List<long> Offence;
 
-        public int ClusterID;
-        public int SolarSystemID;
-        public int PlanetID;
+        public UniversalAddress Home;
 
         public int CoreShards;
 

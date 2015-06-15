@@ -211,6 +211,19 @@ namespace TerminalDecay5Client
                     mapgraph.DrawImage(maptile, new Point(Convert.ToInt32(l[0]) * 26, Convert.ToInt32(l[1]) * 26));
                 }
             }
+
+            foreach (List<string> l in transmission)
+            {
+                if (l.Count == 7)
+                {
+                    Pen myPen;
+                    myPen = new System.Drawing.Pen(System.Drawing.Color.Yellow);
+                    mapgraph.DrawLine(myPen, Convert.ToInt32(l[0]) * 26 + 13, Convert.ToInt32(l[1]) * 26 + 13, Convert.ToInt32(l[2]) * 26 + 13, Convert.ToInt32(l[3]) * 26 + 13);
+                    myPen.Dispose();                 
+                }
+            }
+
+
             MapCanvas.Image = MapImage;
         }
 

@@ -16,8 +16,7 @@ namespace TDCore5
         public Outpost OriginOutpost;
         public Outpost DestinationOutpost;
 
-        public int StartTick;
-
+        public int StartTick;        
         public int Duration;
 
         public TroopMovement()
