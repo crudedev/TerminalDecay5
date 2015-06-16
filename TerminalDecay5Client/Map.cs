@@ -219,6 +219,15 @@ namespace TerminalDecay5Client
                     Pen myPen;
                     myPen = new System.Drawing.Pen(System.Drawing.Color.Yellow);
                     mapgraph.DrawLine(myPen, Convert.ToInt32(l[0]) * 26 + 13, Convert.ToInt32(l[1]) * 26 + 13, Convert.ToInt32(l[2]) * 26 + 13, Convert.ToInt32(l[3]) * 26 + 13);
+                    myPen.Width = 6;
+                    float delta = Convert.ToInt32(l[6]) - Convert.ToInt32(l[4]);
+                    float result = delta / Convert.ToInt32(l[5]);
+
+                    int x = Convert.ToInt32(((Convert.ToInt32(l[0]) * 26 + 13) - (Convert.ToInt32(l[2]) * 26 + 13)) * result) - Convert.ToInt32(l[0]) * 26 + 13;
+                    int y = Convert.ToInt32(((Convert.ToInt32(l[1]) * 26 + 13) - (Convert.ToInt32(l[3]) * 26 + 13)) * result) - Convert.ToInt32(l[1]) * 26 + 13;
+
+                    mapgraph.DrawLine(myPen, new Point(x-2, y-2), new Point(x+2, y+2));
+
                     myPen.Dispose();                 
                 }
             }

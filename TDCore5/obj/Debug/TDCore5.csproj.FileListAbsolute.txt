@@ -2,4 +2,3 @@ C:\Users\D\Dropbox\GitHub\TerminalDecay5\TDCore5\bin\Debug\TDCore5.dll
 C:\Users\D\Dropbox\GitHub\TerminalDecay5\TDCore5\bin\Debug\TDCore5.pdb
 C:\Users\D\Dropbox\GitHub\TerminalDecay5\TDCore5\obj\Debug\TDCore5.dll
 C:\Users\D\Dropbox\GitHub\TerminalDecay5\TDCore5\obj\Debug\TDCore5.pdb
-C:\Users\D\Dropbox\GitHub\TerminalDecay5\TDCore5\obj\Debug\TDCore5.csprojResolveAssemblyReference.cache

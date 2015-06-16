@@ -38,8 +38,8 @@ namespace TerminalDecay5Server
             _tcpListener = new TcpListener(IPAddress.Any, 42666);
             _listenThread = new Thread(new ThreadStart(ListenForClients));
             _listenThread.Start();
-            _serverTick = new Timer(RunUniverse, universe, 20000, 40000);
-            _serverSave = new Timer(SaveUnivsere, universe, 20000, 400000);
+            _serverTick = new Timer(RunUniverse, universe, 2000, 4000);
+            _serverSave = new Timer(SaveUnivsere, universe, 20000, 40000);
         }
 
         static void SaveUnivsere(object ob)
