@@ -75,7 +75,7 @@ namespace TerminalDecay5Client
         private void button1_Click(object sender, EventArgs e)
         {
             ServerConnection sc = new ServerConnection();
-            sc.ServerRequest(RenderResMap, 0, MessageConstants.splitMessageToken + Convert.ToString(playerToken) + MessageConstants.splitMessageToken + Convert.ToString(_currentPlanet) +  MessageConstants.splitMessageToken + _currentSolarSystem + MessageConstants.splitMessageToken + _currentCluster + MessageConstants.messageCompleteToken);
+            sc.ServerRequest(RenderResMap, 0, MessageConstants.splitMessageToken + Convert.ToString(playerToken) + MessageConstants.splitMessageToken + Convert.ToString(_currentPlanet) + MessageConstants.splitMessageToken + _currentSolarSystem + MessageConstants.splitMessageToken + _currentCluster + MessageConstants.messageCompleteToken);
             hideMenus();
         }
 
@@ -220,15 +220,56 @@ namespace TerminalDecay5Client
                     myPen = new System.Drawing.Pen(System.Drawing.Color.Yellow);
                     mapgraph.DrawLine(myPen, Convert.ToInt32(l[0]) * 26 + 13, Convert.ToInt32(l[1]) * 26 + 13, Convert.ToInt32(l[2]) * 26 + 13, Convert.ToInt32(l[3]) * 26 + 13);
                     myPen.Width = 6;
+
                     float delta = Convert.ToInt32(l[6]) - Convert.ToInt32(l[4]);
                     float result = delta / Convert.ToInt32(l[5]);
 
-                    int x = Convert.ToInt32(((Convert.ToInt32(l[0]) * 26 + 13) - (Convert.ToInt32(l[2]) * 26 + 13)) * result) - Convert.ToInt32(l[0]) * 26 + 13;
-                    int y = Convert.ToInt32(((Convert.ToInt32(l[1]) * 26 + 13) - (Convert.ToInt32(l[3]) * 26 + 13)) * result) - Convert.ToInt32(l[1]) * 26 + 13;
+                    if (result > 1)
+                    {
+                        result = 1;
+                    }
 
-                    mapgraph.DrawLine(myPen, new Point(x-2, y-2), new Point(x+2, y+2));
+                    int origX = Convert.ToInt32(l[0]);
+                    int origY = Convert.ToInt32(l[1]);
 
-                    myPen.Dispose();                 
+                    int destX = Convert.ToInt32(l[2]);
+                    int destY = Convert.ToInt32(l[3]);
+
+                    int x = 0;
+                    int y = 0;
+
+                    if (origX < destX)
+                    {
+                        x = origX - destX;
+                        x = Convert.ToInt32(x * result);
+                        x += (origX) * 26 + 13;
+                    }
+                    else
+                    {
+                        x = destX - origX;
+                        x = Convert.ToInt32(x * result);
+                        x += (origX) * 26 + 13;
+                    }
+
+                    if (origY < destY)
+                    {
+                        y = origY - destY;
+                        y += Convert.ToInt32(y * result);
+                        y += (origY) * 26 + 13;
+                    }
+                    else
+                    {
+                        y = origY - destY;
+                        y -= Convert.ToInt32(y * result);
+                        y += (origY) * 26 + 13;
+                    }
+
+
+
+
+                    mapgraph.DrawLine(myPen, new Point(x - 2, y - 2), new Point(x + 2, y + 2));
+
+                    myPen.Dispose();
                 }
             }
 
@@ -292,7 +333,7 @@ namespace TerminalDecay5Client
                     _currentX = mx;
                     _currentY = my;
                     ServerConnection sc = new ServerConnection();
-                    sc.ServerRequest(RenderMainMap, 3, MessageConstants.splitMessageToken + Convert.ToString(playerToken) + MessageConstants.splitMessageToken + Convert.ToString(mx) + MessageConstants.splitMessageToken + Convert.ToString(my) + MessageConstants.splitMessageToken + _currentCluster + MessageConstants.splitMessageToken +_currentSolarSystem + MessageConstants.messageCompleteToken);
+                    sc.ServerRequest(RenderMainMap, 3, MessageConstants.splitMessageToken + Convert.ToString(playerToken) + MessageConstants.splitMessageToken + Convert.ToString(mx) + MessageConstants.splitMessageToken + Convert.ToString(my) + MessageConstants.splitMessageToken + _currentCluster + MessageConstants.splitMessageToken + _currentSolarSystem + MessageConstants.messageCompleteToken);
                 }
             }
 
@@ -371,7 +412,7 @@ namespace TerminalDecay5Client
             showOffenceMenu(false);
             showAttackMenu(false);
 
-            if(CurrentView == 3)
+            if (CurrentView == 3)
             {
                 button1.Visible = true;
             }
@@ -1038,7 +1079,7 @@ namespace TerminalDecay5Client
 
         private void ResultsOfAttack(List<List<string>> transmission)
         {
-            if(transmission[0][1] == "Error")
+            if (transmission[0][1] == "Error")
             {
                 MessageBox.Show(transmission[0][2]);
             }

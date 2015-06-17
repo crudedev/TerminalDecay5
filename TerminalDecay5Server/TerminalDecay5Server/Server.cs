@@ -38,8 +38,8 @@ namespace TerminalDecay5Server
             _tcpListener = new TcpListener(IPAddress.Any, 42666);
             _listenThread = new Thread(new ThreadStart(ListenForClients));
             _listenThread.Start();
-            _serverTick = new Timer(RunUniverse, universe, 2000, 4000);
-            _serverSave = new Timer(SaveUnivsere, universe, 20000, 40000);
+            _serverTick = new Timer(RunUniverse, universe, 800, 1600);
+            _serverSave = new Timer(SaveUnivsere, universe, 200000, 400000);
         }
 
         static void SaveUnivsere(object ob)
@@ -1130,12 +1130,15 @@ namespace TerminalDecay5Server
 
             string response = MessageConstants.MessageTypes[13] + MessageConstants.nextMessageToken;
 
-            if (getPlayer(transmissions[0][1]).PlayerID == getOutpost(transmissions[0][2], transmissions[0][3]).OwnerID)
+            try
             {
-                Player pl = getPlayer(transmissions[0][1]);
-                response += SendOffenceOntile(transmissions);
+                if (getPlayer(transmissions[0][1]).PlayerID == getOutpost(transmissions[0][2], transmissions[0][3]).OwnerID)
+                {
+                    Player pl = getPlayer(transmissions[0][1]);
+                    response += SendOffenceOntile(transmissions);
+                }
             }
-            else
+            catch
             {
                 response += "Player and outpost owner not the same";
             }
