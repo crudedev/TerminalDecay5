@@ -238,32 +238,42 @@ namespace TerminalDecay5Client
                     int x = 0;
                     int y = 0;
 
-                    if (origX < destX)
+                    float fx = 0;
+                    float fy = 0;
+
+                    if (origX >= destX)
                     {
-                        x = origX - destX;
-                        x = Convert.ToInt32(x * result);
-                        x += (origX) * 26 + 13;
+                        x = destX - origX;
+                        x = x * 26;
+                        fx = x * result;
+                        x = (origX) * 26;
+                        x =   x+Convert.ToInt32(fx) + 13;
                     }
                     else
                     {
                         x = destX - origX;
-                        x = Convert.ToInt32(x * result);
-                        x += (origX) * 26 + 13;
+                        x = x * 26;
+                        fx = x * result;
+                        x = (origX) * 26;
+                        x = x + Convert.ToInt32(fx) + 13;
                     }
 
-                    if (origY < destY)
+                    if (origY >= destY)
                     {
                         y = origY - destY;
-                        y += Convert.ToInt32(y * result);
-                        y += (origY) * 26 + 13;
+                        y = y * 26;
+                        fy = y * result;
+                        y = (origY) * 26;
+                        y = y - Convert.ToInt32(fy) + 13;
                     }
                     else
                     {
                         y = origY - destY;
-                        y -= Convert.ToInt32(y * result);
-                        y += (origY) * 26 + 13;
+                        y = y * 26;
+                        fy = y * result;
+                        y = (origY) * 26;
+                        y = y - Convert.ToInt32(fy) + 13;
                     }
-
 
 
 
