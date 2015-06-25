@@ -226,6 +226,49 @@ namespace TerminalDecay5Server
                 u.OffenceBuildQueue.Remove(item);
             }
 
+            List<TroopMovement> CompleteMovements = new List<TroopMovement>();
+
+            foreach (var item in u.TroopMovements)
+            {
+                if(item.StartTick + item.Duration  < u.CurrentTick)
+                {
+                    switch (item.MovementType)
+                    {
+                        case Cmn.MovType.Reinforcement:
+                            //dump the troops in the base and add the troop movement to a temp remove list
+                            for (int def = 0; def < item.Defence.Count; def++)
+                            {
+                                item.DestinationOutpost.Defence[def] += item.Defence[def];
+                            }
+
+                            for (int off = 0; off < item.Offence.Count; off++)
+                            {
+                              item.DestinationOutpost.Offence[off] += item.Offence[off];
+                            }
+
+                            CompleteMovements.Add(item);
+
+                            break;
+                        case Cmn.MovType.Attack:
+                            CalculateBattle(item,u);
+                            Outpost orig = item.OriginOutpost;
+                            item.OriginOutpost = item.DestinationOutpost;
+                            item.DestinationOutpost = orig;
+                            item.StartTick = u.CurrentTick;
+                            item.MovementType = Cmn.MovType.Reinforcement;            
+                            //send it back change it to a reinforcement
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
+
+            foreach (var item in CompleteMovements)
+            {
+                u.TroopMovements.Remove(item);
+            }
+
         }
 
         private static long UpdateBuildQueue(BuildQueueItem item, Universe u, List<List<long>> cost)
@@ -824,7 +867,7 @@ namespace TerminalDecay5Server
             }
         }
 
-        public void CalculateBattle(TroopMovement t)
+        public static void CalculateBattle(TroopMovement t,Universe u)
         {
             long attackOff = 0;
             long defenceOff = 0;
@@ -954,9 +997,9 @@ namespace TerminalDecay5Server
                 float death = t.Offence[item.Value];
                 death = death * attackDeath;
 
-                int sign = universe.r.Next(1000);
+                int sign = u.r.Next(1000);
                 float remove = death * 0.3f;
-                remove = universe.r.Next(Convert.ToInt32(remove));
+                remove = u.r.Next(Convert.ToInt32(remove));
 
                 if (sign > 500)
                 {
@@ -984,8 +1027,8 @@ namespace TerminalDecay5Server
                 float death = t.DestinationOutpost.Defence[item.Value];
                 death = death * deffenceDeath;
 
-                int sign = universe.r.Next(1000);
-                float remove = universe.r.Next(Convert.ToInt32(death * 0.3));
+                int sign = u.r.Next(1000);
+                float remove = u.r.Next(Convert.ToInt32(death * 0.3));
 
                 if (sign > 500)
                 {
@@ -1008,8 +1051,8 @@ namespace TerminalDecay5Server
                 float death = t.DestinationOutpost.Offence[item.Value];
                 death = death * deffenceDeath;
 
-                int sign = universe.r.Next(1000);
-                float remove = universe.r.Next(Convert.ToInt32(death * 0.3));
+                int sign = u.r.Next(1000);
+                float remove = u.r.Next(Convert.ToInt32(death * 0.3));
 
                 if (sign > 500)
                 {
@@ -1046,7 +1089,7 @@ namespace TerminalDecay5Server
 
             for (int i = Convert.ToInt32(loss); i > 0; i--)
             {
-                int temp = universe.r.Next(Cmn.BuildType.Count);
+                int temp = u.r.Next(Cmn.BuildType.Count);
 
                 if (t.DestinationOutpost.Buildings[temp] > 0)
                 {
@@ -1085,11 +1128,11 @@ namespace TerminalDecay5Server
 
                 foreach (var item in Cmn.Resource)
                 {
-                    universe.players[t.OriginOutpost.OwnerID].Resources[item.Value] += Convert.ToInt32(universe.players[t.DestinationOutpost.Home.PlanetID].Resources[item.Value] * removeRes);
+                    u.players[t.OriginOutpost.OwnerID].Resources[item.Value] += Convert.ToInt64(u.players[t.DestinationOutpost.Home.PlanetID].Resources[item.Value] * removeRes);
 
-                    AttackerMessage += " Gained " + item.Key + ": " + Convert.ToString(Convert.ToInt32(universe.players[t.DestinationOutpost.OwnerID].Resources[item.Value] * removeRes));
-                    DeffenceMessage += " Lost " + item.Key + ": " + Convert.ToString(Convert.ToInt32(universe.players[t.DestinationOutpost.OwnerID].Resources[item.Value] * removeRes));
-                    universe.players[t.DestinationOutpost.OwnerID].Resources[item.Value] -= Convert.ToInt32(universe.players[t.DestinationOutpost.OwnerID].Resources[item.Value] * removeRes);
+                    AttackerMessage += " Gained " + item.Key + ": " + Convert.ToString(Convert.ToInt64(u.players[t.DestinationOutpost.OwnerID].Resources[item.Value] * removeRes));
+                    DeffenceMessage += " Lost " + item.Key + ": " + Convert.ToString(Convert.ToInt64(u.players[t.DestinationOutpost.OwnerID].Resources[item.Value] * removeRes));
+                    u.players[t.DestinationOutpost.OwnerID].Resources[item.Value] -= Convert.ToInt64(u.players[t.DestinationOutpost.OwnerID].Resources[item.Value] * removeRes);
                 }
             }
 
@@ -1102,17 +1145,14 @@ namespace TerminalDecay5Server
             }
 
             Message tempMessage = new Message(-1, t.OriginOutpost.OwnerID, "Attacking Another Player", AttackerMessage);
-            universe.Messages.Add(tempMessage);
+            u.Messages.Add(tempMessage);
             tempMessage = new Message(-1, t.DestinationOutpost.OwnerID, "Attacked by Another Player", DeffenceMessage);
-            universe.Messages.Add(tempMessage);
+            u.Messages.Add(tempMessage);
 
             // response = "Success" + MessageConstants.splitMessageToken + AttackerMessage;
 
 
         }
-
-
-
 
         private void SendOffenceForAttack(List<List<string>> transmissions, TcpClient tcpClient)
         {

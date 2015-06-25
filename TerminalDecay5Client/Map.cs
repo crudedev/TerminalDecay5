@@ -29,9 +29,7 @@ namespace TerminalDecay5Client
         private int _currentPlanet = 0;
         private int _currentSolarSystem = 0;
         private int _currentCluster = 0;
-
-
-
+        
         Messages frmMessage = new Messages();
 
         public Map()
