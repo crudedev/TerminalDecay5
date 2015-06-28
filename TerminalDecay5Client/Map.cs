@@ -19,6 +19,7 @@ namespace TerminalDecay5Client
         //3 = solarsystem view
         //4 = cluster view
         //5 = universe view
+        //6 = reinforce view
 
         private int _currentX;
         private int _currentY;
@@ -309,7 +310,7 @@ namespace TerminalDecay5Client
                     }
                     else
                     {
-                        switch(l[2])
+                        switch (l[2])
                         {
                             case "Portal":
                                 c = Color.AliceBlue;
@@ -422,6 +423,18 @@ namespace TerminalDecay5Client
                 }
             }
 
+
+            if (CurrentView == 6)
+            {
+                if (m.Button == MouseButtons.Left)
+                {
+                    _targetX = mx;
+                    _targetY = my;
+                    ServerConnection sc = new ServerConnection();
+                    sc.ServerRequest(UpdateReinforcePanel, 21, MessageConstants.splitMessageToken + Convert.ToString(playerToken) + MessageConstants.splitMessageToken + Convert.ToString(_currentX) + MessageConstants.splitMessageToken + Convert.ToString(_currentY)); ;
+                }
+            }
+
         }
 
         private void DisplayAttack(List<List<string>> transmission)
@@ -474,6 +487,7 @@ namespace TerminalDecay5Client
             showDefenceMenu(false);
             showOffenceMenu(false);
             showAttackMenu(false);
+            showReinforcemenu(false);
 
             if (CurrentView == 3)
             {
@@ -595,6 +609,39 @@ namespace TerminalDecay5Client
         private string updateBuildPanelCostString(List<List<string>> transmission, int x)
         {
             return string.Format("Population: {0}, Metal: {1}, Water: {2}, Power: {3}, Food {4}", transmission[x][0], transmission[x][1], transmission[x][2], transmission[x][3], transmission[x][4]);
+        }
+
+        private void showReinforcemenu(bool show)
+        {
+            lblReinforceArtillery.Visible = show;
+            lblReinforceBattleShip.Visible = show;
+            lblReinforceBomber.Visible = show;
+            lblReinforceCarrier.Visible = show;
+            lblReinforceDestroyer.Visible = show;
+            lblReinforceDroneBase.Visible = show;
+            lblReinforceFrigate.Visible = show;
+            lblReinforceGunner.Visible = show;
+            lblReinforceGunship.Visible = show;
+            lblReinforcePatrol.Visible = show;
+            lblReinforceScout.Visible = show;
+            lblReinforceTurret.Visible = show;
+
+            txtReinforceArtillery.Visible = show;
+            txtReinforceBattleship.Visible = show;
+            txtReinforceBomber.Visible = show;
+            txtReinforceCarrier.Visible = show;
+            txtReinforceDestroyer.Visible = show;
+            txtReinforceDroneBase.Visible = show;
+            txtReinforceFrigate.Visible = show;
+            txtReinforceGunner.Visible = show;
+            txtReinforceGunship.Visible = show;
+            txtReinforcePartrol.Visible = show;
+            txtReinforceScout.Visible = show;
+            txtReinforceTurret.Visible = show;
+
+            cmdReinforce.Visible = show;
+            button7.Visible = !show;
+
         }
 
         private void showBuildmenu(bool show)
@@ -1038,13 +1085,7 @@ namespace TerminalDecay5Client
             lblCarrierAttack.Text = transmission[12][5];
             lblBattleshipAttack.Text = transmission[12][6];
 
-            //lblScoutDefence.Text = transmission[13][0];
-            //lblGunshipDefence.Text = transmission[13][1];
-            //lblBomberDefence.Text = transmission[13][2];
-            //lblFrigateDefence.Text = transmission[13][3];
-            //lblDestroyerDefence.Text = transmission[13][4];
-            //lblCarrierDefence.Text = transmission[13][5];
-            //lblBattleshipDeffence.Text = transmission[13][6];
+
         }
 
         private void btnOffenceBuild_Click(object sender, EventArgs e)
@@ -1093,7 +1134,6 @@ namespace TerminalDecay5Client
         {
             LblSidePanel.Text = "SelectTarget";
             CurrentView = 2;
-
         }
 
         private void btnSendAttack_Click(object sender, EventArgs e)
@@ -1490,6 +1530,118 @@ namespace TerminalDecay5Client
 
             ServerConnection sc = new ServerConnection();
             sc.ServerRequest(RenderMainMap, 3, MessageConstants.splitMessageToken + Convert.ToString(playerToken) + MessageConstants.splitMessageToken + Convert.ToString(_currentX) + MessageConstants.splitMessageToken + Convert.ToString(_currentY) + MessageConstants.splitMessageToken + _currentCluster + MessageConstants.splitMessageToken + _currentSolarSystem + MessageConstants.messageCompleteToken);
+        }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            LblSidePanel.Text = "SelectTarget";
+            CurrentView = 6;
+        }
+
+        private void cmdReinforce_Click(object sender, EventArgs e)
+        {
+            List<long> ReinforcementList = new List<long>();
+            try
+            {
+
+                showReinforcemenu(true);
+
+
+
+                ReinforcementList.Add(Convert.ToInt64(txtReinforceScout.Text));
+                ReinforcementList.Add(Convert.ToInt64(txtReinforceGunship.Text));
+                ReinforcementList.Add(Convert.ToInt64(txtReinforceBomber.Text));
+                ReinforcementList.Add(Convert.ToInt64(txtReinforceFrigate.Text));
+                ReinforcementList.Add(Convert.ToInt64(txtReinforceDestroyer.Text));
+                ReinforcementList.Add(Convert.ToInt64(txtReinforceCarrier.Text));
+                ReinforcementList.Add(Convert.ToInt64(txtReinforceBattleship.Text));
+                ReinforcementList.Add(Convert.ToInt64(txtReinforcePartrol.Text));
+                ReinforcementList.Add(Convert.ToInt64(txtReinforceGunner.Text));
+                ReinforcementList.Add(Convert.ToInt64(txtReinforceTurret.Text));
+                ReinforcementList.Add(Convert.ToInt64(txtReinforceArtillery.Text));
+                ReinforcementList.Add(Convert.ToInt64(txtDroneBase.Text));
+
+
+                string request = MessageConstants.splitMessageToken + Convert.ToString(playerToken) + MessageConstants.nextMessageToken;
+
+                request += _currentX + MessageConstants.splitMessageToken + _currentY + MessageConstants.splitMessageToken + _targetX + MessageConstants.splitMessageToken + _targetY + MessageConstants.nextMessageToken;
+
+                foreach (int i in ReinforcementList)
+                {
+                    request += i + MessageConstants.splitMessageToken;
+                }
+
+                request += MessageConstants.nextMessageToken;
+                request += _currentX + MessageConstants.splitMessageToken + _currentY;
+
+                ServerConnection sc = new ServerConnection();
+                sc.ServerRequest(ResultsOfAttack, 22, request);
+
+            }
+            catch (Exception)
+            {
+
+                txtReinforceArtillery.Text = "0";
+                txtReinforceBattleship.Text = "0";
+                txtReinforceBomber.Text = "0";
+                txtReinforceCarrier.Text = "0";
+                txtReinforceDestroyer.Text = "0";
+                txtReinforceDroneBase.Text = "0";
+                txtReinforceFrigate.Text = "0";
+                txtReinforceGunner.Text = "0";
+                txtReinforceGunship.Text = "0";
+                txtReinforcePartrol.Text = "0";
+                txtReinforceScout.Text = "0";
+                txtReinforceTurret.Text = "0";
+
+                MessageBox.Show("Invalid Input");
+
+            }
+
+
+        }
+
+        private void UpdateReinforcePanel(List<List<string>> transmission)
+        {
+
+            hideMenus();
+            if (transmission[1][0] == "-1")
+            {
+                MessageBox.Show("You don't own an outpost here");
+                return;
+            }
+
+
+            showReinforcemenu(true);
+            lblReinforceScout.Text = "scout: " + transmission[1][0];
+            lblReinforceGunship.Text = "gunship: " + transmission[1][1];
+            lblReinforceBomber.Text = "bomber: " + transmission[1][2];
+            lblReinforceFrigate.Text = "frigate: " + transmission[1][3];
+            lblReinforceDestroyer.Text = "destroyer: " + transmission[1][4];
+            lblReinforceCarrier.Text = "carrier:" + transmission[1][5];
+            lblReinforceBattleShip.Text = "battleship:" + transmission[1][6];
+
+
+            lblReinforcePatrol.Text = "patrol: " + transmission[1][7];
+            lblReinforceGunner.Text = "gunner: " + transmission[1][8];
+            lblReinforceTurret.Text = "turret: " + transmission[1][9];
+            lblReinforceArtillery.Text = "artillery: " + transmission[1][10];
+            lblReinforceDroneBase.Text = "drone base: " + transmission[1][11];
+
+
+            txtReinforceArtillery.Text = "0";
+            txtReinforceBattleship.Text = "0";
+            txtReinforceBomber.Text = "0";
+            txtReinforceCarrier.Text = "0";
+            txtReinforceDestroyer.Text = "0";
+            txtReinforceDroneBase.Text = "0";
+            txtReinforceFrigate.Text = "0";
+            txtReinforceGunner.Text = "0";
+            txtReinforceGunship.Text = "0";
+            txtReinforcePartrol.Text = "0";
+            txtReinforceScout.Text = "0";
+            txtReinforceTurret.Text = "0";
+
         }
     }
 }

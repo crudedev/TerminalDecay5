@@ -34,7 +34,9 @@ namespace TDCore5
             MessageTypes.Add(17, "ViewSolarMap^&^&%**%d.1sa");
             MessageTypes.Add(18, "ViewClusterMapxxdjgrymn,4");
             MessageTypes.Add(19, "ViewUniverse,4dk,meiu8hg6");
-            MessageTypes.Add(20, "FetchPlayerHomeal.tryhsvf");
+            MessageTypes.Add(20, "FetchPlayerHomeSl.tryhsvf");
+            MessageTypes.Add(21, "GetAllUnits.zxctuym,olDJE");
+            MessageTypes.Add(22, "SendReinforcements.uym*oD");
         }
 
     }

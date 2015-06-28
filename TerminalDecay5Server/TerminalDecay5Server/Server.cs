@@ -771,6 +771,16 @@ namespace TerminalDecay5Server
                 SendHomePlanet(transmissions, tcpClient);
             }
 
+            if (transmissions[0][0] == MessageConstants.MessageTypes[21])
+            {
+                SendAllUnits(transmissions, tcpClient);
+            }
+
+            if (transmissions[0][0] == MessageConstants.MessageTypes[22])
+            {
+                Reinforce(transmissions, tcpClient);
+            }
+
             tcpClient.Close();
             client = null;
 
@@ -1020,6 +1030,98 @@ namespace TerminalDecay5Server
             clientStream.Write(buffer, 0, buffer.Length);
             clientStream.Flush();
 
+        }
+
+        private void Reinforce(List<List<string>> transmissions, TcpClient tcpClient)
+        {
+            string response = MessageConstants.MessageTypes[14] + MessageConstants.nextMessageToken;
+
+            Player Attacker = getPlayer(transmissions[0][1]);
+            Outpost AttackOp = getOutpost(transmissions[1][0], transmissions[1][1]);
+            Outpost DeffenceOp = getOutpost(transmissions[1][2], transmissions[1][3]);
+
+            string ErrorResponse = "";
+
+            if (Attacker != null && AttackOp != null && DeffenceOp != null)
+            {
+
+                for (int i = 0; i < Cmn.OffenceType.Count; i++)
+                {
+
+                    if (Convert.ToInt32(transmissions[2][i]) > AttackOp.Offence[i])
+                    {
+                        ErrorResponse = "Not Enough Units";
+                    }
+                }
+
+                for (int i = Cmn.OffenceType.Count; i < Cmn.OffenceType.Count + Cmn.DefenceType.Count; i++)
+                {
+
+                    if (Convert.ToInt32(transmissions[2][i]) > AttackOp.Defence[i - Cmn.OffenceType.Count])
+                    {
+                        ErrorResponse = "Not Enough Units";
+                    }
+                }
+
+                if (ErrorResponse == "")
+                {
+
+                    TroopMovement t = new TroopMovement();
+                    t.Offence = new List<long>();
+                    for (int i = 0; i < Cmn.OffenceType.Count; i++)
+                    {
+                        t.Offence.Add(Convert.ToInt32(transmissions[2][i]));
+                        AttackOp.Offence[i] -= Convert.ToInt32(transmissions[2][i]);
+                    }
+
+                    for (int i = Cmn.OffenceType.Count; i < Cmn.OffenceType.Count + Cmn.DefenceType.Count; i++)
+                    {
+                        t.Defence.Add(Convert.ToInt32(transmissions[2][i]));
+                        AttackOp.Defence[i - Cmn.OffenceType.Count] -= Convert.ToInt32(transmissions[2][i]);
+                    }
+
+                    t.OriginOutpost = AttackOp;
+                    t.DestinationOutpost = DeffenceOp;
+                    t.MovementType = Cmn.MovType.Reinforcement;
+
+                    t.StartTick = universe.CurrentTick;
+
+                    int dx = DeffenceOp.Tile.X - AttackOp.Tile.X;
+                    int dy = DeffenceOp.Tile.Y - AttackOp.Tile.Y;
+
+                    double dist = Math.Sqrt(dx * dx + dy * dy);
+
+                    t.Duration = Convert.ToInt32(dist) + t.StartTick;
+
+                    universe.TroopMovements.Add(t);
+
+                }
+                else
+                {
+                    ErrorResponse = "Error building reinforcement";
+                }
+
+
+                if (ErrorResponse != "")
+                {
+                    response = "Error" + MessageConstants.splitMessageToken + ErrorResponse;
+                }
+
+            }
+            else
+            {
+                ErrorResponse = "One or more bases not found";
+            }  
+            
+            response += MessageConstants.messageCompleteToken;
+                response = MessageConstants.MessageTypes[14] + MessageConstants.splitMessageToken + response;
+                NetworkStream clientStream = tcpClient.GetStream();
+                ASCIIEncoding encoder = new ASCIIEncoding();
+
+                byte[] buffer = encoder.GetBytes(response);
+
+                clientStream.Write(buffer, 0, buffer.Length);
+                clientStream.Flush();
         }
 
         private void Attack(List<List<string>> transmissions, TcpClient tcpClient)
@@ -2472,6 +2574,46 @@ namespace TerminalDecay5Server
             o.Offence[Cmn.OffenceType[Cmn.OffTenum.Scout]] = 5;
 
             universe.outposts.Add(o);
+        }
+
+        private void SendAllUnits(List<List<string>> transmissions, TcpClient tcpClient)
+        {
+
+            try
+            {
+                int playerid = getPlayer(transmissions[0][1]).PlayerID;
+            }
+            catch (Exception)
+            {
+                rejectConnection(21, "player token wrong", tcpClient);
+                return;
+            }
+
+            string response = MessageConstants.MessageTypes[21] + MessageConstants.nextMessageToken;
+
+            try
+            {
+                if (getPlayer(transmissions[0][1]).PlayerID == getOutpost(transmissions[0][2], transmissions[0][3]).OwnerID)
+                {
+                    Player pl = getPlayer(transmissions[0][1]);
+                    response += SendOffenceOntile(transmissions);
+                    response += SendDefenceOnTile(transmissions);
+                }
+            }
+            catch
+            {
+                response += "Player and outpost owner not the same";
+            }
+
+            response += MessageConstants.messageCompleteToken;
+            NetworkStream clientStream = tcpClient.GetStream();
+            ASCIIEncoding encoder = new ASCIIEncoding();
+
+            byte[] buffer = encoder.GetBytes(response);
+
+            clientStream.Write(buffer, 0, buffer.Length);
+            clientStream.Flush();
+
         }
     }
 }

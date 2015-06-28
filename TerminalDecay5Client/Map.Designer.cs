@@ -194,6 +194,32 @@ namespace TerminalDecay5Client
             this.button4 = new System.Windows.Forms.Button();
             this.button5 = new System.Windows.Forms.Button();
             this.button6 = new System.Windows.Forms.Button();
+            this.cmdReinforce = new System.Windows.Forms.Button();
+            this.txtReinforceBattleship = new System.Windows.Forms.TextBox();
+            this.txtReinforceCarrier = new System.Windows.Forms.TextBox();
+            this.txtReinforceDestroyer = new System.Windows.Forms.TextBox();
+            this.txtReinforceFrigate = new System.Windows.Forms.TextBox();
+            this.txtReinforceBomber = new System.Windows.Forms.TextBox();
+            this.txtReinforceGunship = new System.Windows.Forms.TextBox();
+            this.txtReinforceScout = new System.Windows.Forms.TextBox();
+            this.lblReinforceBattleShip = new System.Windows.Forms.Label();
+            this.lblReinforceCarrier = new System.Windows.Forms.Label();
+            this.lblReinforceDestroyer = new System.Windows.Forms.Label();
+            this.lblReinforceFrigate = new System.Windows.Forms.Label();
+            this.lblReinforceBomber = new System.Windows.Forms.Label();
+            this.lblReinforceGunship = new System.Windows.Forms.Label();
+            this.lblReinforceScout = new System.Windows.Forms.Label();
+            this.lblReinforceDroneBase = new System.Windows.Forms.Label();
+            this.lblReinforceArtillery = new System.Windows.Forms.Label();
+            this.lblReinforceTurret = new System.Windows.Forms.Label();
+            this.lblReinforceGunner = new System.Windows.Forms.Label();
+            this.lblReinforcePatrol = new System.Windows.Forms.Label();
+            this.txtReinforceDroneBase = new System.Windows.Forms.TextBox();
+            this.txtReinforceArtillery = new System.Windows.Forms.TextBox();
+            this.txtReinforceTurret = new System.Windows.Forms.TextBox();
+            this.txtReinforceGunner = new System.Windows.Forms.TextBox();
+            this.txtReinforcePartrol = new System.Windows.Forms.TextBox();
+            this.button7 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.MapCanvas)).BeginInit();
             this.SuspendLayout();
             // 
@@ -1607,7 +1633,7 @@ namespace TerminalDecay5Client
             // lblAttackBattleship
             // 
             this.lblAttackBattleship.AutoSize = true;
-            this.lblAttackBattleship.Location = new System.Drawing.Point(1168, 508);
+            this.lblAttackBattleship.Location = new System.Drawing.Point(834, 519);
             this.lblAttackBattleship.Name = "lblAttackBattleship";
             this.lblAttackBattleship.Size = new System.Drawing.Size(49, 13);
             this.lblAttackBattleship.TabIndex = 164;
@@ -1617,7 +1643,7 @@ namespace TerminalDecay5Client
             // lblAttackCarrier
             // 
             this.lblAttackCarrier.AutoSize = true;
-            this.lblAttackCarrier.Location = new System.Drawing.Point(1168, 462);
+            this.lblAttackCarrier.Location = new System.Drawing.Point(834, 473);
             this.lblAttackCarrier.Name = "lblAttackCarrier";
             this.lblAttackCarrier.Size = new System.Drawing.Size(36, 13);
             this.lblAttackCarrier.TabIndex = 163;
@@ -1627,7 +1653,7 @@ namespace TerminalDecay5Client
             // lblAttackDestroyer
             // 
             this.lblAttackDestroyer.AutoSize = true;
-            this.lblAttackDestroyer.Location = new System.Drawing.Point(1168, 416);
+            this.lblAttackDestroyer.Location = new System.Drawing.Point(834, 427);
             this.lblAttackDestroyer.Name = "lblAttackDestroyer";
             this.lblAttackDestroyer.Size = new System.Drawing.Size(50, 13);
             this.lblAttackDestroyer.TabIndex = 162;
@@ -1637,7 +1663,7 @@ namespace TerminalDecay5Client
             // lblAttaackFrigate
             // 
             this.lblAttaackFrigate.AutoSize = true;
-            this.lblAttaackFrigate.Location = new System.Drawing.Point(1168, 370);
+            this.lblAttaackFrigate.Location = new System.Drawing.Point(834, 381);
             this.lblAttaackFrigate.Name = "lblAttaackFrigate";
             this.lblAttaackFrigate.Size = new System.Drawing.Size(36, 13);
             this.lblAttaackFrigate.TabIndex = 161;
@@ -1647,7 +1673,7 @@ namespace TerminalDecay5Client
             // lblAttackBomber
             // 
             this.lblAttackBomber.AutoSize = true;
-            this.lblAttackBomber.Location = new System.Drawing.Point(1168, 326);
+            this.lblAttackBomber.Location = new System.Drawing.Point(834, 337);
             this.lblAttackBomber.Name = "lblAttackBomber";
             this.lblAttackBomber.Size = new System.Drawing.Size(45, 13);
             this.lblAttackBomber.TabIndex = 160;
@@ -1657,7 +1683,7 @@ namespace TerminalDecay5Client
             // lblAttackGunship
             // 
             this.lblAttackGunship.AutoSize = true;
-            this.lblAttackGunship.Location = new System.Drawing.Point(1168, 280);
+            this.lblAttackGunship.Location = new System.Drawing.Point(834, 291);
             this.lblAttackGunship.Name = "lblAttackGunship";
             this.lblAttackGunship.Size = new System.Drawing.Size(47, 13);
             this.lblAttackGunship.TabIndex = 159;
@@ -1667,7 +1693,7 @@ namespace TerminalDecay5Client
             // lblAttackScout
             // 
             this.lblAttackScout.AutoSize = true;
-            this.lblAttackScout.Location = new System.Drawing.Point(1168, 235);
+            this.lblAttackScout.Location = new System.Drawing.Point(834, 247);
             this.lblAttackScout.Name = "lblAttackScout";
             this.lblAttackScout.Size = new System.Drawing.Size(36, 13);
             this.lblAttackScout.TabIndex = 158;
@@ -1676,7 +1702,7 @@ namespace TerminalDecay5Client
             // 
             // txtAttackBattleship
             // 
-            this.txtAttackBattleship.Location = new System.Drawing.Point(1282, 509);
+            this.txtAttackBattleship.Location = new System.Drawing.Point(948, 520);
             this.txtAttackBattleship.Name = "txtAttackBattleship";
             this.txtAttackBattleship.Size = new System.Drawing.Size(100, 20);
             this.txtAttackBattleship.TabIndex = 171;
@@ -1685,7 +1711,7 @@ namespace TerminalDecay5Client
             // 
             // txtAttackCarrier
             // 
-            this.txtAttackCarrier.Location = new System.Drawing.Point(1282, 463);
+            this.txtAttackCarrier.Location = new System.Drawing.Point(948, 474);
             this.txtAttackCarrier.Name = "txtAttackCarrier";
             this.txtAttackCarrier.Size = new System.Drawing.Size(100, 20);
             this.txtAttackCarrier.TabIndex = 170;
@@ -1694,7 +1720,7 @@ namespace TerminalDecay5Client
             // 
             // txtAttackDestroyer
             // 
-            this.txtAttackDestroyer.Location = new System.Drawing.Point(1282, 417);
+            this.txtAttackDestroyer.Location = new System.Drawing.Point(948, 428);
             this.txtAttackDestroyer.Name = "txtAttackDestroyer";
             this.txtAttackDestroyer.Size = new System.Drawing.Size(100, 20);
             this.txtAttackDestroyer.TabIndex = 169;
@@ -1703,7 +1729,7 @@ namespace TerminalDecay5Client
             // 
             // txtAttackFrigate
             // 
-            this.txtAttackFrigate.Location = new System.Drawing.Point(1282, 371);
+            this.txtAttackFrigate.Location = new System.Drawing.Point(948, 382);
             this.txtAttackFrigate.Name = "txtAttackFrigate";
             this.txtAttackFrigate.Size = new System.Drawing.Size(100, 20);
             this.txtAttackFrigate.TabIndex = 168;
@@ -1712,7 +1738,7 @@ namespace TerminalDecay5Client
             // 
             // txtAttackBomber
             // 
-            this.txtAttackBomber.Location = new System.Drawing.Point(1282, 327);
+            this.txtAttackBomber.Location = new System.Drawing.Point(948, 338);
             this.txtAttackBomber.Name = "txtAttackBomber";
             this.txtAttackBomber.Size = new System.Drawing.Size(100, 20);
             this.txtAttackBomber.TabIndex = 167;
@@ -1721,7 +1747,7 @@ namespace TerminalDecay5Client
             // 
             // txtAttackGunship
             // 
-            this.txtAttackGunship.Location = new System.Drawing.Point(1282, 281);
+            this.txtAttackGunship.Location = new System.Drawing.Point(948, 292);
             this.txtAttackGunship.Name = "txtAttackGunship";
             this.txtAttackGunship.Size = new System.Drawing.Size(100, 20);
             this.txtAttackGunship.TabIndex = 166;
@@ -1730,7 +1756,7 @@ namespace TerminalDecay5Client
             // 
             // txtAttackScout
             // 
-            this.txtAttackScout.Location = new System.Drawing.Point(1282, 236);
+            this.txtAttackScout.Location = new System.Drawing.Point(948, 247);
             this.txtAttackScout.Name = "txtAttackScout";
             this.txtAttackScout.Size = new System.Drawing.Size(100, 20);
             this.txtAttackScout.TabIndex = 165;
@@ -1739,7 +1765,7 @@ namespace TerminalDecay5Client
             // 
             // btnSendAttack
             // 
-            this.btnSendAttack.Location = new System.Drawing.Point(1351, 548);
+            this.btnSendAttack.Location = new System.Drawing.Point(1017, 559);
             this.btnSendAttack.Name = "btnSendAttack";
             this.btnSendAttack.Size = new System.Drawing.Size(119, 23);
             this.btnSendAttack.TabIndex = 172;
@@ -1800,10 +1826,286 @@ namespace TerminalDecay5Client
             this.button6.UseVisualStyleBackColor = true;
             this.button6.Click += new System.EventHandler(this.button6_Click);
             // 
+            // cmdReinforce
+            // 
+            this.cmdReinforce.Location = new System.Drawing.Point(1323, 705);
+            this.cmdReinforce.Name = "cmdReinforce";
+            this.cmdReinforce.Size = new System.Drawing.Size(119, 23);
+            this.cmdReinforce.TabIndex = 192;
+            this.cmdReinforce.Text = "Reinforce";
+            this.cmdReinforce.UseVisualStyleBackColor = true;
+            this.cmdReinforce.Visible = false;
+            this.cmdReinforce.Click += new System.EventHandler(this.cmdReinforce_Click);
+            // 
+            // txtReinforceBattleship
+            // 
+            this.txtReinforceBattleship.Location = new System.Drawing.Point(1233, 396);
+            this.txtReinforceBattleship.Name = "txtReinforceBattleship";
+            this.txtReinforceBattleship.Size = new System.Drawing.Size(100, 20);
+            this.txtReinforceBattleship.TabIndex = 191;
+            this.txtReinforceBattleship.Text = "0";
+            this.txtReinforceBattleship.Visible = false;
+            // 
+            // txtReinforceCarrier
+            // 
+            this.txtReinforceCarrier.Location = new System.Drawing.Point(1233, 350);
+            this.txtReinforceCarrier.Name = "txtReinforceCarrier";
+            this.txtReinforceCarrier.Size = new System.Drawing.Size(100, 20);
+            this.txtReinforceCarrier.TabIndex = 190;
+            this.txtReinforceCarrier.Text = "0";
+            this.txtReinforceCarrier.Visible = false;
+            // 
+            // txtReinforceDestroyer
+            // 
+            this.txtReinforceDestroyer.Location = new System.Drawing.Point(1233, 304);
+            this.txtReinforceDestroyer.Name = "txtReinforceDestroyer";
+            this.txtReinforceDestroyer.Size = new System.Drawing.Size(100, 20);
+            this.txtReinforceDestroyer.TabIndex = 189;
+            this.txtReinforceDestroyer.Text = "0";
+            this.txtReinforceDestroyer.Visible = false;
+            // 
+            // txtReinforceFrigate
+            // 
+            this.txtReinforceFrigate.Location = new System.Drawing.Point(1233, 258);
+            this.txtReinforceFrigate.Name = "txtReinforceFrigate";
+            this.txtReinforceFrigate.Size = new System.Drawing.Size(100, 20);
+            this.txtReinforceFrigate.TabIndex = 188;
+            this.txtReinforceFrigate.Text = "0";
+            this.txtReinforceFrigate.Visible = false;
+            // 
+            // txtReinforceBomber
+            // 
+            this.txtReinforceBomber.Location = new System.Drawing.Point(1233, 214);
+            this.txtReinforceBomber.Name = "txtReinforceBomber";
+            this.txtReinforceBomber.Size = new System.Drawing.Size(100, 20);
+            this.txtReinforceBomber.TabIndex = 187;
+            this.txtReinforceBomber.Text = "0";
+            this.txtReinforceBomber.Visible = false;
+            // 
+            // txtReinforceGunship
+            // 
+            this.txtReinforceGunship.Location = new System.Drawing.Point(1233, 168);
+            this.txtReinforceGunship.Name = "txtReinforceGunship";
+            this.txtReinforceGunship.Size = new System.Drawing.Size(100, 20);
+            this.txtReinforceGunship.TabIndex = 186;
+            this.txtReinforceGunship.Text = "0";
+            this.txtReinforceGunship.Visible = false;
+            // 
+            // txtReinforceScout
+            // 
+            this.txtReinforceScout.Location = new System.Drawing.Point(1233, 123);
+            this.txtReinforceScout.Name = "txtReinforceScout";
+            this.txtReinforceScout.Size = new System.Drawing.Size(100, 20);
+            this.txtReinforceScout.TabIndex = 185;
+            this.txtReinforceScout.Text = "0";
+            this.txtReinforceScout.Visible = false;
+            // 
+            // lblReinforceBattleShip
+            // 
+            this.lblReinforceBattleShip.AutoSize = true;
+            this.lblReinforceBattleShip.Location = new System.Drawing.Point(1119, 395);
+            this.lblReinforceBattleShip.Name = "lblReinforceBattleShip";
+            this.lblReinforceBattleShip.Size = new System.Drawing.Size(49, 13);
+            this.lblReinforceBattleShip.TabIndex = 184;
+            this.lblReinforceBattleShip.Text = "batleship";
+            this.lblReinforceBattleShip.Visible = false;
+            // 
+            // lblReinforceCarrier
+            // 
+            this.lblReinforceCarrier.AutoSize = true;
+            this.lblReinforceCarrier.Location = new System.Drawing.Point(1119, 349);
+            this.lblReinforceCarrier.Name = "lblReinforceCarrier";
+            this.lblReinforceCarrier.Size = new System.Drawing.Size(36, 13);
+            this.lblReinforceCarrier.TabIndex = 183;
+            this.lblReinforceCarrier.Text = "carrier";
+            this.lblReinforceCarrier.Visible = false;
+            // 
+            // lblReinforceDestroyer
+            // 
+            this.lblReinforceDestroyer.AutoSize = true;
+            this.lblReinforceDestroyer.Location = new System.Drawing.Point(1119, 303);
+            this.lblReinforceDestroyer.Name = "lblReinforceDestroyer";
+            this.lblReinforceDestroyer.Size = new System.Drawing.Size(50, 13);
+            this.lblReinforceDestroyer.TabIndex = 182;
+            this.lblReinforceDestroyer.Text = "destroyer";
+            this.lblReinforceDestroyer.Visible = false;
+            // 
+            // lblReinforceFrigate
+            // 
+            this.lblReinforceFrigate.AutoSize = true;
+            this.lblReinforceFrigate.Location = new System.Drawing.Point(1119, 257);
+            this.lblReinforceFrigate.Name = "lblReinforceFrigate";
+            this.lblReinforceFrigate.Size = new System.Drawing.Size(36, 13);
+            this.lblReinforceFrigate.TabIndex = 181;
+            this.lblReinforceFrigate.Text = "frigate";
+            this.lblReinforceFrigate.Visible = false;
+            // 
+            // lblReinforceBomber
+            // 
+            this.lblReinforceBomber.AutoSize = true;
+            this.lblReinforceBomber.Location = new System.Drawing.Point(1119, 213);
+            this.lblReinforceBomber.Name = "lblReinforceBomber";
+            this.lblReinforceBomber.Size = new System.Drawing.Size(45, 13);
+            this.lblReinforceBomber.TabIndex = 180;
+            this.lblReinforceBomber.Text = "bomber:";
+            this.lblReinforceBomber.Visible = false;
+            // 
+            // lblReinforceGunship
+            // 
+            this.lblReinforceGunship.AutoSize = true;
+            this.lblReinforceGunship.Location = new System.Drawing.Point(1119, 167);
+            this.lblReinforceGunship.Name = "lblReinforceGunship";
+            this.lblReinforceGunship.Size = new System.Drawing.Size(47, 13);
+            this.lblReinforceGunship.TabIndex = 179;
+            this.lblReinforceGunship.Text = "gunship:";
+            this.lblReinforceGunship.Visible = false;
+            // 
+            // lblReinforceScout
+            // 
+            this.lblReinforceScout.AutoSize = true;
+            this.lblReinforceScout.Location = new System.Drawing.Point(1119, 123);
+            this.lblReinforceScout.Name = "lblReinforceScout";
+            this.lblReinforceScout.Size = new System.Drawing.Size(36, 13);
+            this.lblReinforceScout.TabIndex = 178;
+            this.lblReinforceScout.Text = "scout:";
+            this.lblReinforceScout.Visible = false;
+            // 
+            // lblReinforceDroneBase
+            // 
+            this.lblReinforceDroneBase.AutoSize = true;
+            this.lblReinforceDroneBase.Location = new System.Drawing.Point(1121, 633);
+            this.lblReinforceDroneBase.Name = "lblReinforceDroneBase";
+            this.lblReinforceDroneBase.Size = new System.Drawing.Size(63, 13);
+            this.lblReinforceDroneBase.TabIndex = 197;
+            this.lblReinforceDroneBase.Text = "drone base:";
+            this.lblReinforceDroneBase.Visible = false;
+            // 
+            // lblReinforceArtillery
+            // 
+            this.lblReinforceArtillery.AutoSize = true;
+            this.lblReinforceArtillery.Location = new System.Drawing.Point(1121, 587);
+            this.lblReinforceArtillery.Name = "lblReinforceArtillery";
+            this.lblReinforceArtillery.Size = new System.Drawing.Size(42, 13);
+            this.lblReinforceArtillery.TabIndex = 196;
+            this.lblReinforceArtillery.Text = "artillery:";
+            this.lblReinforceArtillery.Visible = false;
+            // 
+            // lblReinforceTurret
+            // 
+            this.lblReinforceTurret.AutoSize = true;
+            this.lblReinforceTurret.Location = new System.Drawing.Point(1121, 543);
+            this.lblReinforceTurret.Name = "lblReinforceTurret";
+            this.lblReinforceTurret.Size = new System.Drawing.Size(34, 13);
+            this.lblReinforceTurret.TabIndex = 195;
+            this.lblReinforceTurret.Text = "turret:";
+            this.lblReinforceTurret.Visible = false;
+            // 
+            // lblReinforceGunner
+            // 
+            this.lblReinforceGunner.AutoSize = true;
+            this.lblReinforceGunner.Location = new System.Drawing.Point(1121, 497);
+            this.lblReinforceGunner.Name = "lblReinforceGunner";
+            this.lblReinforceGunner.Size = new System.Drawing.Size(43, 13);
+            this.lblReinforceGunner.TabIndex = 194;
+            this.lblReinforceGunner.Text = "gunner:";
+            this.lblReinforceGunner.Visible = false;
+            // 
+            // lblReinforcePatrol
+            // 
+            this.lblReinforcePatrol.AutoSize = true;
+            this.lblReinforcePatrol.Location = new System.Drawing.Point(1121, 452);
+            this.lblReinforcePatrol.Name = "lblReinforcePatrol";
+            this.lblReinforcePatrol.Size = new System.Drawing.Size(36, 13);
+            this.lblReinforcePatrol.TabIndex = 193;
+            this.lblReinforcePatrol.Text = "patrol:";
+            this.lblReinforcePatrol.Visible = false;
+            // 
+            // txtReinforceDroneBase
+            // 
+            this.txtReinforceDroneBase.Location = new System.Drawing.Point(1233, 628);
+            this.txtReinforceDroneBase.Name = "txtReinforceDroneBase";
+            this.txtReinforceDroneBase.Size = new System.Drawing.Size(100, 20);
+            this.txtReinforceDroneBase.TabIndex = 202;
+            this.txtReinforceDroneBase.Text = "0";
+            this.txtReinforceDroneBase.Visible = false;
+            // 
+            // txtReinforceArtillery
+            // 
+            this.txtReinforceArtillery.Location = new System.Drawing.Point(1233, 582);
+            this.txtReinforceArtillery.Name = "txtReinforceArtillery";
+            this.txtReinforceArtillery.Size = new System.Drawing.Size(100, 20);
+            this.txtReinforceArtillery.TabIndex = 201;
+            this.txtReinforceArtillery.Text = "0";
+            this.txtReinforceArtillery.Visible = false;
+            // 
+            // txtReinforceTurret
+            // 
+            this.txtReinforceTurret.Location = new System.Drawing.Point(1233, 536);
+            this.txtReinforceTurret.Name = "txtReinforceTurret";
+            this.txtReinforceTurret.Size = new System.Drawing.Size(100, 20);
+            this.txtReinforceTurret.TabIndex = 200;
+            this.txtReinforceTurret.Text = "0";
+            this.txtReinforceTurret.Visible = false;
+            // 
+            // txtReinforceGunner
+            // 
+            this.txtReinforceGunner.Location = new System.Drawing.Point(1233, 490);
+            this.txtReinforceGunner.Name = "txtReinforceGunner";
+            this.txtReinforceGunner.Size = new System.Drawing.Size(100, 20);
+            this.txtReinforceGunner.TabIndex = 199;
+            this.txtReinforceGunner.Text = "0";
+            this.txtReinforceGunner.Visible = false;
+            // 
+            // txtReinforcePartrol
+            // 
+            this.txtReinforcePartrol.Location = new System.Drawing.Point(1233, 446);
+            this.txtReinforcePartrol.Name = "txtReinforcePartrol";
+            this.txtReinforcePartrol.Size = new System.Drawing.Size(100, 20);
+            this.txtReinforcePartrol.TabIndex = 198;
+            this.txtReinforcePartrol.Text = "0";
+            this.txtReinforcePartrol.Visible = false;
+            // 
+            // button7
+            // 
+            this.button7.Location = new System.Drawing.Point(1233, 47);
+            this.button7.Name = "button7";
+            this.button7.Size = new System.Drawing.Size(62, 23);
+            this.button7.TabIndex = 203;
+            this.button7.Text = "Reinforce";
+            this.button7.UseVisualStyleBackColor = true;
+            this.button7.Visible = false;
+            this.button7.Click += new System.EventHandler(this.button7_Click);
+            // 
             // Map
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.ClientSize = new System.Drawing.Size(1498, 831);
+            this.Controls.Add(this.button7);
+            this.Controls.Add(this.txtReinforceDroneBase);
+            this.Controls.Add(this.txtReinforceArtillery);
+            this.Controls.Add(this.txtReinforceTurret);
+            this.Controls.Add(this.txtReinforceGunner);
+            this.Controls.Add(this.txtReinforcePartrol);
+            this.Controls.Add(this.lblReinforceDroneBase);
+            this.Controls.Add(this.lblReinforceArtillery);
+            this.Controls.Add(this.lblReinforceTurret);
+            this.Controls.Add(this.lblReinforceGunner);
+            this.Controls.Add(this.lblReinforcePatrol);
+            this.Controls.Add(this.cmdReinforce);
+            this.Controls.Add(this.txtReinforceBattleship);
+            this.Controls.Add(this.txtReinforceCarrier);
+            this.Controls.Add(this.txtReinforceDestroyer);
+            this.Controls.Add(this.txtReinforceFrigate);
+            this.Controls.Add(this.txtReinforceBomber);
+            this.Controls.Add(this.txtReinforceGunship);
+            this.Controls.Add(this.txtReinforceScout);
+            this.Controls.Add(this.lblReinforceBattleShip);
+            this.Controls.Add(this.lblReinforceCarrier);
+            this.Controls.Add(this.lblReinforceDestroyer);
+            this.Controls.Add(this.lblReinforceFrigate);
+            this.Controls.Add(this.lblReinforceBomber);
+            this.Controls.Add(this.lblReinforceGunship);
+            this.Controls.Add(this.lblReinforceScout);
             this.Controls.Add(this.button6);
             this.Controls.Add(this.button5);
             this.Controls.Add(this.button4);
@@ -2139,6 +2441,32 @@ namespace TerminalDecay5Client
         private Button button4;
         private Button button5;
         private Button button6;
+        private Button cmdReinforce;
+        private TextBox txtReinforceBattleship;
+        private TextBox txtReinforceCarrier;
+        private TextBox txtReinforceDestroyer;
+        private TextBox txtReinforceFrigate;
+        private TextBox txtReinforceBomber;
+        private TextBox txtReinforceGunship;
+        private TextBox txtReinforceScout;
+        private Label lblReinforceBattleShip;
+        private Label lblReinforceCarrier;
+        private Label lblReinforceDestroyer;
+        private Label lblReinforceFrigate;
+        private Label lblReinforceBomber;
+        private Label lblReinforceGunship;
+        private Label lblReinforceScout;
+        private Label lblReinforceDroneBase;
+        private Label lblReinforceArtillery;
+        private Label lblReinforceTurret;
+        private Label lblReinforceGunner;
+        private Label lblReinforcePatrol;
+        private TextBox txtReinforceDroneBase;
+        private TextBox txtReinforceArtillery;
+        private TextBox txtReinforceTurret;
+        private TextBox txtReinforceGunner;
+        private TextBox txtReinforcePartrol;
+        private Button button7;
     }
 }
 
