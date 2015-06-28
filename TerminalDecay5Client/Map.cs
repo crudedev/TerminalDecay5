@@ -29,7 +29,7 @@ namespace TerminalDecay5Client
         private int _currentPlanet = 0;
         private int _currentSolarSystem = 0;
         private int _currentCluster = 0;
-        
+
         Messages frmMessage = new Messages();
 
         public Map()
@@ -245,7 +245,7 @@ namespace TerminalDecay5Client
                         x = x * 26;
                         fx = x * result;
                         x = (origX) * 26;
-                        x =   x+Convert.ToInt32(fx) + 13;
+                        x = x + Convert.ToInt32(fx) + 13;
                     }
                     else
                     {
@@ -281,6 +281,61 @@ namespace TerminalDecay5Client
                 }
             }
 
+            //draw the special structures
+
+            foreach (List<string> l in transmission)
+            {
+                if (l.Count == 4)
+                {
+                    if (l[2] == "ResourceWell")
+                    {
+                        c = Color.White;
+
+                        switch (l[3])
+                        {
+                            case "1":
+                                c = Color.Orchid;
+                                break;
+                            case "2":
+                                c = Color.Aqua;
+                                break;
+                            case "3":
+                                c = Color.Yellow;
+                                break;
+                            case "4":
+                                c = Color.Olive;
+                                break;
+                        }
+                    }
+                    else
+                    {
+                        switch(l[2])
+                        {
+                            case "Portal":
+                                c = Color.AliceBlue;
+                                break;
+
+                            case "OffenceBoost":
+                                c = Color.DarkRed;
+                                break;
+
+                            case "DeffenceBoost":
+                                c = Color.DarkOrange;
+                                break;
+
+                            case "ManufacturingBoost":
+                                c = Color.DarkGreen;
+                                break;
+                        }
+                    }
+
+                    maptile = new Bitmap(26, 26);
+                    tilegraph = Graphics.FromImage(maptile);
+                    b = new SolidBrush(c);
+                    tilegraph.FillRectangle(b, 0, 0, 25, 25);
+                    mapgraph.DrawImage(maptile, new Point(Convert.ToInt32(l[0]) * 26, Convert.ToInt32(l[1]) * 26));
+                }
+            }
 
             MapCanvas.Image = MapImage;
         }
