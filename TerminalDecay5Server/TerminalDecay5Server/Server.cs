@@ -500,6 +500,18 @@ namespace TerminalDecay5Server
             Outpost o = u.outposts[item.OutpostId];
             long FabCapacity = o.Buildings[Cmn.BuildType[Cmn.BldTenum.Fabricator]];
 
+            float fabBuff = 0;
+
+            List<SpecialStructure> fabStructures = FindLocalStructures(u.outposts[item.OutpostId].Address, u.outposts[item.OutpostId].Tile, u);
+            foreach (var special in fabStructures)
+            {
+                if (special.specialType == Cmn.SpecialType.ManufacturingBoost)
+                {
+                    fabBuff += special.BuffSize;
+                }
+            }
+
+            FabCapacity = Convert.ToInt64(FabCapacity * (1 + fabBuff));
 
             long itemCompleted = 99999999999999;
 
