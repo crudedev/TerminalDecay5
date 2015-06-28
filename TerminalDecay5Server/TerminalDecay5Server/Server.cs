@@ -262,6 +262,64 @@ namespace TerminalDecay5Server
                 u.TroopMovements.Remove(item);
             }
 
+            foreach (var item in u.SpecialStructures)
+            {
+                if(item.specialType == Cmn.SpecialType.ResourceWell)
+                {
+                    List<Outpost> localOutpost = FindLocalOutpost(item.Address, item.Tile, u);
+                    foreach (var outpost in localOutpost)
+                    {
+                        u.players[outpost.OwnerID].Resources[item.resourceType] += item.ProductionSize;
+                    }
+                }
+            }
+
+        }
+
+        private static List<Outpost> FindLocalOutpost(UniversalAddress a, Position p, Universe u)
+        {
+
+            List<Outpost> LocalOutposts = new List<Outpost>();
+
+            for (int i = 0; i < 9; i++)
+            {
+
+                int x = (i % 3) - 1;
+                int y = ((i - (i % 3)) / 3) - 1;
+                
+                x = p.X + x;
+                y = p.Y + y;
+
+                bool blocked = false;
+
+                if (x < 0 && x > 26)
+                {
+                    blocked = true;
+                }
+
+                if (y < 0 && y > 26)
+                {
+                    blocked = true;
+                }
+
+                if (!blocked)
+                {
+                    foreach (var item in u.outposts)
+                    {
+                        if (item.Address == a)
+                        {
+                            if (item.Tile.X == x)
+                            {
+                                if (item.Tile.Y == y)
+                                {
+                                    LocalOutposts.Add(item);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return LocalOutposts;
         }
 
         private static void CreateSpecialStructure(Outpost outpost, Universe u)
