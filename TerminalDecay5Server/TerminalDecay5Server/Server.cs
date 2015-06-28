@@ -104,14 +104,14 @@ namespace TerminalDecay5Server
 
 
                 //check for SpecialStructure creation
-                while(outpost.CoreShards >=5)
+                while (outpost.CoreShards >= 5)
                 {
-                    outpost.CoreShards -= 5;  
-                    CreateSpecialStructure(outpost, u);                    
+                    outpost.CoreShards -= 5;
+                    CreateSpecialStructure(outpost, u);
                 }
 
                 //update based on SpecialStructures
-                
+
 
             }
 
@@ -283,7 +283,7 @@ namespace TerminalDecay5Server
                 {
                     tileToTest = 9 % (space + i);
                 }
-                
+
                 int x = (tileToTest % 3) - 1;
                 int y = ((tileToTest - (tileToTest % 3)) / 3) - 1;
 
@@ -306,7 +306,7 @@ namespace TerminalDecay5Server
                 {
                     foreach (var item in u.outposts)
                     {
-                        if (item.Adress == outpost.Adress)
+                        if (item.Address == outpost.Address)
                         {
                             if (item.Tile.X == x)
                             {
@@ -320,7 +320,7 @@ namespace TerminalDecay5Server
 
                     foreach (var item in u.SpecialStructures)
                     {
-                        if(outpost.Adress == item.Address)
+                        if (outpost.Address == item.Address)
                         {
                             if (item.Tile.X == x)
                             {
@@ -339,24 +339,24 @@ namespace TerminalDecay5Server
                     p = new Position(x, y);
                     SpecialStructure ss = new SpecialStructure();
                     ss.Tile = p;
-                    
+
                     //choose between resource bonus and the others; 
 
                     //find if there are any 
-                    if(u.r.Next(1000)<800)
+                    if (u.r.Next(1000) < 800)
                     {
-                       ss.specialType = Cmn.SpecialType.ResourceWell;
-                       ss.resourceType = u.r.Next(1, 5);
-                       ss.ProductionSize = u.r.Next(100, 1000);
+                        ss.specialType = Cmn.SpecialType.ResourceWell;
+                        ss.resourceType = u.r.Next(1, 5);
+                        ss.ProductionSize = u.r.Next(100, 1000);
                     }
                     else
                     {
                         //create a non resource one
-                        if(u.r.Next(1000)<800)
+                        if (u.r.Next(1000) < 800)
                         {
                             int type = u.r.Next(3);
                             float boost = u.r.Next(100) / 1000;
-                            switch(type)
+                            switch (type)
                             {
                                 case 0:
                                     ss.specialType = Cmn.SpecialType.DeffenceBoost;
@@ -377,7 +377,7 @@ namespace TerminalDecay5Server
                             ss.specialType = Cmn.SpecialType.Portal;
                         }
                     }
-                    ss.Address = outpost.Adress;
+                    ss.Address = outpost.Address;
                     u.SpecialStructures.Add(ss);
                 }
                 else
@@ -1247,7 +1247,7 @@ namespace TerminalDecay5Server
 
                 foreach (var item in Cmn.Resource)
                 {
-                    u.players[t.OriginOutpost.OwnerID].Resources[item.Value] += Convert.ToInt64(u.players[t.DestinationOutpost.Adress.PlanetID].Resources[item.Value] * removeRes);
+                    u.players[t.OriginOutpost.OwnerID].Resources[item.Value] += Convert.ToInt64(u.players[t.DestinationOutpost.Address.PlanetID].Resources[item.Value] * removeRes);
 
                     AttackerMessage += " Gained " + item.Key + ": " + Convert.ToString(Convert.ToInt64(u.players[t.DestinationOutpost.OwnerID].Resources[item.Value] * removeRes));
                     DeffenceMessage += " Lost " + item.Key + ": " + Convert.ToString(Convert.ToInt64(u.players[t.DestinationOutpost.OwnerID].Resources[item.Value] * removeRes));
@@ -1836,20 +1836,69 @@ namespace TerminalDecay5Server
                 o.ID = universe.outposts.Count;
                 o.OwnerID = newp.PlayerID;
 
-                Position v = new Position();
-                Random r = new Random();
-                v.X = r.Next(3, 22);
-                v.Y = r.Next(3, 22);
-
                 o.Tile = new Position();
 
+
+
+                o.Address = new UniversalAddress();
+                o.Address.ClusterID = 0;
+                o.Address.SolarSytemID = 0;
+                o.Address.PlanetID = 0;
+
+
+                Position v = new Position();
+                Random r = new Random();
+
+                bool blocked = true;
+                
+                int tilecount = 0;
+
+                while (blocked == true)
+                {
+                    blocked = false;
+                    tilecount++;
+                    v.X = r.Next(3, 22);
+                    v.Y = r.Next(3, 22);
+                    foreach (var item in universe.outposts)
+                    {
+                        if (item.Address == o.Address)
+                        {
+                            if (item.Tile == v)
+                            {
+                                blocked = true;
+                            }
+                        }
+                    }
+
+                    foreach (var item in universe.SpecialStructures)
+                    {
+                        if (item.Address == o.Address)
+                        {
+                            if (item.Tile == v)
+                            {
+                                blocked = true;
+                            }
+                        }
+                    }
+                    if(tilecount > 700)
+                    {
+                        o.Address.PlanetID++;
+                        if(o.Address.PlanetID > universe.clusters[o.Address.ClusterID].solarSystems[o.Address.SolarSytemID].planets.Count)
+                        {
+                            o.Address.PlanetID = 0;
+                            o.Address.SolarSytemID++;
+                            if(o.Address.SolarSytemID >universe.clusters[o.Address.ClusterID].solarSystems.Count)
+                            {
+                                o.Address.PlanetID = 0;
+                                o.Address.SolarSytemID = 0;
+                                o.Address.ClusterID++;
+                            }
+
+                        }
+                    }
+
+                }
                 o.Tile = v;
-
-                o.Adress = new UniversalAddress();
-                o.Adress.ClusterID = 0;
-                o.Adress.SolarSytemID = 0;
-                o.Adress.PlanetID = 0;
-
                 //fortest
                 o.CoreShards = 5;
                 //fortest
@@ -1857,7 +1906,7 @@ namespace TerminalDecay5Server
                 newp.home = new UniversalAddress();
 
 
-                newp.home = o.Adress;
+                newp.home = o.Address;
 
                 o.Buildings[Cmn.BuildType[Cmn.BldTenum.Mine]] = 1;
                 o.Buildings[Cmn.BuildType[Cmn.BldTenum.Farm]] = 2;
@@ -1959,7 +2008,7 @@ namespace TerminalDecay5Server
 
             foreach (Outpost o in universe.outposts)
             {
-                if (o.Adress.ClusterID.ToString() == message[0][4] && o.Adress.SolarSytemID.ToString() == message[0][5] && o.Adress.PlanetID == planetId)
+                if (o.Address.ClusterID.ToString() == message[0][4] && o.Address.SolarSytemID.ToString() == message[0][5] && o.Address.PlanetID == planetId)
                 {
                     response += o.Tile.X + MessageConstants.splitMessageToken + o.Tile.Y + MessageConstants.splitMessageToken + o.OwnerID + MessageConstants.splitMessageToken;
                     if (playerid == o.OwnerID)
@@ -1995,7 +2044,7 @@ namespace TerminalDecay5Server
 
             foreach (var item in universe.TroopMovements)
             {
-                if (item.OriginOutpost.Adress.ClusterID.ToString() == message[0][4] && item.OriginOutpost.Adress.SolarSytemID.ToString() == message[0][5] && item.OriginOutpost.Adress.PlanetID == planetId)
+                if (item.OriginOutpost.Address.ClusterID.ToString() == message[0][4] && item.OriginOutpost.Address.SolarSytemID.ToString() == message[0][5] && item.OriginOutpost.Address.PlanetID == planetId)
                 {
                     response += MessageConstants.nextMessageToken;
                     response += item.OriginOutpost.Tile.X + MessageConstants.splitMessageToken + item.OriginOutpost.Tile.Y + MessageConstants.splitMessageToken + item.DestinationOutpost.Tile.X + MessageConstants.splitMessageToken + item.DestinationOutpost.Tile.Y + MessageConstants.splitMessageToken + item.StartTick + MessageConstants.splitMessageToken + item.Duration + MessageConstants.splitMessageToken + universe.CurrentTick;
@@ -2012,7 +2061,7 @@ namespace TerminalDecay5Server
                     response += item.Tile.X + MessageConstants.splitMessageToken + item.Tile.Y + MessageConstants.splitMessageToken + item.specialType + MessageConstants.splitMessageToken + item.resourceType;
                 }
             }
-            
+
 
 
             response += MessageConstants.messageCompleteToken;
@@ -2207,13 +2256,58 @@ namespace TerminalDecay5Server
             v.X = universe.r.Next(3, 22);
             v.Y = universe.r.Next(3, 22);
 
-            o.Tile = new Position();
+            bool blocked = true;
+            int tilecount = 0;
+            while (blocked == true)
+            {
+                blocked = false;
+                tilecount++;
+                
+                foreach (var item in universe.outposts)
+                {
+                    if (item.Address == o.Address)
+                    {
+                        if (item.Tile == v)
+                        {
+                            blocked = true;
+                        }
+                    }
+                }
+
+                foreach (var item in universe.SpecialStructures)
+                {
+                    if (item.Address == o.Address)
+                    {
+                        if (item.Tile == v)
+                        {
+                            blocked = true;
+                        }
+                    }
+                }
+                if (tilecount > 700)
+                {
+                    o.Address.PlanetID++;
+                    if (o.Address.PlanetID > universe.clusters[o.Address.ClusterID].solarSystems[o.Address.SolarSytemID].planets.Count)
+                    {
+                        o.Address.PlanetID = 0;
+                        o.Address.SolarSytemID++;
+                        if (o.Address.SolarSytemID > universe.clusters[o.Address.ClusterID].solarSystems.Count)
+                        {
+                            o.Address.PlanetID = 0;
+                            o.Address.SolarSytemID = 0;
+                            o.Address.ClusterID++;
+                        }
+
+                    }
+                }
+
+            }
             o.Tile = v;
 
-            o.Adress = new UniversalAddress();
-            o.Adress.ClusterID = 0;
-            o.Adress.SolarSytemID = 0;
-            o.Adress.PlanetID = 0;
+            o.Address = new UniversalAddress();
+            o.Address.ClusterID = 0;
+            o.Address.SolarSytemID = 0;
+            o.Address.PlanetID = 0;
 
             o.Buildings[Cmn.BuildType[Cmn.BldTenum.Mine]] = 1;
             o.Buildings[Cmn.BuildType[Cmn.BldTenum.Farm]] = 2;

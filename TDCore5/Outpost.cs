@@ -17,7 +17,7 @@ namespace TDCore5
         public List<long> Defence;
         public List<long> Offence;
 
-        public UniversalAddress Adress;
+        public UniversalAddress Address;
 
         public int CoreShards;
 
