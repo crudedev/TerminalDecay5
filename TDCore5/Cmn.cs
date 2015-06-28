@@ -4,6 +4,18 @@ namespace TDCore5
 {
     public static class Cmn
     {
+        public enum SpecialType
+        {
+            ResourceWell = 0,
+            Portal = 1,
+            OffenceBoost = 2,
+            DeffenceBoost = 3,
+            ManufacturingBoost = 4,
+            //If expanding to this, the special structure creation code has a hard coded value for the number of items here
+        }
+        
+
+
         public enum Renum
         {
             Population = 0,

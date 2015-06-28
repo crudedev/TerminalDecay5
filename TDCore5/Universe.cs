@@ -18,6 +18,7 @@ namespace TDCore5
         public Random r;
         public List<Message> Messages;
         public List<TroopMovement> TroopMovements;
+        public List<SpecialStructure> SpecialStructures;
                 
         public int CurrentTick = 0;
 
@@ -100,6 +101,7 @@ namespace TDCore5
             players = new List<Player>();
             Messages = new List<Message>();
             TroopMovements = new List<TroopMovement>();
+            SpecialStructures = new List<SpecialStructure>();           
 
         }
 

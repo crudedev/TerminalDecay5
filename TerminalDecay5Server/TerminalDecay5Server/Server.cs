@@ -78,37 +78,19 @@ namespace TerminalDecay5Server
                     for (int ii = 0; ii < Cmn.Resource.Count; ii++)
                     {
 
-                        bool found = false;
-                        List<int> pickedTiles = new List<int>();
-
-                        while (!found)
+                        MapTile m = u.clusters[0].solarSystems[0].planets[0].mapTiles[getTileFromPosition(outpost.Tile)];
+                        if (m.Resources[ii] > Cmn.BuildingProduction[i][ii])
                         {
-                            int pickedTile = (int)(u.r.Next(outpost.Tiles.Count));
-                            if (!pickedTiles.Contains(pickedTile))
-                            {
-                                MapTile m = u.clusters[0].solarSystems[0].planets[0].mapTiles[getTileFromPosition(outpost.Tiles[pickedTile])];
-                                if (m.Resources[ii] > Cmn.BuildingProduction[i][ii])
-                                {
-                                    found = true;
-                                    m.Resources[ii] -= Cmn.BuildingProduction[i][ii];
-                                    u.players[outpost.OwnerID].Resources[ii] += Cmn.BuildingProduction[i][ii];
-                                }
-                                else
-                                {
-                                    u.players[outpost.OwnerID].Resources[ii] += m.Resources[ii];
-                                    m.Resources[ii] = 0;
-                                    pickedTiles.Add(pickedTile);
-                                }
-                            }
-
-                            if (pickedTiles.Count == outpost.Tiles.Count)
-                            {
-                                found = true;
-                            }
-
+                            m.Resources[ii] -= Cmn.BuildingProduction[i][ii];
+                            u.players[outpost.OwnerID].Resources[ii] += Cmn.BuildingProduction[i][ii];
                         }
-
+                        else
+                        {
+                            u.players[outpost.OwnerID].Resources[ii] += m.Resources[ii];
+                            m.Resources[ii] = 0;
+                        }
                     }
+
                 }
                 u.players[outpost.OwnerID].Resources[Cmn.Resource[Cmn.Renum.Population]] += u.players[outpost.OwnerID].Resources[Cmn.Resource[Cmn.Renum.Population]] / 10;
                 u.players[outpost.OwnerID].Resources[Cmn.Resource[Cmn.Renum.Population]] += 1;
@@ -119,6 +101,16 @@ namespace TerminalDecay5Server
                 }
 
                 popcap[outpost.OwnerID] += outpost.Buildings[Cmn.BuildType[Cmn.BldTenum.Habitat]] * 50;
+
+
+                //check for POI creation
+                if (outpost.CoreShards > 5)
+                {
+                    CreatePOI(outpost, u);
+                }
+
+                //update based on POI's
+
 
             }
 
@@ -230,7 +222,7 @@ namespace TerminalDecay5Server
 
             foreach (var item in u.TroopMovements)
             {
-                if(item.StartTick + item.Duration  < u.CurrentTick)
+                if (item.StartTick + item.Duration < u.CurrentTick)
                 {
                     switch (item.MovementType)
                     {
@@ -243,19 +235,19 @@ namespace TerminalDecay5Server
 
                             for (int off = 0; off < item.Offence.Count; off++)
                             {
-                              item.DestinationOutpost.Offence[off] += item.Offence[off];
+                                item.DestinationOutpost.Offence[off] += item.Offence[off];
                             }
 
                             CompleteMovements.Add(item);
 
                             break;
                         case Cmn.MovType.Attack:
-                            CalculateBattle(item,u);
+                            CalculateBattle(item, u);
                             Outpost orig = item.OriginOutpost;
                             item.OriginOutpost = item.DestinationOutpost;
                             item.DestinationOutpost = orig;
                             item.StartTick = u.CurrentTick;
-                            item.MovementType = Cmn.MovType.Reinforcement;            
+                            item.MovementType = Cmn.MovType.Reinforcement;
                             //send it back change it to a reinforcement
                             break;
                         default:
@@ -268,6 +260,100 @@ namespace TerminalDecay5Server
             {
                 u.TroopMovements.Remove(item);
             }
+
+        }
+
+        private static void CreatePOI(Outpost outpost, Universe u)
+        {
+
+
+            int space = u.r.Next(9);
+            int tileToTest = 0;
+
+            Position p = new Position(-1, -1);
+
+            for (int i = 0; i < 9; i++)
+            {
+                tileToTest = 9 % (space + i);
+
+                int x = (tileToTest % 3) - 1;
+                int y = ((tileToTest - (tileToTest % 3)) / 3) - 1;
+
+                x = outpost.Tile.X + x;
+                y = outpost.Tile.Y + y;
+
+                bool blocked = false;
+
+                if (x < 0 && x > 26)
+                {
+                    blocked = true;
+                }
+
+                if (y < 0 && y > 26)
+                {
+                    blocked = true;
+                }
+
+                if (!blocked)
+                {
+                    foreach (var item in u.outposts)
+                    {
+                        if (item.Tile.X == x)
+                        {
+                            if (item.Tile.Y == y)
+                            {
+                                blocked = true;
+                            }
+                        }
+                    }
+                }
+
+                if (blocked == false)
+                {
+                    i = 10;
+                    p = new Position(x, y);
+                    SpecialStructure ss = new SpecialStructure();
+                    ss.Tile = p;
+                    
+                    //choose between resource bonus and the others; 
+
+                    //find if there are any 
+                    if(u.r.Next(1000)<800)
+                    {
+                       ss.specialType = Cmn.SpecialType.ResourceWell;
+                       ss.resourceType = u.r.Next(1, 5);
+                       ss.ProductionSize = u.r.Next(100, 1000);
+                    }
+                    else
+                    {
+                        //create a non resource one
+                        if(u.r.Next(1000)<800)
+                        {
+                            int type = u.r.Next(3);                            
+                            switch(type)
+                            {
+                                case 0:
+                                    ss.specialType = Cmn.SpecialType.DeffenceBoost;
+                                    break;
+                                case 1:
+                                    ss.specialType = Cmn.SpecialType.OffenceBoost;
+                                    break;
+                                case 2:
+                                    ss.specialType = Cmn.SpecialType.ManufacturingBoost;
+                                    break;
+                            }
+                        }
+                        else
+                        {
+                            ss.specialType = Cmn.SpecialType.Portal;
+                        }
+                    }
+
+                    u.SpecialStructures.Add(ss);
+                }
+            }
+
+
 
         }
 
@@ -828,8 +914,8 @@ namespace TerminalDecay5Server
 
                         t.StartTick = universe.CurrentTick;
 
-                        int dx = DeffenceOp.Tiles[0].X - AttackOp.Tiles[0].X;
-                        int dy = DeffenceOp.Tiles[0].Y - AttackOp.Tiles[0].Y;
+                        int dx = DeffenceOp.Tile.X - AttackOp.Tile.X;
+                        int dy = DeffenceOp.Tile.Y - AttackOp.Tile.Y;
 
                         double dist = Math.Sqrt(dx * dx + dy * dy);
 
@@ -867,7 +953,7 @@ namespace TerminalDecay5Server
             }
         }
 
-        public static void CalculateBattle(TroopMovement t,Universe u)
+        public static void CalculateBattle(TroopMovement t, Universe u)
         {
             long attackOff = 0;
             long defenceOff = 0;
@@ -1722,9 +1808,9 @@ namespace TerminalDecay5Server
                 v.X = r.Next(3, 22);
                 v.Y = r.Next(3, 22);
 
-                o.Tiles = new List<Position>();
+                o.Tile = new Position();
 
-                o.Tiles.Add(v);
+                o.Tile = v;
 
                 o.Home = new UniversalAddress();
                 o.Home.ClusterID = 0;
@@ -1838,36 +1924,33 @@ namespace TerminalDecay5Server
             {
                 if (o.Home.ClusterID.ToString() == message[0][4] && o.Home.SolarSytemID.ToString() == message[0][5] && o.Home.PlanetID == planetId)
                 {
-                    foreach (Position p in o.Tiles)
+                    response += o.Tile.X + MessageConstants.splitMessageToken + o.Tile.Y + MessageConstants.splitMessageToken + o.OwnerID + MessageConstants.splitMessageToken;
+                    if (playerid == o.OwnerID)
                     {
-                        response += p.X + MessageConstants.splitMessageToken + p.Y + MessageConstants.splitMessageToken + o.OwnerID + MessageConstants.splitMessageToken;
-                        if (playerid == o.OwnerID)
+                        response += "mine";
+                    }
+                    else
+                    {
+                        if (o.OwnerID == AIID.PlayerID)
                         {
-                            response += "mine";
+                            response += "AI";
                         }
                         else
                         {
-                            if (o.OwnerID == AIID.PlayerID)
-                            {
-                                response += "AI";
-                            }
-                            else
-                            {
-                                response += "otherPlayer";
-                            }
+                            response += "otherPlayer";
                         }
-
-                        long def = 0;
-                        for (int index = 0; index < Cmn.DefenceType.Count; index++)
-                        {
-                            def += o.Defence[index] * Cmn.DefenceAttack[index];
-                        }
-
-                        response += MessageConstants.splitMessageToken + def.ToString();
-
-
-                        response += MessageConstants.nextMessageToken;
                     }
+
+                    long def = 0;
+                    for (int index = 0; index < Cmn.DefenceType.Count; index++)
+                    {
+                        def += o.Defence[index] * Cmn.DefenceAttack[index];
+                    }
+
+                    response += MessageConstants.splitMessageToken + def.ToString();
+
+
+                    response += MessageConstants.nextMessageToken;
                 }
             }
 
@@ -1878,7 +1961,7 @@ namespace TerminalDecay5Server
                 if (item.OriginOutpost.Home.ClusterID.ToString() == message[0][4] && item.OriginOutpost.Home.SolarSytemID.ToString() == message[0][5] && item.OriginOutpost.Home.PlanetID == planetId)
                 {
                     response += MessageConstants.nextMessageToken;
-                    response += item.OriginOutpost.Tiles[0].X + MessageConstants.splitMessageToken + item.OriginOutpost.Tiles[0].Y + MessageConstants.splitMessageToken + item.DestinationOutpost.Tiles[0].X + MessageConstants.splitMessageToken + item.DestinationOutpost.Tiles[0].Y + MessageConstants.splitMessageToken + item.StartTick + MessageConstants.splitMessageToken + item.Duration + MessageConstants.splitMessageToken + universe.CurrentTick;
+                    response += item.OriginOutpost.Tile.X + MessageConstants.splitMessageToken + item.OriginOutpost.Tile.Y + MessageConstants.splitMessageToken + item.DestinationOutpost.Tile.X + MessageConstants.splitMessageToken + item.DestinationOutpost.Tile.Y + MessageConstants.splitMessageToken + item.StartTick + MessageConstants.splitMessageToken + item.Duration + MessageConstants.splitMessageToken + universe.CurrentTick;
                 }
             }
 
@@ -2006,12 +2089,9 @@ namespace TerminalDecay5Server
         {
             foreach (Outpost o in universe.outposts)
             {
-                foreach (Position p in o.Tiles)
+                if (o.Tile.X == Convert.ToInt32(x) && o.Tile.Y == Convert.ToInt32(y))
                 {
-                    if (p.X == Convert.ToInt32(x) && p.Y == Convert.ToInt32(y))
-                    {
-                        return o;
-                    }
+                    return o;
                 }
             }
             return null;
@@ -2078,9 +2158,8 @@ namespace TerminalDecay5Server
             v.X = universe.r.Next(3, 22);
             v.Y = universe.r.Next(3, 22);
 
-            o.Tiles = new List<Position>();
-
-            o.Tiles.Add(v);
+            o.Tile = new Position();
+            o.Tile = v;
 
             o.Home = new UniversalAddress();
             o.Home.ClusterID = 0;

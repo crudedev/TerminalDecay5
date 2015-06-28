@@ -12,7 +12,7 @@ namespace TDCore5
         public int OwnerID;
         public int Capacity;
 
-        public List<Position> Tiles;
+        public Position Tile;
         public List<long> Buildings;
         public List<long> Defence;
         public List<long> Offence;
@@ -47,7 +47,7 @@ namespace TDCore5
             this.ID = (int)info.GetValue("id", typeof(int));
             this.OwnerID = (int)info.GetValue("ownerid", typeof(int));
             this.Capacity = (int)info.GetValue("capacity", typeof(int));
-            this.Tiles = (List<Position>)info.GetValue("tiles", typeof(List<Position>));
+            this.Tile = (Position)info.GetValue("tile", typeof(Position));
             this.Buildings = (List<long>)info.GetValue("building", typeof(List<long>));
             this.Defence = (List<long>)info.GetValue("defence", typeof(List<long>));
             this.Offence = (List<long>)info.GetValue("offence", typeof(List<long>));                 
@@ -58,7 +58,7 @@ namespace TDCore5
             info.AddValue("id", this.ID);
             info.AddValue("ownerid", this.OwnerID);
             info.AddValue("capacity", this.Capacity);
-            info.AddValue("tiles", this.Tiles);
+            info.AddValue("tile", this.Tile);
             info.AddValue("building", this.Buildings);
             info.AddValue("defence", this.Defence);
             info.AddValue("offence", this.Offence);
