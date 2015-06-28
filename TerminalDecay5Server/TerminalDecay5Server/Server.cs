@@ -264,7 +264,7 @@ namespace TerminalDecay5Server
 
             foreach (var item in u.SpecialStructures)
             {
-                if(item.specialType == Cmn.SpecialType.ResourceWell)
+                if (item.specialType == Cmn.SpecialType.ResourceWell)
                 {
                     List<Outpost> localOutpost = FindLocalOutpost(item.Address, item.Tile, u);
                     foreach (var outpost in localOutpost)
@@ -286,7 +286,7 @@ namespace TerminalDecay5Server
 
                 int x = (i % 3) - 1;
                 int y = ((i - (i % 3)) / 3) - 1;
-                
+
                 x = p.X + x;
                 y = p.Y + y;
 
@@ -320,6 +320,52 @@ namespace TerminalDecay5Server
                 }
             }
             return LocalOutposts;
+        }
+
+        private static List<SpecialStructure> FindLocalStructures(UniversalAddress a, Position p, Universe u)
+        {
+
+            List<SpecialStructure> LocalSpecialStructure = new List<SpecialStructure>();
+
+            for (int i = 0; i < 9; i++)
+            {
+
+                int x = (i % 3) - 1;
+                int y = ((i - (i % 3)) / 3) - 1;
+
+                x = p.X + x;
+                y = p.Y + y;
+
+                bool blocked = false;
+
+                if (x < 0 && x > 26)
+                {
+                    blocked = true;
+                }
+
+                if (y < 0 && y > 26)
+                {
+                    blocked = true;
+                }
+
+                if (!blocked)
+                {
+                    foreach (var item in u.SpecialStructures)
+                    {
+                        if (item.Address == a)
+                        {
+                            if (item.Tile.X == x)
+                            {
+                                if (item.Tile.Y == y)
+                                {
+                                    LocalSpecialStructure.Add(item);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return LocalSpecialStructure;
         }
 
         private static void CreateSpecialStructure(Outpost outpost, Universe u)
@@ -440,7 +486,7 @@ namespace TerminalDecay5Server
                 }
                 else
                 {
-                    int lol = 0;
+
                 }
             }
 
@@ -1046,18 +1092,52 @@ namespace TerminalDecay5Server
 
         public static void CalculateBattle(TroopMovement t, Universe u)
         {
+
+            //find out if the players have any offence or defence strucutres
+
+            float OffenceOffenceBoost = 0;
+            float DefenceOffenceBoost = 0;
+            float DefenceDefenceBoost = 0;
+
+            List<SpecialStructure> DefenceSpecialStructures = FindLocalStructures(t.DestinationOutpost.Address, t.DestinationOutpost.Tile, u);
+            foreach (var special in DefenceSpecialStructures)
+            {
+                if (special.specialType == Cmn.SpecialType.DeffenceBoost)
+                {
+                    DefenceDefenceBoost += special.BuffSize;
+                }
+
+                if (special.specialType == Cmn.SpecialType.OffenceBoost)
+                {
+                    DefenceOffenceBoost += special.BuffSize;
+                }
+            }
+
+            List<SpecialStructure> OffenceSpecialStructures = FindLocalStructures(t.OriginOutpost.Address, t.OriginOutpost.Tile, u);
+            foreach (var special in DefenceSpecialStructures)
+            {
+                if (special.specialType == Cmn.SpecialType.OffenceBoost)
+                {
+                    if (special.specialType == Cmn.SpecialType.OffenceBoost)
+                    {
+                        OffenceOffenceBoost += special.BuffSize;
+                    }
+                }
+            }
+
+
             long attackOff = 0;
             long defenceOff = 0;
 
             for (int i = 0; i < Cmn.DefenceType.Count; i++)
             {
-                defenceOff += Cmn.DefenceAttack[i] * t.DestinationOutpost.Defence[i];
-                defenceOff += Cmn.OffenceAttack[i] * (t.DestinationOutpost.Offence[i] / 2);
+                defenceOff += Convert.ToInt64((Cmn.DefenceAttack[i] * t.DestinationOutpost.Defence[i]) * (1 + DefenceDefenceBoost));
+                defenceOff += Convert.ToInt64((Cmn.OffenceAttack[i] * t.DestinationOutpost.Offence[i] / 2) * (1 + DefenceOffenceBoost));
             }
 
             for (int i = 0; i < Cmn.OffenceType.Count; i++)
             {
-                attackOff += Cmn.OffenceAttack[i] * t.Offence[i];
+                attackOff += Convert.ToInt64((Cmn.OffenceAttack[i] * t.Offence[i]) * (1 + OffenceOffenceBoost));
             }
 
             string AttackerMessage = "";
@@ -1908,7 +1988,7 @@ namespace TerminalDecay5Server
                 Random r = new Random();
 
                 bool blocked = true;
-                
+
                 int tilecount = 0;
 
                 while (blocked == true)
@@ -1938,14 +2018,14 @@ namespace TerminalDecay5Server
                             }
                         }
                     }
-                    if(tilecount > 700)
+                    if (tilecount > 700)
                     {
                         o.Address.PlanetID++;
-                        if(o.Address.PlanetID > universe.clusters[o.Address.ClusterID].solarSystems[o.Address.SolarSytemID].planets.Count)
+                        if (o.Address.PlanetID > universe.clusters[o.Address.ClusterID].solarSystems[o.Address.SolarSytemID].planets.Count)
                         {
                             o.Address.PlanetID = 0;
                             o.Address.SolarSytemID++;
-                            if(o.Address.SolarSytemID >universe.clusters[o.Address.ClusterID].solarSystems.Count)
+                            if (o.Address.SolarSytemID > universe.clusters[o.Address.ClusterID].solarSystems.Count)
                             {
                                 o.Address.PlanetID = 0;
                                 o.Address.SolarSytemID = 0;
@@ -2320,7 +2400,7 @@ namespace TerminalDecay5Server
             {
                 blocked = false;
                 tilecount++;
-                
+
                 foreach (var item in universe.outposts)
                 {
                     if (item.Address == o.Address)
