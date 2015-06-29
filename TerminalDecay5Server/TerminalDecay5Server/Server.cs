@@ -69,7 +69,7 @@ namespace TerminalDecay5Server
             Dictionary<int, long> popcap;
             popcap = new Dictionary<int, long>();
 
-            #region add resoureces from buildings
+            #region calculate changes to outposts
 
             foreach (Outpost outpost in u.outposts)
             {
@@ -100,19 +100,36 @@ namespace TerminalDecay5Server
                     popcap.Add(outpost.OwnerID, 0);
                 }
 
-                popcap[outpost.OwnerID] += outpost.Buildings[Cmn.BuildType[Cmn.BldTenum.Habitat]] * 50;
+                popcap[outpost.OwnerID] += outpost.Buildings[Cmn.BuildType[Cmn.BldTenum.Habitat]] * 100;
 
 
-                //check for SpecialStructure creation
                 while (outpost.CoreShards >= 5)
                 {
                     outpost.CoreShards -= 5;
                     CreateSpecialStructure(outpost, u);
                 }
 
-                //update based on SpecialStructures
+                //cost of units
+                for (int i = 0; i < outpost.Offence.Count; i++)
+                {
+                    u.players[outpost.OwnerID].Resources[Cmn.Resource[Cmn.Renum.Food]] -= outpost.Offence[i];
+                    u.players[outpost.OwnerID].Resources[Cmn.Resource[Cmn.Renum.Power]] -= outpost.Offence[i];
 
+                    if (u.players[outpost.OwnerID].Resources[Cmn.Resource[Cmn.Renum.Food]] <= 0)
+                    {
+                        outpost.Offence[i] = Convert.ToInt64(outpost.Offence[i] * 0.95f);
+                    }
+                }
 
+                for (int i = 0; i < outpost.Defence.Count; i++)
+                {
+                    u.players[outpost.OwnerID].Resources[Cmn.Resource[Cmn.Renum.Food]] -= outpost.Defence[i];
+                    u.players[outpost.OwnerID].Resources[Cmn.Resource[Cmn.Renum.Power]] -= outpost.Defence[i];
+                    if (u.players[outpost.OwnerID].Resources[Cmn.Resource[Cmn.Renum.Food]] <= 0)
+                    {
+                        outpost.Defence[i] = Convert.ToInt64(outpost.Defence[i] * 0.95f);
+                    }
+                }
             }
 
             foreach (var item in popcap)
@@ -120,6 +137,7 @@ namespace TerminalDecay5Server
                 if (u.players[item.Key].Resources[0] > item.Value)
                 {
                     u.players[item.Key].Resources[0] -= u.players[item.Key].Resources[0] / 10;
+                    u.players[item.Key].Resources[Cmn.Resource[Cmn.Renum.Food]] -= u.players[item.Key].Resources[Cmn.Resource[Cmn.Renum.Population]] / 10;
                 }
             }
 
@@ -253,6 +271,29 @@ namespace TerminalDecay5Server
                             break;
                         default:
                             break;
+                    }
+                }
+                else
+                {
+                    for (int i = 0; i < item.Offence.Count; i++)
+                    {
+                        u.players[item.OriginOutpost.OwnerID].Resources[Cmn.Resource[Cmn.Renum.Food]] -= item.Offence[i];
+                        u.players[item.OriginOutpost.OwnerID].Resources[Cmn.Resource[Cmn.Renum.Power]] -= item.Offence[i];
+
+                        if (u.players[item.OriginOutpost.OwnerID].Resources[Cmn.Resource[Cmn.Renum.Food]] <= 0)
+                        {
+                            item.Offence[i] = Convert.ToInt64(item.Offence[i] * 0.95f);
+                        }
+                    }
+
+                    for (int i = 0; i < item.Defence.Count; i++)
+                    {
+                        u.players[item.OriginOutpost.OwnerID].Resources[Cmn.Resource[Cmn.Renum.Food]] -= item.Defence[i];
+                        u.players[item.OriginOutpost.OwnerID].Resources[Cmn.Resource[Cmn.Renum.Power]] -= item.Defence[i];
+                        if (u.players[item.OriginOutpost.OwnerID].Resources[Cmn.Resource[Cmn.Renum.Food]] <= 0)
+                        {
+                            item.Defence[i] = Convert.ToInt64(item.Defence[i] * 0.95f);
+                        }
                     }
                 }
             }
@@ -1111,17 +1152,17 @@ namespace TerminalDecay5Server
             else
             {
                 ErrorResponse = "One or more bases not found";
-            }  
-            
+            }
+
             response += MessageConstants.messageCompleteToken;
-                response = MessageConstants.MessageTypes[14] + MessageConstants.splitMessageToken + response;
-                NetworkStream clientStream = tcpClient.GetStream();
-                ASCIIEncoding encoder = new ASCIIEncoding();
+            response = MessageConstants.MessageTypes[14] + MessageConstants.splitMessageToken + response;
+            NetworkStream clientStream = tcpClient.GetStream();
+            ASCIIEncoding encoder = new ASCIIEncoding();
 
-                byte[] buffer = encoder.GetBytes(response);
+            byte[] buffer = encoder.GetBytes(response);
 
-                clientStream.Write(buffer, 0, buffer.Length);
-                clientStream.Flush();
+            clientStream.Write(buffer, 0, buffer.Length);
+            clientStream.Flush();
         }
 
         private void Attack(List<List<string>> transmissions, TcpClient tcpClient)
@@ -2070,11 +2111,11 @@ namespace TerminalDecay5Server
 
                 newp.PlayerID = universe.players.Count;
 
-                newp.Resources[Cmn.Resource[Cmn.Renum.Food]] = 1000;
-                newp.Resources[Cmn.Resource[Cmn.Renum.Metal]] = 10000;
-                newp.Resources[Cmn.Resource[Cmn.Renum.Population]] = 100;
-                newp.Resources[Cmn.Resource[Cmn.Renum.Power]] = 3000;
-                newp.Resources[Cmn.Resource[Cmn.Renum.Water]] = 1000;
+                newp.Resources[Cmn.Resource[Cmn.Renum.Food]] = 10000;
+                newp.Resources[Cmn.Resource[Cmn.Renum.Metal]] = 100000;
+                newp.Resources[Cmn.Resource[Cmn.Renum.Population]] = 1000;
+                newp.Resources[Cmn.Resource[Cmn.Renum.Power]] = 30000;
+                newp.Resources[Cmn.Resource[Cmn.Renum.Water]] = 10000;
 
                 universe.players.Add(newp);
 
@@ -2084,7 +2125,7 @@ namespace TerminalDecay5Server
                 }
 
                 Outpost o = new Outpost();
-                o.Capacity = 25;
+                o.Capacity = 100;
                 o.ID = universe.outposts.Count;
                 o.OwnerID = newp.PlayerID;
 
@@ -2160,17 +2201,17 @@ namespace TerminalDecay5Server
 
                 newp.home = o.Address;
 
-                o.Buildings[Cmn.BuildType[Cmn.BldTenum.Mine]] = 1;
-                o.Buildings[Cmn.BuildType[Cmn.BldTenum.Farm]] = 2;
-                o.Buildings[Cmn.BuildType[Cmn.BldTenum.Habitat]] = 1;
-                o.Buildings[Cmn.BuildType[Cmn.BldTenum.SolarPLant]] = 1;
-                o.Buildings[Cmn.BuildType[Cmn.BldTenum.Well]] = 1;
-                o.Buildings[Cmn.BuildType[Cmn.BldTenum.Fabricator]] = 2;
+                o.Buildings[Cmn.BuildType[Cmn.BldTenum.Mine]] = 5;
+                o.Buildings[Cmn.BuildType[Cmn.BldTenum.Farm]] = 5;
+                o.Buildings[Cmn.BuildType[Cmn.BldTenum.Habitat]] = 5;
+                o.Buildings[Cmn.BuildType[Cmn.BldTenum.SolarPLant]] = 5;
+                o.Buildings[Cmn.BuildType[Cmn.BldTenum.Well]] = 5;
+                o.Buildings[Cmn.BuildType[Cmn.BldTenum.Fabricator]] = 5;
 
-                o.Defence[Cmn.DefenceType[Cmn.DefTenum.Patrol]] = 5;
-                o.Defence[Cmn.DefenceType[Cmn.DefTenum.Gunner]] = 2;
+                o.Defence[Cmn.DefenceType[Cmn.DefTenum.Patrol]] = 10;
+                o.Defence[Cmn.DefenceType[Cmn.DefTenum.Gunner]] = 5;
 
-                o.Offence[Cmn.OffenceType[Cmn.OffTenum.Scout]] = 5;
+                o.Offence[Cmn.OffenceType[Cmn.OffTenum.Scout]] = 10;
                 o.Offence[Cmn.OffenceType[Cmn.OffTenum.Battleship]] = 500;
 
                 universe.outposts.Add(o);
