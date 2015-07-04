@@ -715,6 +715,9 @@ namespace TerminalDecay5Client
 
             LblSidePanel.Visible = !show;
 
+            LstBuildingsBuildQueue.Visible = show;
+            btnRemoveBuildings.Visible = show;
+
         }
 
         private void showDefenceMenu(bool show)
@@ -956,6 +959,11 @@ namespace TerminalDecay5Client
 
         private void BtnOffence_Click(object sender, EventArgs e)
         {
+            GetoffenceList();
+        }
+
+        private void GetoffenceList()
+        {
             ServerConnection sc = new ServerConnection();
             sc.ServerRequest(UpdateBuildOffPanel, 11, MessageConstants.splitToken + Convert.ToString(playerToken) + MessageConstants.splitToken + Convert.ToString(_currentX) + MessageConstants.splitToken + Convert.ToString(_currentY)); ;
         }
@@ -1020,6 +1028,9 @@ namespace TerminalDecay5Client
             BtnAttack.Visible = !show;
 
             LblSidePanel.Visible = !show;
+
+            LstRemoveOffenceList.Visible = show;
+            btnRemoveOffenceList.Visible = show;
         }
 
         private void UpdateBuildOffPanel(List<List<string>> transmission)
@@ -1100,7 +1111,17 @@ namespace TerminalDecay5Client
             lblCarrierAttack.Text = transmission[12][5];
             lblBattleshipAttack.Text = transmission[12][6];
 
+            LstRemoveOffenceList.Items.Clear();
+            BuildGuidList = new Dictionary<int, Guid>();
 
+            for (int i = 13; i < transmission.Count; i++)
+            {
+                if (transmission[i].Count == 4)
+                {
+                    LstRemoveOffenceList.Items.Add(transmission[i][0] + "  " + transmission[i][2] + "/" + transmission[i][1]);
+                    BuildGuidList.Add(i - 13, new Guid(transmission[i][3]));
+                }
+            }
         }
 
         private void btnOffenceBuild_Click(object sender, EventArgs e)
@@ -1683,6 +1704,32 @@ namespace TerminalDecay5Client
                 MessageBox.Show("Successfully Removed From Queue");
             }
             GetBuildingView();
+        }
+
+        private void btnRemoveOffenceList_Click(object sender, EventArgs e)
+        {
+
+            if (LstRemoveOffenceList.SelectedIndex != -1)
+            {
+                if (BuildGuidList.ContainsKey(LstRemoveOffenceList.SelectedIndex))
+                {
+                    ServerConnection sc = new ServerConnection();
+                    sc.ServerRequest(RemoveFromQueueOffResponse, 24, MessageConstants.splitToken + Convert.ToString(playerToken) + MessageConstants.splitToken + BuildGuidList[LstRemoveOffenceList.SelectedIndex]);
+                }
+            }
+            else
+            {
+                MessageBox.Show("No selected item");
+            }
+        }
+
+        private void RemoveFromQueueOffResponse(List<List<string>> transmission)
+        {
+            if (transmission[1][0] == "success")
+            {
+                MessageBox.Show("Successfully Removed From Queue");
+            }
+            GetoffenceList();
         }
     }
 }

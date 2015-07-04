@@ -221,7 +221,9 @@ namespace TerminalDecay5Client
             this.txtReinforcePartrol = new System.Windows.Forms.TextBox();
             this.button7 = new System.Windows.Forms.Button();
             this.LstBuildingsBuildQueue = new System.Windows.Forms.ListBox();
-            this.txtRemoveBuildings = new System.Windows.Forms.Button();
+            this.btnRemoveBuildings = new System.Windows.Forms.Button();
+            this.btnRemoveOffenceList = new System.Windows.Forms.Button();
+            this.LstRemoveOffenceList = new System.Windows.Forms.ListBox();
             ((System.ComponentModel.ISupportInitialize)(this.MapCanvas)).BeginInit();
             this.SuspendLayout();
             // 
@@ -2085,22 +2087,46 @@ namespace TerminalDecay5Client
             this.LstBuildingsBuildQueue.Name = "LstBuildingsBuildQueue";
             this.LstBuildingsBuildQueue.Size = new System.Drawing.Size(273, 121);
             this.LstBuildingsBuildQueue.TabIndex = 204;
+            this.LstBuildingsBuildQueue.Visible = false;
             // 
-            // txtRemoveBuildings
+            // btnRemoveBuildings
             // 
-            this.txtRemoveBuildings.Location = new System.Drawing.Point(1033, 740);
-            this.txtRemoveBuildings.Name = "txtRemoveBuildings";
-            this.txtRemoveBuildings.Size = new System.Drawing.Size(82, 23);
-            this.txtRemoveBuildings.TabIndex = 205;
-            this.txtRemoveBuildings.Text = "Remove Build Item";
-            this.txtRemoveBuildings.UseVisualStyleBackColor = true;
-            this.txtRemoveBuildings.Click += new System.EventHandler(this.txtRemoveBuildings_Click);
+            this.btnRemoveBuildings.Location = new System.Drawing.Point(1033, 740);
+            this.btnRemoveBuildings.Name = "btnRemoveBuildings";
+            this.btnRemoveBuildings.Size = new System.Drawing.Size(136, 23);
+            this.btnRemoveBuildings.TabIndex = 205;
+            this.btnRemoveBuildings.Text = "Remove Build Item";
+            this.btnRemoveBuildings.UseVisualStyleBackColor = true;
+            this.btnRemoveBuildings.Visible = false;
+            this.btnRemoveBuildings.Click += new System.EventHandler(this.txtRemoveBuildings_Click);
+            // 
+            // btnRemoveOffenceList
+            // 
+            this.btnRemoveOffenceList.Location = new System.Drawing.Point(1051, 734);
+            this.btnRemoveOffenceList.Name = "btnRemoveOffenceList";
+            this.btnRemoveOffenceList.Size = new System.Drawing.Size(149, 23);
+            this.btnRemoveOffenceList.TabIndex = 207;
+            this.btnRemoveOffenceList.Text = "Remove Offence Build Item";
+            this.btnRemoveOffenceList.UseVisualStyleBackColor = true;
+            this.btnRemoveOffenceList.Visible = false;
+            this.btnRemoveOffenceList.Click += new System.EventHandler(this.btnRemoveOffenceList_Click);
+            // 
+            // LstRemoveOffenceList
+            // 
+            this.LstRemoveOffenceList.FormattingEnabled = true;
+            this.LstRemoveOffenceList.Location = new System.Drawing.Point(854, 607);
+            this.LstRemoveOffenceList.Name = "LstRemoveOffenceList";
+            this.LstRemoveOffenceList.Size = new System.Drawing.Size(273, 121);
+            this.LstRemoveOffenceList.TabIndex = 206;
+            this.LstRemoveOffenceList.Visible = false;
             // 
             // Map
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.ClientSize = new System.Drawing.Size(1498, 831);
-            this.Controls.Add(this.txtRemoveBuildings);
+            this.Controls.Add(this.btnRemoveOffenceList);
+            this.Controls.Add(this.LstRemoveOffenceList);
+            this.Controls.Add(this.btnRemoveBuildings);
             this.Controls.Add(this.LstBuildingsBuildQueue);
             this.Controls.Add(this.button7);
             this.Controls.Add(this.txtReinforceDroneBase);
@@ -2490,7 +2516,9 @@ namespace TerminalDecay5Client
         private TextBox txtReinforcePartrol;
         private Button button7;
         private ListBox LstBuildingsBuildQueue;
-        private Button txtRemoveBuildings;
+        private Button btnRemoveBuildings;
+        private Button btnRemoveOffenceList;
+        private ListBox LstRemoveOffenceList;
     }
 }
 

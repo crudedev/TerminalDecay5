@@ -827,11 +827,40 @@ namespace TerminalDecay5Server
                 RemoveFromBuildQueue(transmissions, tcpClient);
             }
 
+            if (transmissions[0][0] == MessageConstants.MessageTypes[24])
+            {
+                RemoveFromOffQueue(transmissions, tcpClient);
+            }
+
             tcpClient.Close();
             client = null;
 
             #endregion
         }
+
+        private void RemoveFromOffQueue(List<List<string>> transmissions, TcpClient tcpClient)
+        {
+            for (int i = 0; i < universe.OffenceBuildQueue.Count; i++)
+            {
+                if (universe.OffenceBuildQueue[i].BuildQueueID == new Guid(transmissions[0][2]))
+                {
+                    universe.OffenceBuildQueue.Remove(universe.OffenceBuildQueue[i]);
+
+                    string response = MessageConstants.MessageTypes[24] + MessageConstants.nextToken;
+                    response += "success" + MessageConstants.completeToken;
+                    
+                    NetworkStream clientStream = tcpClient.GetStream();
+                    ASCIIEncoding encoder = new ASCIIEncoding();
+
+                    byte[] buffer = encoder.GetBytes(response);
+
+                    clientStream.Write(buffer, 0, buffer.Length);
+                    clientStream.Flush();
+                    break;
+                }
+            }
+        }
+
 
         private void RemoveFromBuildQueue(List<List<string>> transmissions, TcpClient tcpClient)
         {
@@ -1638,10 +1667,12 @@ namespace TerminalDecay5Server
 
         private void SendOffenceBuildList(List<List<string>> transmissions, TcpClient tcpClient)
         {
-
+            Outpost o = new Outpost();
             try
             {
                 int playerid = getPlayer(transmissions[0][1]).PlayerID;
+                o = getOutpost(transmissions[0][2], transmissions[0][3]);
+
             }
             catch (Exception)
             {
@@ -1652,7 +1683,7 @@ namespace TerminalDecay5Server
             string response = MessageConstants.MessageTypes[11] + MessageConstants.nextToken;
 
 
-            if (getPlayer(transmissions[0][1]).PlayerID == getOutpost(transmissions[0][2], transmissions[0][3]).OwnerID)
+            if (getPlayer(transmissions[0][1]).PlayerID == o.OwnerID)
             {
 
                 response += SendOffenceOntile(transmissions);
@@ -1685,7 +1716,7 @@ namespace TerminalDecay5Server
 
                 foreach (var item in universe.OffenceBuildQueue)
                 {
-                    if (item.PlayerId == pl.PlayerID)
+                    if (item.PlayerId == pl.PlayerID && item.OutpostId == o.ID)
                     {
                         inProgress[item.ItemType] += item.ItemTotal - item.Complete;
                     }
@@ -1709,6 +1740,19 @@ namespace TerminalDecay5Server
                 {
                     response += item + MessageConstants.splitToken;
                 }
+
+                response += MessageConstants.nextToken;
+
+
+                foreach (var item in universe.OffenceBuildQueue)
+                {
+                    if (item.PlayerId == pl.PlayerID && item.OutpostId == o.ID)
+                    {
+                        response += Cmn.OffenceName[item.ItemType] + MessageConstants.splitToken + item.ItemTotal + MessageConstants.splitToken + item.Complete + MessageConstants.splitToken + item.BuildQueueID;
+                        response += MessageConstants.nextToken;
+                    }
+                }
+
 
             }
             else

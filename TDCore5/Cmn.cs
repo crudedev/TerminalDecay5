@@ -58,6 +58,8 @@ namespace TDCore5
 
         public static Dictionary<OffTenum, int> OffenceType;
 
+        public static Dictionary<int, string> OffenceName;
+
         public static List<List<long>> OffenceCost;
 
         public enum DefTenum
@@ -134,6 +136,8 @@ namespace TDCore5
             OffenceCost = new List<List<long>>();
             OffenceAttack = new List<long>();
             BuildingName = new Dictionary<int, string>();
+            OffenceName = new Dictionary<int, string>();
+            
 
             BuildingName.Add(BuildType[BldTenum.Farm], "Farm");
             BuildingName.Add(BuildType[BldTenum.Fabricator], "Fabricator");
@@ -141,6 +145,15 @@ namespace TDCore5
             BuildingName.Add(BuildType[BldTenum.Mine], "Mine");
             BuildingName.Add(BuildType[BldTenum.SolarPLant], "SolarPLant");
             BuildingName.Add(BuildType[BldTenum.Well], "Well");
+
+            OffenceName.Add(OffenceType[OffTenum.Battleship], "Battleship");
+            OffenceName.Add(OffenceType[OffTenum.Bomber], "Bomber");
+            OffenceName.Add(OffenceType[OffTenum.Carrier], "Carrier");
+            OffenceName.Add(OffenceType[OffTenum.Destroyer], "Destroyer");
+            OffenceName.Add(OffenceType[OffTenum.Frigate], "Frigate");
+            OffenceName.Add(OffenceType[OffTenum.Gunship], "Gunship");
+            OffenceName.Add(OffenceType[OffTenum.Scout], "Scout");
+
 
             foreach (KeyValuePair<BldTenum, int> build in BuildType)
             {
