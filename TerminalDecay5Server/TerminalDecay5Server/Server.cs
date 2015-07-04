@@ -655,7 +655,7 @@ namespace TerminalDecay5Server
                     transmissionString += encoder.GetString(message, 0, bytesRead);
 
 
-                    if (transmissionString.Substring(transmissionString.Length - MessageConstants.messageCompleteToken.Length, MessageConstants.messageCompleteToken.Length) == MessageConstants.messageCompleteToken)
+                    if (transmissionString.Substring(transmissionString.Length - MessageConstants.completeToken.Length, MessageConstants.completeToken.Length) == MessageConstants.completeToken)
                     {
                         break;
                     }
@@ -686,18 +686,18 @@ namespace TerminalDecay5Server
 
             #region Message Proccessing
 
-            transmissionString = transmissionString.Replace(MessageConstants.messageCompleteToken, "");
+            transmissionString = transmissionString.Replace(MessageConstants.completeToken, "");
 
 
             string[] messages;
-            messages = transmissionString.Split(new string[] { MessageConstants.nextMessageToken }, StringSplitOptions.None);
+            messages = transmissionString.Split(new string[] { MessageConstants.nextToken }, StringSplitOptions.None);
 
             List<List<string>> transmissions = new List<List<string>>();
 
             foreach (string m in messages)
             {
                 List<string> messageList = new List<string>();
-                messageList.AddRange(m.Split(new string[] { MessageConstants.splitMessageToken }, StringSplitOptions.None));
+                messageList.AddRange(m.Split(new string[] { MessageConstants.splitToken }, StringSplitOptions.None));
 
                 transmissions.Add(messageList);
 
@@ -822,10 +822,40 @@ namespace TerminalDecay5Server
                 Reinforce(transmissions, tcpClient);
             }
 
+            if (transmissions[0][0] == MessageConstants.MessageTypes[23])
+            {
+                RemoveFromBuildQueue(transmissions, tcpClient);
+            }
+
             tcpClient.Close();
             client = null;
 
             #endregion
+        }
+
+        private void RemoveFromBuildQueue(List<List<string>> transmissions, TcpClient tcpClient)
+        {
+            for (int i = 0; i < universe.BuildingBuildQueue.Count; i++)
+            {
+                if(universe.BuildingBuildQueue[i].BuildQueueID == new Guid(transmissions[0][2]))
+                {
+                    universe.BuildingBuildQueue.Remove(universe.BuildingBuildQueue[i]);
+
+                    string response = MessageConstants.MessageTypes[23] + MessageConstants.nextToken;
+                    response += "success" + MessageConstants.completeToken;
+
+                    
+
+                    NetworkStream clientStream = tcpClient.GetStream();
+                    ASCIIEncoding encoder = new ASCIIEncoding();
+
+                    byte[] buffer = encoder.GetBytes(response);
+
+                    clientStream.Write(buffer, 0, buffer.Length);
+                    clientStream.Flush();
+                    break;
+                }
+            }
         }
 
         private void SendHomePlanet(List<List<string>> message, TcpClient tcpClient)
@@ -842,14 +872,14 @@ namespace TerminalDecay5Server
                 return;
             }
 
-            string response = MessageConstants.MessageTypes[20] + MessageConstants.nextMessageToken;
+            string response = MessageConstants.MessageTypes[20] + MessageConstants.nextToken;
 
             response += Convert.ToString(player.home.ClusterID);
-            response += MessageConstants.splitMessageToken + Convert.ToString(player.home.SolarSytemID);
-            response += MessageConstants.splitMessageToken + Convert.ToString(universe.clusters[player.home.ClusterID].solarSystems[player.home.SolarSytemID].planets[player.home.PlanetID].position.X);
-            response += MessageConstants.splitMessageToken + Convert.ToString(universe.clusters[player.home.ClusterID].solarSystems[player.home.SolarSytemID].planets[player.home.PlanetID].position.Y);
+            response += MessageConstants.splitToken + Convert.ToString(player.home.SolarSytemID);
+            response += MessageConstants.splitToken + Convert.ToString(universe.clusters[player.home.ClusterID].solarSystems[player.home.SolarSytemID].planets[player.home.PlanetID].position.X);
+            response += MessageConstants.splitToken + Convert.ToString(universe.clusters[player.home.ClusterID].solarSystems[player.home.SolarSytemID].planets[player.home.PlanetID].position.Y);
 
-            response += MessageConstants.messageCompleteToken;
+            response += MessageConstants.completeToken;
 
             NetworkStream clientStream = tcpClient.GetStream();
             ASCIIEncoding encoder = new ASCIIEncoding();
@@ -864,7 +894,7 @@ namespace TerminalDecay5Server
         private void SendUniverseMap(List<List<string>> message, TcpClient tcpClient)
         {
             long playerid = -1;
-            string response = MessageConstants.MessageTypes[19] + MessageConstants.nextMessageToken;
+            string response = MessageConstants.MessageTypes[19] + MessageConstants.nextToken;
 
             try
             {
@@ -878,10 +908,10 @@ namespace TerminalDecay5Server
 
             foreach (Cluster c in universe.clusters)
             {
-                response += c.position.X + MessageConstants.splitMessageToken + c.position.Y + MessageConstants.splitMessageToken + c.ClusterType + MessageConstants.nextMessageToken;
+                response += c.position.X + MessageConstants.splitToken + c.position.Y + MessageConstants.splitToken + c.ClusterType + MessageConstants.nextToken;
             }
 
-            response += MessageConstants.messageCompleteToken;
+            response += MessageConstants.completeToken;
 
             NetworkStream clientStream = tcpClient.GetStream();
             ASCIIEncoding encoder = new ASCIIEncoding();
@@ -896,7 +926,7 @@ namespace TerminalDecay5Server
         private void SendClusterMap(List<List<string>> message, TcpClient tcpClient)
         {
             long playerid = -1;
-            string response = MessageConstants.MessageTypes[18] + MessageConstants.nextMessageToken;
+            string response = MessageConstants.MessageTypes[18] + MessageConstants.nextToken;
 
             try
             {
@@ -922,18 +952,18 @@ namespace TerminalDecay5Server
                 SelectedCluster = universe.clusters[0];
             }
 
-            response += SelectedCluster.ClusterID + MessageConstants.nextMessageToken;
+            response += SelectedCluster.ClusterID + MessageConstants.nextToken;
 
 
 
             foreach (SolarSystem s in SelectedCluster.solarSystems)
             {
-                response += s.position.X + MessageConstants.splitMessageToken + s.position.Y + MessageConstants.splitMessageToken + s.SolarSystemType + MessageConstants.nextMessageToken;
+                response += s.position.X + MessageConstants.splitToken + s.position.Y + MessageConstants.splitToken + s.SolarSystemType + MessageConstants.nextToken;
             }
 
 
 
-            response += MessageConstants.messageCompleteToken;
+            response += MessageConstants.completeToken;
 
             NetworkStream clientStream = tcpClient.GetStream();
             ASCIIEncoding encoder = new ASCIIEncoding();
@@ -948,7 +978,7 @@ namespace TerminalDecay5Server
         private void SendSolarMap(List<List<string>> message, TcpClient tcpClient)
         {
             long playerid = -1;
-            string response = MessageConstants.MessageTypes[17] + MessageConstants.nextMessageToken;
+            string response = MessageConstants.MessageTypes[17] + MessageConstants.nextToken;
 
             try
             {
@@ -963,10 +993,10 @@ namespace TerminalDecay5Server
 
             foreach (Planet p in universe.clusters[0].solarSystems[0].planets)
             {
-                response += p.position.X + MessageConstants.splitMessageToken + p.position.Y + MessageConstants.splitMessageToken + p.planetType + MessageConstants.nextMessageToken;
+                response += p.position.X + MessageConstants.splitToken + p.position.Y + MessageConstants.splitToken + p.planetType + MessageConstants.nextToken;
             }
 
-            response += MessageConstants.messageCompleteToken;
+            response += MessageConstants.completeToken;
 
             NetworkStream clientStream = tcpClient.GetStream();
             ASCIIEncoding encoder = new ASCIIEncoding();
@@ -991,7 +1021,7 @@ namespace TerminalDecay5Server
                 return;
             }
 
-            string response = MessageConstants.MessageTypes[16] + MessageConstants.nextMessageToken;
+            string response = MessageConstants.MessageTypes[16] + MessageConstants.nextToken;
 
             Player pl = getPlayer(transmissions[1][0]);
 
@@ -1004,14 +1034,14 @@ namespace TerminalDecay5Server
                     messageCount++;
                     if (messageCount == Convert.ToInt32(transmissions[2][0]) + 1)
                     {
-                        response += item.messageTitle + MessageConstants.splitMessageToken + item.senderID + MessageConstants.splitMessageToken + item.messageBody + MessageConstants.splitMessageToken + item.sentDate;
+                        response += item.messageTitle + MessageConstants.splitToken + item.senderID + MessageConstants.splitToken + item.messageBody + MessageConstants.splitToken + item.sentDate;
                         item.read = true;
                         break;
                     }
                 }
             }
 
-            response += MessageConstants.messageCompleteToken;
+            response += MessageConstants.completeToken;
             NetworkStream clientStream = tcpClient.GetStream();
             ASCIIEncoding encoder = new ASCIIEncoding();
 
@@ -1034,7 +1064,7 @@ namespace TerminalDecay5Server
                 return;
             }
 
-            string response = MessageConstants.MessageTypes[15] + MessageConstants.nextMessageToken;
+            string response = MessageConstants.MessageTypes[15] + MessageConstants.nextToken;
 
 
             Player pl = getPlayer(transmissions[0][1]);
@@ -1052,17 +1082,17 @@ namespace TerminalDecay5Server
 
             foreach (var item in Mes)
             {
-                response += item.senderID + ": " + item.messageTitle + MessageConstants.splitMessageToken;
+                response += item.senderID + ": " + item.messageTitle + MessageConstants.splitToken;
             }
 
-            response += MessageConstants.nextMessageToken;
+            response += MessageConstants.nextToken;
 
             foreach (var item in universe.players)
             {
-                response += item.PlayerID + ":" + item.Name + MessageConstants.splitMessageToken;
+                response += item.PlayerID + ":" + item.Name + MessageConstants.splitToken;
             }
 
-            response += MessageConstants.messageCompleteToken;
+            response += MessageConstants.completeToken;
             NetworkStream clientStream = tcpClient.GetStream();
             ASCIIEncoding encoder = new ASCIIEncoding();
 
@@ -1075,7 +1105,7 @@ namespace TerminalDecay5Server
 
         private void Reinforce(List<List<string>> transmissions, TcpClient tcpClient)
         {
-            string response = MessageConstants.MessageTypes[14] + MessageConstants.nextMessageToken;
+            string response = MessageConstants.MessageTypes[14] + MessageConstants.nextToken;
 
             Player Attacker = getPlayer(transmissions[0][1]);
             Outpost AttackOp = getOutpost(transmissions[1][0], transmissions[1][1]);
@@ -1145,7 +1175,7 @@ namespace TerminalDecay5Server
 
                 if (ErrorResponse != "")
                 {
-                    response = "Error" + MessageConstants.splitMessageToken + ErrorResponse;
+                    response = "Error" + MessageConstants.splitToken + ErrorResponse;
                 }
 
             }
@@ -1154,8 +1184,8 @@ namespace TerminalDecay5Server
                 ErrorResponse = "One or more bases not found";
             }
 
-            response += MessageConstants.messageCompleteToken;
-            response = MessageConstants.MessageTypes[14] + MessageConstants.splitMessageToken + response;
+            response += MessageConstants.completeToken;
+            response = MessageConstants.MessageTypes[14] + MessageConstants.splitToken + response;
             NetworkStream clientStream = tcpClient.GetStream();
             ASCIIEncoding encoder = new ASCIIEncoding();
 
@@ -1167,7 +1197,7 @@ namespace TerminalDecay5Server
 
         private void Attack(List<List<string>> transmissions, TcpClient tcpClient)
         {
-            string response = MessageConstants.MessageTypes[14] + MessageConstants.nextMessageToken;
+            string response = MessageConstants.MessageTypes[14] + MessageConstants.nextToken;
 
             Player Attacker = getPlayer(transmissions[0][1]);
             Outpost AttackOp = getOutpost(transmissions[1][0], transmissions[1][1]);
@@ -1229,11 +1259,11 @@ namespace TerminalDecay5Server
 
                 if (ErrorResponse != "")
                 {
-                    response = "Error" + MessageConstants.splitMessageToken + ErrorResponse;
+                    response = "Error" + MessageConstants.splitToken + ErrorResponse;
                 }
 
-                response += MessageConstants.messageCompleteToken;
-                response = MessageConstants.MessageTypes[14] + MessageConstants.splitMessageToken + response;
+                response += MessageConstants.completeToken;
+                response = MessageConstants.MessageTypes[14] + MessageConstants.splitToken + response;
                 NetworkStream clientStream = tcpClient.GetStream();
                 ASCIIEncoding encoder = new ASCIIEncoding();
 
@@ -1580,7 +1610,7 @@ namespace TerminalDecay5Server
             }
 
 
-            string response = MessageConstants.MessageTypes[13] + MessageConstants.nextMessageToken;
+            string response = MessageConstants.MessageTypes[13] + MessageConstants.nextToken;
 
             try
             {
@@ -1595,7 +1625,7 @@ namespace TerminalDecay5Server
                 response += "Player and outpost owner not the same";
             }
 
-            response += MessageConstants.messageCompleteToken;
+            response += MessageConstants.completeToken;
             NetworkStream clientStream = tcpClient.GetStream();
             ASCIIEncoding encoder = new ASCIIEncoding();
 
@@ -1619,31 +1649,31 @@ namespace TerminalDecay5Server
                 return;
             }
 
-            string response = MessageConstants.MessageTypes[11] + MessageConstants.nextMessageToken;
+            string response = MessageConstants.MessageTypes[11] + MessageConstants.nextToken;
 
 
             if (getPlayer(transmissions[0][1]).PlayerID == getOutpost(transmissions[0][2], transmissions[0][3]).OwnerID)
             {
 
                 response += SendOffenceOntile(transmissions);
-                response += MessageConstants.nextMessageToken;
+                response += MessageConstants.nextToken;
 
                 foreach (List<long> d in Cmn.OffenceCost)
                 {
                     foreach (long val in d)
                     {
-                        response += val + MessageConstants.splitMessageToken;
+                        response += val + MessageConstants.splitToken;
                     }
 
-                    response += MessageConstants.nextMessageToken;
+                    response += MessageConstants.nextToken;
                 }
 
                 foreach (long prod in Cmn.OffenceAttack)
                 {
-                    response += prod + MessageConstants.splitMessageToken;
+                    response += prod + MessageConstants.splitToken;
                 }
 
-                response += MessageConstants.nextMessageToken;
+                response += MessageConstants.nextToken;
 
                 List<long> inProgress = new List<long>();
                 foreach (var item in Cmn.OffenceType)
@@ -1663,21 +1693,21 @@ namespace TerminalDecay5Server
 
                 foreach (var item in inProgress)
                 {
-                    response += item + MessageConstants.splitMessageToken;
+                    response += item + MessageConstants.splitToken;
                 }
 
-                response += MessageConstants.nextMessageToken;
+                response += MessageConstants.nextToken;
 
                 foreach (var item in Cmn.OffenceAttack)
                 {
-                    response += item + MessageConstants.splitMessageToken;
+                    response += item + MessageConstants.splitToken;
                 }
 
-                response += MessageConstants.nextMessageToken;
+                response += MessageConstants.nextToken;
 
                 foreach (var item in Cmn.OffenceAttack)
                 {
-                    response += item + MessageConstants.splitMessageToken;
+                    response += item + MessageConstants.splitToken;
                 }
 
             }
@@ -1686,7 +1716,7 @@ namespace TerminalDecay5Server
                 response += "Player and outpost owner not the same";
             }
 
-            response += MessageConstants.messageCompleteToken;
+            response += MessageConstants.completeToken;
             NetworkStream clientStream = tcpClient.GetStream();
             ASCIIEncoding encoder = new ASCIIEncoding();
 
@@ -1704,14 +1734,14 @@ namespace TerminalDecay5Server
 
             if (op == null)
             {
-                response += "-1" + MessageConstants.splitMessageToken;
+                response += "-1" + MessageConstants.splitToken;
             }
             else
             {
                 //response += op.OwnerID;
                 foreach (var item in Cmn.OffenceType)
                 {
-                    response += op.Offence[item.Value] + MessageConstants.splitMessageToken;
+                    response += op.Offence[item.Value] + MessageConstants.splitToken;
                 }
             }
 
@@ -1753,8 +1783,8 @@ namespace TerminalDecay5Server
                 response = "Player and outpost owner not the same";
             }
 
-            response = MessageConstants.MessageTypes[10] + MessageConstants.splitMessageToken + response;
-            response += MessageConstants.messageCompleteToken;
+            response = MessageConstants.MessageTypes[10] + MessageConstants.splitToken + response;
+            response += MessageConstants.completeToken;
             NetworkStream clientStream = tcpClient.GetStream();
             ASCIIEncoding encoder = new ASCIIEncoding();
 
@@ -1799,8 +1829,8 @@ namespace TerminalDecay5Server
                 response = "Player and outpost owner not the same";
             }
 
-            response = MessageConstants.MessageTypes[12] + MessageConstants.splitMessageToken + response;
-            response += MessageConstants.messageCompleteToken;
+            response = MessageConstants.MessageTypes[12] + MessageConstants.splitToken + response;
+            response += MessageConstants.completeToken;
             NetworkStream clientStream = tcpClient.GetStream();
             ASCIIEncoding encoder = new ASCIIEncoding();
 
@@ -1813,26 +1843,26 @@ namespace TerminalDecay5Server
 
         private void SendDefenceBuildList(List<List<string>> transmissions, TcpClient tcpClient)
         {
-            string response = MessageConstants.MessageTypes[9] + MessageConstants.nextMessageToken;
+            string response = MessageConstants.MessageTypes[9] + MessageConstants.nextToken;
             response += SendDefencesOntile(transmissions);
-            response += MessageConstants.nextMessageToken;
+            response += MessageConstants.nextToken;
 
             foreach (List<long> d in Cmn.DefenceCost)
             {
                 foreach (long val in d)
                 {
-                    response += val + MessageConstants.splitMessageToken;
+                    response += val + MessageConstants.splitToken;
                 }
 
-                response += MessageConstants.nextMessageToken;
+                response += MessageConstants.nextToken;
             }
 
             foreach (long prod in Cmn.DefenceAttack)
             {
-                response += prod + MessageConstants.splitMessageToken;
+                response += prod + MessageConstants.splitToken;
             }
 
-            response += MessageConstants.nextMessageToken;
+            response += MessageConstants.nextToken;
 
             List<long> inProgress = new List<long>();
             foreach (var item in Cmn.DefenceType)
@@ -1852,12 +1882,12 @@ namespace TerminalDecay5Server
 
             foreach (var item in inProgress)
             {
-                response += item + MessageConstants.splitMessageToken;
+                response += item + MessageConstants.splitToken;
             }
 
 
 
-            response += MessageConstants.messageCompleteToken;
+            response += MessageConstants.completeToken;
             NetworkStream clientStream = tcpClient.GetStream();
             ASCIIEncoding encoder = new ASCIIEncoding();
 
@@ -1876,11 +1906,11 @@ namespace TerminalDecay5Server
 
             if (op == null)
             {
-                response += "-1" + MessageConstants.splitMessageToken;
+                response += "-1" + MessageConstants.splitToken;
             }
             else
             {
-                response += op.OwnerID + MessageConstants.splitMessageToken + op.Defence[Cmn.DefenceType[Cmn.DefTenum.Patrol]] + MessageConstants.splitMessageToken + op.Defence[Cmn.DefenceType[Cmn.DefTenum.Gunner]] + MessageConstants.splitMessageToken + op.Defence[Cmn.DefenceType[Cmn.DefTenum.Turret]] + MessageConstants.splitMessageToken + op.Defence[Cmn.DefenceType[Cmn.DefTenum.Artillery]] + MessageConstants.splitMessageToken + op.Defence[Cmn.DefenceType[Cmn.DefTenum.DroneBase]] + MessageConstants.nextMessageToken; ;
+                response += op.OwnerID + MessageConstants.splitToken + op.Defence[Cmn.DefenceType[Cmn.DefTenum.Patrol]] + MessageConstants.splitToken + op.Defence[Cmn.DefenceType[Cmn.DefTenum.Gunner]] + MessageConstants.splitToken + op.Defence[Cmn.DefenceType[Cmn.DefTenum.Turret]] + MessageConstants.splitToken + op.Defence[Cmn.DefenceType[Cmn.DefTenum.Artillery]] + MessageConstants.splitToken + op.Defence[Cmn.DefenceType[Cmn.DefTenum.DroneBase]] + MessageConstants.nextToken; ;
             }
 
             return response;
@@ -1921,8 +1951,8 @@ namespace TerminalDecay5Server
                 response = "Player and outpost owner not the same";
             }
 
-            response = MessageConstants.MessageTypes[8] + MessageConstants.splitMessageToken + response;
-            response += MessageConstants.messageCompleteToken;
+            response = MessageConstants.MessageTypes[8] + MessageConstants.splitToken + response;
+            response += MessageConstants.completeToken;
             NetworkStream clientStream = tcpClient.GetStream();
             ASCIIEncoding encoder = new ASCIIEncoding();
 
@@ -1935,8 +1965,8 @@ namespace TerminalDecay5Server
 
         private void SendBuildList(List<List<string>> transmissions, TcpClient tcpClient)
         {
-            string response = MessageConstants.MessageTypes[7] + MessageConstants.nextMessageToken;
-
+            string response = MessageConstants.MessageTypes[7] + MessageConstants.nextToken;
+            int outpostID = -1;
             try
             {
                 int playerid = getPlayer(transmissions[0][1]).PlayerID;
@@ -1947,27 +1977,37 @@ namespace TerminalDecay5Server
                 return;
             }
 
+            try
+            {
+                outpostID = getOutpost(transmissions[0][2], transmissions[0][3]).ID;
+            }
+            catch (Exception)
+            {
+                rejectConnection(7, "player token wrong", tcpClient);
+                return;
+            }
+
             response += SendBuildingsOntile(transmissions);
-            response += MessageConstants.nextMessageToken;
+            response += MessageConstants.nextToken;
 
 
             foreach (List<long> build in Cmn.BuildCost)
             {
                 foreach (long val in build)
                 {
-                    response += val + MessageConstants.splitMessageToken;
+                    response += val + MessageConstants.splitToken;
                 }
 
-                response += MessageConstants.nextMessageToken;
+                response += MessageConstants.nextToken;
             }
 
             foreach (List<long> prod in Cmn.BuildingProduction)
             {
                 foreach (long val in prod)
                 {
-                    response += val + MessageConstants.splitMessageToken;
+                    response += val + MessageConstants.splitToken;
                 }
-                response += MessageConstants.nextMessageToken;
+                response += MessageConstants.nextToken;
             }
 
             List<long> inProgress = new List<long>();
@@ -1980,7 +2020,7 @@ namespace TerminalDecay5Server
 
             foreach (var item in universe.BuildingBuildQueue)
             {
-                if (item.PlayerId == pl.PlayerID)
+                if (item.PlayerId == pl.PlayerID && item.OutpostId == outpostID)
                 {
                     inProgress[item.ItemType] = item.ItemTotal - item.Complete;
                 }
@@ -1988,10 +2028,22 @@ namespace TerminalDecay5Server
 
             foreach (var item in inProgress)
             {
-                response += item + MessageConstants.splitMessageToken;
+                response += item + MessageConstants.splitToken;
             }
 
-            response += MessageConstants.messageCompleteToken;
+            response += MessageConstants.nextToken;
+
+
+            foreach (var item in universe.BuildingBuildQueue)
+            {
+                if (item.PlayerId == pl.PlayerID && item.OutpostId == outpostID)
+                {
+                    response += Cmn.BuildingName[item.ItemType] + MessageConstants.splitToken + item.ItemTotal + MessageConstants.splitToken + item.Complete + MessageConstants.splitToken + item.BuildQueueID;
+                    response += MessageConstants.nextToken;
+                }
+            }
+
+            response += MessageConstants.completeToken;
             NetworkStream clientStream = tcpClient.GetStream();
             ASCIIEncoding encoder = new ASCIIEncoding();
 
@@ -2017,8 +2069,8 @@ namespace TerminalDecay5Server
             }
 
 
-            string reply = MessageConstants.MessageTypes[6] + MessageConstants.nextMessageToken;
-            reply += pl.Resources[Cmn.Resource[Cmn.Renum.Food]] + MessageConstants.splitMessageToken + pl.Resources[Cmn.Resource[Cmn.Renum.Metal]] + MessageConstants.splitMessageToken + pl.Resources[Cmn.Resource[Cmn.Renum.Population]] + MessageConstants.splitMessageToken + pl.Resources[Cmn.Resource[Cmn.Renum.Power]] + MessageConstants.splitMessageToken + pl.Resources[Cmn.Resource[Cmn.Renum.Water]] + MessageConstants.splitMessageToken;
+            string reply = MessageConstants.MessageTypes[6] + MessageConstants.nextToken;
+            reply += pl.Resources[Cmn.Resource[Cmn.Renum.Food]] + MessageConstants.splitToken + pl.Resources[Cmn.Resource[Cmn.Renum.Metal]] + MessageConstants.splitToken + pl.Resources[Cmn.Resource[Cmn.Renum.Population]] + MessageConstants.splitToken + pl.Resources[Cmn.Resource[Cmn.Renum.Power]] + MessageConstants.splitToken + pl.Resources[Cmn.Resource[Cmn.Renum.Water]] + MessageConstants.splitToken;
 
             int mescount = 0;
             foreach (var item in universe.Messages)
@@ -2029,9 +2081,9 @@ namespace TerminalDecay5Server
                 }
 
             }
-            reply += MessageConstants.nextMessageToken + mescount.ToString();
+            reply += MessageConstants.nextToken + mescount.ToString();
 
-            reply += MessageConstants.messageCompleteToken;
+            reply += MessageConstants.completeToken;
 
             NetworkStream clientStream = tcpClient.GetStream();
             ASCIIEncoding encoder = new ASCIIEncoding();
@@ -2057,15 +2109,15 @@ namespace TerminalDecay5Server
 
             if (auth)
             {
-                string Message = MessageConstants.MessageTypes[0] + MessageConstants.nextMessageToken;
+                string Message = MessageConstants.MessageTypes[0] + MessageConstants.nextToken;
 
                 foreach (MapTile m in universe.clusters[Convert.ToInt32(message[0][4])].solarSystems[Convert.ToInt32(message[0][3])].planets[Convert.ToInt32(message[0][2])].mapTiles)
                 {
-                    Message = Message + Convert.ToString(m.position.X) + MessageConstants.splitMessageToken + Convert.ToString(m.position.Y) + MessageConstants.splitMessageToken + m.Resources[Cmn.Resource[Cmn.Renum.Metal]] + MessageConstants.splitMessageToken + m.Resources[Cmn.Resource[Cmn.Renum.Food]] + MessageConstants.splitMessageToken + m.Resources[Cmn.Resource[Cmn.Renum.Water]];
-                    Message = Message + MessageConstants.nextMessageToken;
+                    Message = Message + Convert.ToString(m.position.X) + MessageConstants.splitToken + Convert.ToString(m.position.Y) + MessageConstants.splitToken + m.Resources[Cmn.Resource[Cmn.Renum.Metal]] + MessageConstants.splitToken + m.Resources[Cmn.Resource[Cmn.Renum.Food]] + MessageConstants.splitToken + m.Resources[Cmn.Resource[Cmn.Renum.Water]];
+                    Message = Message + MessageConstants.nextToken;
                 }
 
-                Message += MessageConstants.messageCompleteToken;
+                Message += MessageConstants.completeToken;
 
                 byte[] buffer = encoder.GetBytes(Message);
 
@@ -2216,8 +2268,8 @@ namespace TerminalDecay5Server
 
                 universe.outposts.Add(o);
 
-                string reply = MessageConstants.MessageTypes[1] + MessageConstants.nextMessageToken + "AccountCreated" + MessageConstants.nextMessageToken;
-                reply += MessageConstants.messageCompleteToken;
+                string reply = MessageConstants.MessageTypes[1] + MessageConstants.nextToken + "AccountCreated" + MessageConstants.nextToken;
+                reply += MessageConstants.completeToken;
 
                 NetworkStream clientStream = tcpClient.GetStream();
                 ASCIIEncoding encoder = new ASCIIEncoding();
@@ -2230,8 +2282,8 @@ namespace TerminalDecay5Server
             }
             else
             {
-                string reply = MessageConstants.MessageTypes[1] + MessageConstants.nextMessageToken + "nope";
-                reply += MessageConstants.messageCompleteToken;
+                string reply = MessageConstants.MessageTypes[1] + MessageConstants.nextToken + "nope";
+                reply += MessageConstants.completeToken;
 
                 NetworkStream clientStream = tcpClient.GetStream();
                 ASCIIEncoding encoder = new ASCIIEncoding();
@@ -2253,16 +2305,16 @@ namespace TerminalDecay5Server
                 if (p.Email == message[0][1] && p.Password == message[0][2])
                 {
                     p.token = Guid.NewGuid();
-                    reply = MessageConstants.MessageTypes[2] + MessageConstants.nextMessageToken + "Yeppers" + MessageConstants.nextMessageToken + p.token + MessageConstants.nextMessageToken;
+                    reply = MessageConstants.MessageTypes[2] + MessageConstants.nextToken + "Yeppers" + MessageConstants.nextToken + p.token + MessageConstants.nextToken;
                     break;
                 }
             }
             if (reply == "")
             {
-                reply = MessageConstants.MessageTypes[2] + MessageConstants.nextMessageToken + "nope";
+                reply = MessageConstants.MessageTypes[2] + MessageConstants.nextToken + "nope";
             }
 
-            reply += MessageConstants.messageCompleteToken;
+            reply += MessageConstants.completeToken;
 
             NetworkStream clientStream = tcpClient.GetStream();
             ASCIIEncoding encoder = new ASCIIEncoding();
@@ -2276,7 +2328,7 @@ namespace TerminalDecay5Server
         private void SendMainMap(List<List<string>> message, TcpClient tcpClient)
         {
             long playerid = -1;
-            string response = MessageConstants.MessageTypes[3] + MessageConstants.nextMessageToken;
+            string response = MessageConstants.MessageTypes[3] + MessageConstants.nextToken;
 
             try
             {
@@ -2303,7 +2355,7 @@ namespace TerminalDecay5Server
             {
                 if (o.Address.ClusterID.ToString() == message[0][4] && o.Address.SolarSytemID.ToString() == message[0][5] && o.Address.PlanetID == planetId)
                 {
-                    response += o.Tile.X + MessageConstants.splitMessageToken + o.Tile.Y + MessageConstants.splitMessageToken + o.OwnerID + MessageConstants.splitMessageToken;
+                    response += o.Tile.X + MessageConstants.splitToken + o.Tile.Y + MessageConstants.splitToken + o.OwnerID + MessageConstants.splitToken;
                     if (playerid == o.OwnerID)
                     {
                         response += "mine";
@@ -2326,10 +2378,10 @@ namespace TerminalDecay5Server
                         def += o.Defence[index] * Cmn.DefenceAttack[index];
                     }
 
-                    response += MessageConstants.splitMessageToken + def.ToString();
+                    response += MessageConstants.splitToken + def.ToString();
 
 
-                    response += MessageConstants.nextMessageToken;
+                    response += MessageConstants.nextToken;
                 }
             }
 
@@ -2339,8 +2391,8 @@ namespace TerminalDecay5Server
             {
                 if (item.OriginOutpost.Address.ClusterID.ToString() == message[0][4] && item.OriginOutpost.Address.SolarSytemID.ToString() == message[0][5] && item.OriginOutpost.Address.PlanetID == planetId)
                 {
-                    response += MessageConstants.nextMessageToken;
-                    response += item.OriginOutpost.Tile.X + MessageConstants.splitMessageToken + item.OriginOutpost.Tile.Y + MessageConstants.splitMessageToken + item.DestinationOutpost.Tile.X + MessageConstants.splitMessageToken + item.DestinationOutpost.Tile.Y + MessageConstants.splitMessageToken + item.StartTick + MessageConstants.splitMessageToken + item.Duration + MessageConstants.splitMessageToken + universe.CurrentTick;
+                    response += MessageConstants.nextToken;
+                    response += item.OriginOutpost.Tile.X + MessageConstants.splitToken + item.OriginOutpost.Tile.Y + MessageConstants.splitToken + item.DestinationOutpost.Tile.X + MessageConstants.splitToken + item.DestinationOutpost.Tile.Y + MessageConstants.splitToken + item.StartTick + MessageConstants.splitToken + item.Duration + MessageConstants.splitToken + universe.CurrentTick;
                 }
             }
 
@@ -2350,14 +2402,14 @@ namespace TerminalDecay5Server
             {
                 if (item.Address.ClusterID.ToString() == message[0][4] && item.Address.SolarSytemID.ToString() == message[0][5] && item.Address.PlanetID == planetId)
                 {
-                    response += MessageConstants.nextMessageToken;
-                    response += item.Tile.X + MessageConstants.splitMessageToken + item.Tile.Y + MessageConstants.splitMessageToken + item.specialType + MessageConstants.splitMessageToken + item.resourceType;
+                    response += MessageConstants.nextToken;
+                    response += item.Tile.X + MessageConstants.splitToken + item.Tile.Y + MessageConstants.splitToken + item.specialType + MessageConstants.splitToken + item.resourceType;
                 }
             }
 
 
 
-            response += MessageConstants.messageCompleteToken;
+            response += MessageConstants.completeToken;
 
             NetworkStream clientStream = tcpClient.GetStream();
             ASCIIEncoding encoder = new ASCIIEncoding();
@@ -2375,9 +2427,9 @@ namespace TerminalDecay5Server
             //find the tile involved from the message 
             int index = Convert.ToInt32(message[0][2]) * 25 + Convert.ToInt32(message[0][3]);
 
-            string response = MessageConstants.MessageTypes[4] + MessageConstants.nextMessageToken + universe.clusters[0].solarSystems[0].planets[0].mapTiles[index].Resources[Cmn.Resource[Cmn.Renum.Metal]] + MessageConstants.splitMessageToken + universe.clusters[0].solarSystems[0].planets[0].mapTiles[index].Resources[Cmn.Resource[Cmn.Renum.Food]] + MessageConstants.splitMessageToken + universe.clusters[0].solarSystems[0].planets[0].mapTiles[index].Resources[Cmn.Resource[Cmn.Renum.Water]] + MessageConstants.splitMessageToken;
+            string response = MessageConstants.MessageTypes[4] + MessageConstants.nextToken + universe.clusters[0].solarSystems[0].planets[0].mapTiles[index].Resources[Cmn.Resource[Cmn.Renum.Metal]] + MessageConstants.splitToken + universe.clusters[0].solarSystems[0].planets[0].mapTiles[index].Resources[Cmn.Resource[Cmn.Renum.Food]] + MessageConstants.splitToken + universe.clusters[0].solarSystems[0].planets[0].mapTiles[index].Resources[Cmn.Resource[Cmn.Renum.Water]] + MessageConstants.splitToken;
 
-            response += MessageConstants.messageCompleteToken;
+            response += MessageConstants.completeToken;
 
             NetworkStream clientStream = tcpClient.GetStream();
             ASCIIEncoding encoder = new ASCIIEncoding();
@@ -2390,7 +2442,7 @@ namespace TerminalDecay5Server
 
         private void SendBuildTile(List<List<string>> message, TcpClient tcpClient)
         {
-            string response = MessageConstants.MessageTypes[5] + MessageConstants.nextMessageToken;
+            string response = MessageConstants.MessageTypes[5] + MessageConstants.nextToken;
 
             long playerid = -1;
 
@@ -2405,7 +2457,7 @@ namespace TerminalDecay5Server
 
             response += SendBuildingsOntile(message);
             response += SendDefenceOnTile(message);
-            response += MessageConstants.messageCompleteToken;
+            response += MessageConstants.completeToken;
             NetworkStream clientStream = tcpClient.GetStream();
             ASCIIEncoding encoder = new ASCIIEncoding();
 
@@ -2423,11 +2475,11 @@ namespace TerminalDecay5Server
 
             if (op == null)
             {
-                response += "-1" + MessageConstants.splitMessageToken;
+                response += "-1" + MessageConstants.splitToken;
             }
             else
             {
-                response += op.Defence[Cmn.DefenceType[Cmn.DefTenum.Patrol]] + MessageConstants.splitMessageToken + op.Defence[Cmn.DefenceType[Cmn.DefTenum.Gunner]] + MessageConstants.splitMessageToken + op.Defence[Cmn.DefenceType[Cmn.DefTenum.Turret]] + MessageConstants.splitMessageToken + op.Defence[Cmn.DefenceType[Cmn.DefTenum.Artillery]] + MessageConstants.splitMessageToken + op.Defence[Cmn.DefenceType[Cmn.DefTenum.DroneBase]] + MessageConstants.nextMessageToken; ;
+                response += op.Defence[Cmn.DefenceType[Cmn.DefTenum.Patrol]] + MessageConstants.splitToken + op.Defence[Cmn.DefenceType[Cmn.DefTenum.Gunner]] + MessageConstants.splitToken + op.Defence[Cmn.DefenceType[Cmn.DefTenum.Turret]] + MessageConstants.splitToken + op.Defence[Cmn.DefenceType[Cmn.DefTenum.Artillery]] + MessageConstants.splitToken + op.Defence[Cmn.DefenceType[Cmn.DefTenum.DroneBase]] + MessageConstants.nextToken; ;
             }
             return response;
         }
@@ -2441,7 +2493,7 @@ namespace TerminalDecay5Server
 
             if (op == null)
             {
-                response += "-1" + MessageConstants.splitMessageToken;
+                response += "-1" + MessageConstants.splitToken;
             }
             else
             {
@@ -2449,11 +2501,11 @@ namespace TerminalDecay5Server
                 if (pl.PlayerID == op.OwnerID)
                 {
                     long freeBuild = op.Capacity - (op.Buildings[Cmn.BuildType[Cmn.BldTenum.Farm]] + op.Buildings[Cmn.BuildType[Cmn.BldTenum.Habitat]] + op.Buildings[Cmn.BuildType[Cmn.BldTenum.Mine]] + op.Buildings[Cmn.BuildType[Cmn.BldTenum.SolarPLant]] + op.Buildings[Cmn.BuildType[Cmn.BldTenum.Well]] + op.Buildings[Cmn.BuildType[Cmn.BldTenum.Fabricator]]);
-                    response += op.OwnerID + MessageConstants.splitMessageToken + freeBuild + MessageConstants.splitMessageToken + op.Buildings[Cmn.BuildType[Cmn.BldTenum.Farm]] + MessageConstants.splitMessageToken + op.Buildings[Cmn.BuildType[Cmn.BldTenum.Habitat]] + MessageConstants.splitMessageToken + op.Buildings[Cmn.BuildType[Cmn.BldTenum.Mine]] + MessageConstants.splitMessageToken + op.Buildings[Cmn.BuildType[Cmn.BldTenum.SolarPLant]] + MessageConstants.splitMessageToken + op.Buildings[Cmn.BuildType[Cmn.BldTenum.Well]] + MessageConstants.splitMessageToken + op.Buildings[Cmn.BuildType[Cmn.BldTenum.Fabricator]] + MessageConstants.nextMessageToken; ;
+                    response += op.OwnerID + MessageConstants.splitToken + freeBuild + MessageConstants.splitToken + op.Buildings[Cmn.BuildType[Cmn.BldTenum.Farm]] + MessageConstants.splitToken + op.Buildings[Cmn.BuildType[Cmn.BldTenum.Habitat]] + MessageConstants.splitToken + op.Buildings[Cmn.BuildType[Cmn.BldTenum.Mine]] + MessageConstants.splitToken + op.Buildings[Cmn.BuildType[Cmn.BldTenum.SolarPLant]] + MessageConstants.splitToken + op.Buildings[Cmn.BuildType[Cmn.BldTenum.Well]] + MessageConstants.splitToken + op.Buildings[Cmn.BuildType[Cmn.BldTenum.Fabricator]] + MessageConstants.nextToken; ;
                 }
                 else
                 {
-                    response += "Enemy" + MessageConstants.splitMessageToken + op.OwnerID + MessageConstants.splitMessageToken;
+                    response += "Enemy" + MessageConstants.splitToken + op.OwnerID + MessageConstants.splitToken;
                 }
             }
 
@@ -2496,7 +2548,7 @@ namespace TerminalDecay5Server
         private void rejectConnection(int mesmnum, string message, TcpClient tcpClient)
         {
             string response = MessageConstants.MessageTypes[mesmnum];
-            response += MessageConstants.nextMessageToken + "Logout" + MessageConstants.messageCompleteToken;
+            response += MessageConstants.nextToken + "Logout" + MessageConstants.completeToken;
 
             NetworkStream clientStream = tcpClient.GetStream();
             ASCIIEncoding encoder = new ASCIIEncoding();
@@ -2630,7 +2682,7 @@ namespace TerminalDecay5Server
                 return;
             }
 
-            string response = MessageConstants.MessageTypes[21] + MessageConstants.nextMessageToken;
+            string response = MessageConstants.MessageTypes[21] + MessageConstants.nextToken;
 
             try
             {
@@ -2646,7 +2698,7 @@ namespace TerminalDecay5Server
                 response += "Player and outpost owner not the same";
             }
 
-            response += MessageConstants.messageCompleteToken;
+            response += MessageConstants.completeToken;
             NetworkStream clientStream = tcpClient.GetStream();
             ASCIIEncoding encoder = new ASCIIEncoding();
 

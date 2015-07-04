@@ -33,6 +33,8 @@ namespace TerminalDecay5Client
 
         Messages frmMessage = new Messages();
 
+        public Dictionary<int, Guid> BuildGuidList;
+
         public Map()
         {
             InitializeComponent();
@@ -52,7 +54,7 @@ namespace TerminalDecay5Client
         void UpdatePlayerResoureces(object sender, EventArgs e)
         {
             ServerConnection sc = new ServerConnection();
-            sc.ServerRequest(DrawPlayerResources, 6, MessageConstants.splitMessageToken + Convert.ToString(playerToken) + MessageConstants.splitMessageToken);
+            sc.ServerRequest(DrawPlayerResources, 6, MessageConstants.splitToken + Convert.ToString(playerToken) + MessageConstants.splitToken);
         }
 
         private void DrawPlayerResources(List<List<string>> transmission)
@@ -74,7 +76,7 @@ namespace TerminalDecay5Client
         private void button1_Click(object sender, EventArgs e)
         {
             ServerConnection sc = new ServerConnection();
-            sc.ServerRequest(RenderResMap, 0, MessageConstants.splitMessageToken + Convert.ToString(playerToken) + MessageConstants.splitMessageToken + Convert.ToString(_currentPlanet) + MessageConstants.splitMessageToken + _currentSolarSystem + MessageConstants.splitMessageToken + _currentCluster + MessageConstants.messageCompleteToken);
+            sc.ServerRequest(RenderResMap, 0, MessageConstants.splitToken + Convert.ToString(playerToken) + MessageConstants.splitToken + Convert.ToString(_currentPlanet) + MessageConstants.splitToken + _currentSolarSystem + MessageConstants.splitToken + _currentCluster + MessageConstants.completeToken);
             hideMenus();
         }
 
@@ -136,7 +138,7 @@ namespace TerminalDecay5Client
         private void button2_Click(object sender, EventArgs e)
         {
             ServerConnection sc = new ServerConnection();
-            sc.ServerRequest(RenderMainMap, 3, MessageConstants.splitMessageToken + Convert.ToString(playerToken));
+            sc.ServerRequest(RenderMainMap, 3, MessageConstants.splitToken + Convert.ToString(playerToken));
             hideMenus();
         }
 
@@ -360,7 +362,7 @@ namespace TerminalDecay5Client
                 if (m.Button == MouseButtons.Left)
                 {
                     ServerConnection sc = new ServerConnection();
-                    sc.ServerRequest(UpdateSidePanel, 4, MessageConstants.splitMessageToken + Convert.ToString(playerToken) + MessageConstants.splitMessageToken + Convert.ToString(mx) + MessageConstants.splitMessageToken + Convert.ToString(my) + MessageConstants.messageCompleteToken);
+                    sc.ServerRequest(UpdateSidePanel, 4, MessageConstants.splitToken + Convert.ToString(playerToken) + MessageConstants.splitToken + Convert.ToString(mx) + MessageConstants.splitToken + Convert.ToString(my) + MessageConstants.completeToken);
                 }
             }
 
@@ -371,7 +373,7 @@ namespace TerminalDecay5Client
                     _currentX = mx;
                     _currentY = my;
                     ServerConnection sc = new ServerConnection();
-                    sc.ServerRequest(UpdateSidePanel, 5, MessageConstants.splitMessageToken + Convert.ToString(playerToken) + MessageConstants.splitMessageToken + Convert.ToString(mx) + MessageConstants.splitMessageToken + Convert.ToString(my) + MessageConstants.messageCompleteToken);
+                    sc.ServerRequest(UpdateSidePanel, 5, MessageConstants.splitToken + Convert.ToString(playerToken) + MessageConstants.splitToken + Convert.ToString(mx) + MessageConstants.splitToken + Convert.ToString(my) + MessageConstants.completeToken);
                 }
             }
 
@@ -384,7 +386,7 @@ namespace TerminalDecay5Client
 
                     //get the current offence in that place now, and allow them to use it;
                     ServerConnection sc = new ServerConnection();
-                    sc.ServerRequest(DisplayAttack, 13, MessageConstants.splitMessageToken + Convert.ToString(playerToken) + MessageConstants.splitMessageToken + Convert.ToString(_currentX) + MessageConstants.splitMessageToken + Convert.ToString(_currentY) + MessageConstants.messageCompleteToken);
+                    sc.ServerRequest(DisplayAttack, 13, MessageConstants.splitToken + Convert.ToString(playerToken) + MessageConstants.splitToken + Convert.ToString(_currentX) + MessageConstants.splitToken + Convert.ToString(_currentY) + MessageConstants.completeToken);
 
                 }
             }
@@ -397,7 +399,7 @@ namespace TerminalDecay5Client
                     _currentX = mx;
                     _currentY = my;
                     ServerConnection sc = new ServerConnection();
-                    sc.ServerRequest(RenderMainMap, 3, MessageConstants.splitMessageToken + Convert.ToString(playerToken) + MessageConstants.splitMessageToken + Convert.ToString(mx) + MessageConstants.splitMessageToken + Convert.ToString(my) + MessageConstants.splitMessageToken + _currentCluster + MessageConstants.splitMessageToken + _currentSolarSystem + MessageConstants.messageCompleteToken);
+                    sc.ServerRequest(RenderMainMap, 3, MessageConstants.splitToken + Convert.ToString(playerToken) + MessageConstants.splitToken + Convert.ToString(mx) + MessageConstants.splitToken + Convert.ToString(my) + MessageConstants.splitToken + _currentCluster + MessageConstants.splitToken + _currentSolarSystem + MessageConstants.completeToken);
                 }
             }
 
@@ -408,7 +410,7 @@ namespace TerminalDecay5Client
                     _currentX = mx;
                     _currentY = my;
                     ServerConnection sc = new ServerConnection();
-                    sc.ServerRequest(RenderSolarMap, 17, MessageConstants.splitMessageToken + Convert.ToString(playerToken) + MessageConstants.splitMessageToken + Convert.ToString(mx) + MessageConstants.splitMessageToken + Convert.ToString(my) + MessageConstants.splitMessageToken + _currentCluster + MessageConstants.messageCompleteToken);
+                    sc.ServerRequest(RenderSolarMap, 17, MessageConstants.splitToken + Convert.ToString(playerToken) + MessageConstants.splitToken + Convert.ToString(mx) + MessageConstants.splitToken + Convert.ToString(my) + MessageConstants.splitToken + _currentCluster + MessageConstants.completeToken);
                 }
             }
 
@@ -419,7 +421,7 @@ namespace TerminalDecay5Client
                     _currentX = mx;
                     _currentY = my;
                     ServerConnection sc = new ServerConnection();
-                    sc.ServerRequest(RenderClusterMap, 18, MessageConstants.splitMessageToken + Convert.ToString(playerToken) + MessageConstants.splitMessageToken + Convert.ToString(mx) + MessageConstants.splitMessageToken + Convert.ToString(my) + MessageConstants.messageCompleteToken);
+                    sc.ServerRequest(RenderClusterMap, 18, MessageConstants.splitToken + Convert.ToString(playerToken) + MessageConstants.splitToken + Convert.ToString(mx) + MessageConstants.splitToken + Convert.ToString(my) + MessageConstants.completeToken);
                 }
             }
 
@@ -431,7 +433,7 @@ namespace TerminalDecay5Client
                     _targetX = mx;
                     _targetY = my;
                     ServerConnection sc = new ServerConnection();
-                    sc.ServerRequest(UpdateReinforcePanel, 21, MessageConstants.splitMessageToken + Convert.ToString(playerToken) + MessageConstants.splitMessageToken + Convert.ToString(_currentX) + MessageConstants.splitMessageToken + Convert.ToString(_currentY)); ;
+                    sc.ServerRequest(UpdateReinforcePanel, 21, MessageConstants.splitToken + Convert.ToString(playerToken) + MessageConstants.splitToken + Convert.ToString(_currentX) + MessageConstants.splitToken + Convert.ToString(_currentY)); ;
                 }
             }
 
@@ -529,9 +531,13 @@ namespace TerminalDecay5Client
 
         private void BtnBuild_Click(object sender, EventArgs e)
         {
-            //show the build list
+            GetBuildingView();
+        }
+
+        private void GetBuildingView()
+        {
             ServerConnection sc = new ServerConnection();
-            sc.ServerRequest(UpdateBuildPanel, 7, MessageConstants.splitMessageToken + Convert.ToString(playerToken) + MessageConstants.splitMessageToken + Convert.ToString(_currentX) + MessageConstants.splitMessageToken + Convert.ToString(_currentY));
+            sc.ServerRequest(UpdateBuildPanel, 7, MessageConstants.splitToken + Convert.ToString(playerToken) + MessageConstants.splitToken + Convert.ToString(_currentX) + MessageConstants.splitToken + Convert.ToString(_currentY));
 
         }
 
@@ -561,9 +567,6 @@ namespace TerminalDecay5Client
             lblCostSolarPlant.Text = updateBuildPanelCostString(transmission, 6);
             lblCostWell.Text = updateBuildPanelCostString(transmission, 7);
             lblCostFabricator.Text = updateBuildPanelCostString(transmission, 8);
-
-
-            //draw lblbuildxxxxxx values here when the queue has been built
 
             int nonEmptyValue = -1;
 
@@ -604,6 +607,18 @@ namespace TerminalDecay5Client
             LblBuildSolarPlant.Text = transmission[15][4];
             lblBuildWell.Text = transmission[15][1];
             lblBuildFabricator.Text = transmission[15][5];
+
+            LstBuildingsBuildQueue.Items.Clear();
+            BuildGuidList = new Dictionary<int, Guid>();
+
+            for (int i = 16; i < transmission.Count; i++)
+            {
+                if (transmission[i].Count == 4)
+                {
+                    LstBuildingsBuildQueue.Items.Add(transmission[i][0] + "  " + transmission[i][2] + "/" + transmission[i][1]);
+                    BuildGuidList.Add(i - 16, new Guid(transmission[i][3]));
+                }
+            }
         }
 
         private string updateBuildPanelCostString(List<List<string>> transmission, int x)
@@ -765,15 +780,15 @@ namespace TerminalDecay5Client
                 buildList.Add(Convert.ToInt32(txtSolarPlant.Text));
                 buildList.Add(Convert.ToInt32(txtFabricator.Text));
 
-                string request = MessageConstants.splitMessageToken + Convert.ToString(playerToken) + MessageConstants.nextMessageToken;
+                string request = MessageConstants.splitToken + Convert.ToString(playerToken) + MessageConstants.nextToken;
 
                 foreach (int i in buildList)
                 {
-                    request += i + MessageConstants.splitMessageToken;
+                    request += i + MessageConstants.splitToken;
                 }
 
-                request += MessageConstants.nextMessageToken;
-                request += _currentX + MessageConstants.splitMessageToken + _currentY;
+                request += MessageConstants.nextToken;
+                request += _currentX + MessageConstants.splitToken + _currentY;
 
                 ServerConnection sc = new ServerConnection();
                 sc.ServerRequest(ConfirmBuildQueue, 8, request);
@@ -802,19 +817,19 @@ namespace TerminalDecay5Client
             if (transmission[0][0] == MessageConstants.MessageTypes[8])
             {
                 ServerConnection sc = new ServerConnection();
-                sc.ServerRequest(UpdateBuildPanel, 7, MessageConstants.splitMessageToken + Convert.ToString(playerToken) + MessageConstants.splitMessageToken + Convert.ToString(_currentX) + MessageConstants.splitMessageToken + Convert.ToString(_currentY));
+                sc.ServerRequest(UpdateBuildPanel, 7, MessageConstants.splitToken + Convert.ToString(playerToken) + MessageConstants.splitToken + Convert.ToString(_currentX) + MessageConstants.splitToken + Convert.ToString(_currentY));
             }
 
             if (transmission[0][0] == MessageConstants.MessageTypes[10])
             {
                 ServerConnection sc = new ServerConnection();
-                sc.ServerRequest(UpdateBuildDefPanel, 9, MessageConstants.splitMessageToken + Convert.ToString(playerToken) + MessageConstants.splitMessageToken + Convert.ToString(_currentX) + MessageConstants.splitMessageToken + Convert.ToString(_currentY));
+                sc.ServerRequest(UpdateBuildDefPanel, 9, MessageConstants.splitToken + Convert.ToString(playerToken) + MessageConstants.splitToken + Convert.ToString(_currentX) + MessageConstants.splitToken + Convert.ToString(_currentY));
             }
 
             if (transmission[0][0] == MessageConstants.MessageTypes[12])
             {
                 ServerConnection sc = new ServerConnection();
-                sc.ServerRequest(UpdateBuildOffPanel, 11, MessageConstants.splitMessageToken + Convert.ToString(playerToken) + MessageConstants.splitMessageToken + Convert.ToString(_currentX) + MessageConstants.splitMessageToken + Convert.ToString(_currentY));
+                sc.ServerRequest(UpdateBuildOffPanel, 11, MessageConstants.splitToken + Convert.ToString(playerToken) + MessageConstants.splitToken + Convert.ToString(_currentX) + MessageConstants.splitToken + Convert.ToString(_currentY));
             }
 
 
@@ -829,7 +844,7 @@ namespace TerminalDecay5Client
         {
             //show the build list
             ServerConnection sc = new ServerConnection();
-            sc.ServerRequest(UpdateBuildDefPanel, 9, MessageConstants.splitMessageToken + Convert.ToString(playerToken) + MessageConstants.splitMessageToken + Convert.ToString(_currentX) + MessageConstants.splitMessageToken + Convert.ToString(_currentY)); ;
+            sc.ServerRequest(UpdateBuildDefPanel, 9, MessageConstants.splitToken + Convert.ToString(playerToken) + MessageConstants.splitToken + Convert.ToString(_currentX) + MessageConstants.splitToken + Convert.ToString(_currentY)); ;
 
 
         }
@@ -909,15 +924,15 @@ namespace TerminalDecay5Client
                 defBuildList.Add(Convert.ToInt32(txtArtillery.Text));
                 defBuildList.Add(Convert.ToInt32(txtDroneBase.Text));
 
-                string request = MessageConstants.splitMessageToken + Convert.ToString(playerToken) + MessageConstants.nextMessageToken;
+                string request = MessageConstants.splitToken + Convert.ToString(playerToken) + MessageConstants.nextToken;
 
                 foreach (int i in defBuildList)
                 {
-                    request += i + MessageConstants.splitMessageToken;
+                    request += i + MessageConstants.splitToken;
                 }
 
-                request += MessageConstants.nextMessageToken;
-                request += _currentX + MessageConstants.splitMessageToken + _currentY;
+                request += MessageConstants.nextToken;
+                request += _currentX + MessageConstants.splitToken + _currentY;
                 ServerConnection sc = new ServerConnection();
                 sc.ServerRequest(ConfirmBuildQueue, 10, request);
 
@@ -942,7 +957,7 @@ namespace TerminalDecay5Client
         private void BtnOffence_Click(object sender, EventArgs e)
         {
             ServerConnection sc = new ServerConnection();
-            sc.ServerRequest(UpdateBuildOffPanel, 11, MessageConstants.splitMessageToken + Convert.ToString(playerToken) + MessageConstants.splitMessageToken + Convert.ToString(_currentX) + MessageConstants.splitMessageToken + Convert.ToString(_currentY)); ;
+            sc.ServerRequest(UpdateBuildOffPanel, 11, MessageConstants.splitToken + Convert.ToString(playerToken) + MessageConstants.splitToken + Convert.ToString(_currentX) + MessageConstants.splitToken + Convert.ToString(_currentY)); ;
         }
 
         private void showOffenceMenu(bool show)
@@ -1101,15 +1116,15 @@ namespace TerminalDecay5Client
                 OffBuildList.Add(Convert.ToInt32(txtCarrier.Text));
                 OffBuildList.Add(Convert.ToInt32(txtBattleship.Text));
 
-                string request = MessageConstants.splitMessageToken + Convert.ToString(playerToken) + MessageConstants.nextMessageToken;
+                string request = MessageConstants.splitToken + Convert.ToString(playerToken) + MessageConstants.nextToken;
 
                 foreach (int i in OffBuildList)
                 {
-                    request += i + MessageConstants.splitMessageToken;
+                    request += i + MessageConstants.splitToken;
                 }
 
-                request += MessageConstants.nextMessageToken;
-                request += _currentX + MessageConstants.splitMessageToken + _currentY;
+                request += MessageConstants.nextToken;
+                request += _currentX + MessageConstants.splitToken + _currentY;
 
                 ServerConnection sc = new ServerConnection();
                 sc.ServerRequest(ConfirmBuildQueue, 12, request);
@@ -1149,17 +1164,17 @@ namespace TerminalDecay5Client
                 AttackList.Add(Convert.ToInt32(txtAttackCarrier.Text));
                 AttackList.Add(Convert.ToInt32(txtAttackBattleship.Text));
 
-                string request = MessageConstants.splitMessageToken + Convert.ToString(playerToken) + MessageConstants.nextMessageToken;
+                string request = MessageConstants.splitToken + Convert.ToString(playerToken) + MessageConstants.nextToken;
 
-                request += _currentX + MessageConstants.splitMessageToken + _currentY + MessageConstants.splitMessageToken + _targetX + MessageConstants.splitMessageToken + _targetY + MessageConstants.nextMessageToken;
+                request += _currentX + MessageConstants.splitToken + _currentY + MessageConstants.splitToken + _targetX + MessageConstants.splitToken + _targetY + MessageConstants.nextToken;
 
                 foreach (int i in AttackList)
                 {
-                    request += i + MessageConstants.splitMessageToken;
+                    request += i + MessageConstants.splitToken;
                 }
 
-                request += MessageConstants.nextMessageToken;
-                request += _currentX + MessageConstants.splitMessageToken + _currentY;
+                request += MessageConstants.nextToken;
+                request += _currentX + MessageConstants.splitToken + _currentY;
 
                 ServerConnection sc = new ServerConnection();
                 sc.ServerRequest(ResultsOfAttack, 14, request);
@@ -1214,7 +1229,7 @@ namespace TerminalDecay5Client
         {
             CurrentView = 3;
             ServerConnection sc = new ServerConnection();
-            sc.ServerRequest(RenderSolarMap, 17, MessageConstants.splitMessageToken + Convert.ToString(playerToken));
+            sc.ServerRequest(RenderSolarMap, 17, MessageConstants.splitToken + Convert.ToString(playerToken));
             hideMenus();
         }
 
@@ -1410,7 +1425,7 @@ namespace TerminalDecay5Client
         {
             CurrentView = 4;
             ServerConnection sc = new ServerConnection();
-            sc.ServerRequest(RenderClusterMap, 18, MessageConstants.splitMessageToken + Convert.ToString(playerToken) + MessageConstants.splitMessageToken + _currentX + MessageConstants.splitMessageToken + _currentY);
+            sc.ServerRequest(RenderClusterMap, 18, MessageConstants.splitToken + Convert.ToString(playerToken) + MessageConstants.splitToken + _currentX + MessageConstants.splitToken + _currentY);
             hideMenus();
         }
 
@@ -1509,7 +1524,7 @@ namespace TerminalDecay5Client
         {
             CurrentView = 5;
             ServerConnection sc = new ServerConnection();
-            sc.ServerRequest(RenderUniverse, 19, MessageConstants.splitMessageToken + Convert.ToString(playerToken));
+            sc.ServerRequest(RenderUniverse, 19, MessageConstants.splitToken + Convert.ToString(playerToken));
             hideMenus();
         }
 
@@ -1517,7 +1532,7 @@ namespace TerminalDecay5Client
         {
             CurrentView = 3;
             ServerConnection sc = new ServerConnection();
-            sc.ServerRequest(renderHome, 20, MessageConstants.splitMessageToken + Convert.ToString(playerToken));
+            sc.ServerRequest(renderHome, 20, MessageConstants.splitToken + Convert.ToString(playerToken));
             hideMenus();
         }
 
@@ -1529,7 +1544,7 @@ namespace TerminalDecay5Client
             _currentY = Convert.ToInt32(transmission[1][3]);
 
             ServerConnection sc = new ServerConnection();
-            sc.ServerRequest(RenderMainMap, 3, MessageConstants.splitMessageToken + Convert.ToString(playerToken) + MessageConstants.splitMessageToken + Convert.ToString(_currentX) + MessageConstants.splitMessageToken + Convert.ToString(_currentY) + MessageConstants.splitMessageToken + _currentCluster + MessageConstants.splitMessageToken + _currentSolarSystem + MessageConstants.messageCompleteToken);
+            sc.ServerRequest(RenderMainMap, 3, MessageConstants.splitToken + Convert.ToString(playerToken) + MessageConstants.splitToken + Convert.ToString(_currentX) + MessageConstants.splitToken + Convert.ToString(_currentY) + MessageConstants.splitToken + _currentCluster + MessageConstants.splitToken + _currentSolarSystem + MessageConstants.completeToken);
         }
 
         private void button7_Click(object sender, EventArgs e)
@@ -1562,17 +1577,17 @@ namespace TerminalDecay5Client
                 ReinforcementList.Add(Convert.ToInt64(txtDroneBase.Text));
 
 
-                string request = MessageConstants.splitMessageToken + Convert.ToString(playerToken) + MessageConstants.nextMessageToken;
+                string request = MessageConstants.splitToken + Convert.ToString(playerToken) + MessageConstants.nextToken;
 
-                request += _currentX + MessageConstants.splitMessageToken + _currentY + MessageConstants.splitMessageToken + _targetX + MessageConstants.splitMessageToken + _targetY + MessageConstants.nextMessageToken;
+                request += _currentX + MessageConstants.splitToken + _currentY + MessageConstants.splitToken + _targetX + MessageConstants.splitToken + _targetY + MessageConstants.nextToken;
 
                 foreach (int i in ReinforcementList)
                 {
-                    request += i + MessageConstants.splitMessageToken;
+                    request += i + MessageConstants.splitToken;
                 }
 
-                request += MessageConstants.nextMessageToken;
-                request += _currentX + MessageConstants.splitMessageToken + _currentY;
+                request += MessageConstants.nextToken;
+                request += _currentX + MessageConstants.splitToken + _currentY;
 
                 ServerConnection sc = new ServerConnection();
                 sc.ServerRequest(ResultsOfAttack, 22, request);
@@ -1642,6 +1657,32 @@ namespace TerminalDecay5Client
             txtReinforceScout.Text = "0";
             txtReinforceTurret.Text = "0";
 
+        }
+
+        private void txtRemoveBuildings_Click(object sender, EventArgs e)
+        {
+            if (LstBuildingsBuildQueue.SelectedIndex != -1)
+            {
+                if (BuildGuidList.ContainsKey(LstBuildingsBuildQueue.SelectedIndex))
+                {
+                    ServerConnection sc = new ServerConnection();
+                    sc.ServerRequest(RemoveFromQueueBuildResponse, 23, MessageConstants.splitToken + Convert.ToString(playerToken) + MessageConstants.splitToken + BuildGuidList[LstBuildingsBuildQueue.SelectedIndex]);
+                }
+            }
+            else
+            {
+                MessageBox.Show("No selected item");
+            }
+
+        }
+
+        private void RemoveFromQueueBuildResponse(List<List<string>> transmission)
+        {
+            if (transmission[1][0] == "success")
+            {
+                MessageBox.Show("Successfully Removed From Queue");
+            }
+            GetBuildingView();
         }
     }
 }

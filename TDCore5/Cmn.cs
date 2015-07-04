@@ -13,7 +13,7 @@ namespace TDCore5
             ManufacturingBoost = 4,
             //If expanding to this, the special structure creation code has a hard coded value for the number of items here
         }
-        
+
 
 
         public enum Renum
@@ -38,6 +38,8 @@ namespace TDCore5
         }
 
         public static Dictionary<BldTenum, int> BuildType;
+
+        public static Dictionary<int, string> BuildingName;
 
         public static List<List<long>> BuildCost;
 
@@ -79,7 +81,7 @@ namespace TDCore5
         {
             Attack = 0,
             Reinforcement = 1,
-            Loan = 2            
+            Loan = 2
         }
 
         public static Dictionary<MovType, int> MovementType;
@@ -131,6 +133,14 @@ namespace TDCore5
             DefenceAttack = new List<long>();
             OffenceCost = new List<List<long>>();
             OffenceAttack = new List<long>();
+            BuildingName = new Dictionary<int, string>();
+
+            BuildingName.Add(BuildType[BldTenum.Farm], "Farm");
+            BuildingName.Add(BuildType[BldTenum.Fabricator], "Fabricator");
+            BuildingName.Add(BuildType[BldTenum.Habitat], "Habitat");
+            BuildingName.Add(BuildType[BldTenum.Mine], "Mine");
+            BuildingName.Add(BuildType[BldTenum.SolarPLant], "SolarPLant");
+            BuildingName.Add(BuildType[BldTenum.Well], "Well");
 
             foreach (KeyValuePair<BldTenum, int> build in BuildType)
             {
@@ -259,7 +269,7 @@ namespace TDCore5
             DefenceAttack[DefenceType[DefTenum.Turret]] = 10;
             DefenceAttack[DefenceType[DefTenum.Artillery]] = 15;
             DefenceAttack[DefenceType[DefTenum.DroneBase]] = 40;
-            
+
             OffenceCost[OffenceType[OffTenum.Scout]][Resource[Renum.Food]] = 1;
             OffenceCost[OffenceType[OffTenum.Scout]][Resource[Renum.Metal]] = 1;
             OffenceCost[OffenceType[OffTenum.Scout]][Resource[Renum.Population]] = 1;

@@ -15,7 +15,7 @@ namespace TerminalDecay5Client
         private void BtnCreateAccount_Click(object sender, EventArgs e)
         {
             ServerConnection sc = new ServerConnection();
-            sc.ServerRequest(CreateAccountResponse, 1, MessageConstants.splitMessageToken + TxtAccountName.Text + MessageConstants.splitMessageToken + TxtEmail.Text + MessageConstants.splitMessageToken + TxtPassWord.Text + MessageConstants.messageCompleteToken);
+            sc.ServerRequest(CreateAccountResponse, 1, MessageConstants.splitToken + TxtAccountName.Text + MessageConstants.splitToken + TxtEmail.Text + MessageConstants.splitToken + TxtPassWord.Text + MessageConstants.completeToken);
         }
 
         private void CreateAccountResponse(List<List<string>> transfer)

@@ -14,6 +14,7 @@ namespace TDCore5
         public int ItemType;
         public long ItemTotal;
         public long Complete;
+        public Guid BuildQueueID;
 
         public BuildQueueItem(int playerid, int outpostId, long total, int type,List<long> cost)
         {
@@ -36,12 +37,14 @@ namespace TDCore5
             resourcesRemaining[Cmn.Resource[Cmn.Renum.Population]] = cost[Cmn.Resource[Cmn.Renum.Population]] * ItemTotal;
             resourcesRemaining[Cmn.Resource[Cmn.Renum.Power]] = cost[Cmn.Resource[Cmn.Renum.Power]] * ItemTotal;
             resourcesRemaining[Cmn.Resource[Cmn.Renum.Water]] = cost[Cmn.Resource[Cmn.Renum.Water]] * ItemTotal;
+
+            BuildQueueID = Guid.NewGuid();
             
         }
 
         public BuildQueueItem()
         {
-
+            BuildQueueID = Guid.NewGuid();
         }
 
         public BuildQueueItem(SerializationInfo info, StreamingContext ctxt)

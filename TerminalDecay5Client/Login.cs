@@ -17,7 +17,7 @@ namespace TerminalDecay5Client
         private void BtnLogin_Click(object sender, EventArgs e)
         {
             ServerConnection sc = new ServerConnection();
-            sc.ServerRequest(login,2, MessageConstants.splitMessageToken + TxtEmail.Text + MessageConstants.splitMessageToken + TxtPassWord.Text + MessageConstants.messageCompleteToken);
+            sc.ServerRequest(login,2, MessageConstants.splitToken + TxtEmail.Text + MessageConstants.splitToken + TxtPassWord.Text + MessageConstants.completeToken);
         }
 
         private void login(List<List<string>> response)

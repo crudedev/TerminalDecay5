@@ -5,9 +5,9 @@ namespace TDCore5
 {
     public class MessageConstants
     {
-        public static readonly string messageCompleteToken = "/.,,./.,/.,/.,";
-        public static readonly string splitMessageToken = "][]#'#'#;.,";
-        public static readonly string nextMessageToken = "=-=-#[;#'.,";
+        public static readonly string completeToken = "/.,,./.,/.,/.,";
+        public static readonly string splitToken = "][]#'#'#;.,";
+        public static readonly string nextToken = "=-=-#[;#'.,";
 
         public static Dictionary<Int64, string> MessageTypes;
 
@@ -37,6 +37,7 @@ namespace TDCore5
             MessageTypes.Add(20, "FetchPlayerHomeSl.tryhsvf");
             MessageTypes.Add(21, "GetAllUnits.zxctuym,olDJE");
             MessageTypes.Add(22, "SendReinforcements.uym*oD");
+            MessageTypes.Add(23, "RemoveBuildQclement198/*/");
         }
 
     }

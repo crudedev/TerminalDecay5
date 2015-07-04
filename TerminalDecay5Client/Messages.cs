@@ -27,7 +27,7 @@ namespace TerminalDecay5Client
 
         private void refreshMessages()
         {
-            string request = MessageConstants.splitMessageToken + playerToken.ToString() + MessageConstants.nextMessageToken;
+            string request = MessageConstants.splitToken + playerToken.ToString() + MessageConstants.nextToken;
 
             ServerConnection sc = new ServerConnection();
             sc.ServerRequest(renderMessages, 15, request);
@@ -64,7 +64,7 @@ namespace TerminalDecay5Client
         void lstMessages_Click(object sender, System.EventArgs e)
         {
             ListBox l = (ListBox)sender;
-            string request = MessageConstants.nextMessageToken + playerToken.ToString() + MessageConstants.nextMessageToken + l.SelectedIndex;
+            string request = MessageConstants.nextToken + playerToken.ToString() + MessageConstants.nextToken + l.SelectedIndex;
 
             ServerConnection sc = new ServerConnection();
             sc.ServerRequest(renderSpecificMessage, 16, request);

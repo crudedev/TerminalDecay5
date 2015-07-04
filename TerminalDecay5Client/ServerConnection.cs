@@ -12,9 +12,9 @@ namespace TerminalDecay5Client
 
         private List<List<string>> Decodetransmission(string Message)
         {
-            Message = Message.Replace(MessageConstants.messageCompleteToken, "");
+            Message = Message.Replace(MessageConstants.completeToken, "");
             string[] messages;
-            messages = Message.Split(new string[] { MessageConstants.nextMessageToken }, StringSplitOptions.None);
+            messages = Message.Split(new string[] { MessageConstants.nextToken }, StringSplitOptions.None);
 
             List<List<string>> transmissions = new List<List<string>>();
 
@@ -22,7 +22,7 @@ namespace TerminalDecay5Client
             foreach (string m in messages)
             {
                 List<string> messageList = new List<string>();
-                messageList.AddRange(m.Split(new string[] { MessageConstants.splitMessageToken }, StringSplitOptions.None));
+                messageList.AddRange(m.Split(new string[] { MessageConstants.splitToken }, StringSplitOptions.None));
 
                 transmissions.Add(messageList);
 
@@ -48,7 +48,7 @@ namespace TerminalDecay5Client
             NetworkStream clientStream = client.GetStream();
 
             ASCIIEncoding encoder = new ASCIIEncoding();
-            byte[] buffer = encoder.GetBytes(MessageConstants.MessageTypes[mtype] + req + MessageConstants.messageCompleteToken);
+            byte[] buffer = encoder.GetBytes(MessageConstants.MessageTypes[mtype] + req + MessageConstants.completeToken);
 
             clientStream.Write(buffer, 0, buffer.Length);
 
@@ -80,7 +80,7 @@ namespace TerminalDecay5Client
 
                     reply += encoder.GetString(message, 0, bytesRead);
 
-                    if (reply.Substring(reply.Length - MessageConstants.messageCompleteToken.Length,MessageConstants.messageCompleteToken.Length) == MessageConstants.messageCompleteToken)
+                    if (reply.Substring(reply.Length - MessageConstants.completeToken.Length,MessageConstants.completeToken.Length) == MessageConstants.completeToken)
                     {
                         break;
                     }

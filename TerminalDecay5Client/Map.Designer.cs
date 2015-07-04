@@ -220,6 +220,8 @@ namespace TerminalDecay5Client
             this.txtReinforceGunner = new System.Windows.Forms.TextBox();
             this.txtReinforcePartrol = new System.Windows.Forms.TextBox();
             this.button7 = new System.Windows.Forms.Button();
+            this.LstBuildingsBuildQueue = new System.Windows.Forms.ListBox();
+            this.txtRemoveBuildings = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.MapCanvas)).BeginInit();
             this.SuspendLayout();
             // 
@@ -889,7 +891,7 @@ namespace TerminalDecay5Client
             // 
             // btnBuildDefence
             // 
-            this.btnBuildDefence.Location = new System.Drawing.Point(901, 606);
+            this.btnBuildDefence.Location = new System.Drawing.Point(864, 568);
             this.btnBuildDefence.Name = "btnBuildDefence";
             this.btnBuildDefence.Size = new System.Drawing.Size(119, 23);
             this.btnBuildDefence.TabIndex = 85;
@@ -1601,7 +1603,7 @@ namespace TerminalDecay5Client
             // 
             // btnOffenceBuild
             // 
-            this.btnOffenceBuild.Location = new System.Drawing.Point(901, 577);
+            this.btnOffenceBuild.Location = new System.Drawing.Point(883, 558);
             this.btnOffenceBuild.Name = "btnOffenceBuild";
             this.btnOffenceBuild.Size = new System.Drawing.Size(119, 23);
             this.btnOffenceBuild.TabIndex = 155;
@@ -2076,10 +2078,30 @@ namespace TerminalDecay5Client
             this.button7.Visible = false;
             this.button7.Click += new System.EventHandler(this.button7_Click);
             // 
+            // LstBuildingsBuildQueue
+            // 
+            this.LstBuildingsBuildQueue.FormattingEnabled = true;
+            this.LstBuildingsBuildQueue.Location = new System.Drawing.Point(842, 609);
+            this.LstBuildingsBuildQueue.Name = "LstBuildingsBuildQueue";
+            this.LstBuildingsBuildQueue.Size = new System.Drawing.Size(273, 121);
+            this.LstBuildingsBuildQueue.TabIndex = 204;
+            // 
+            // txtRemoveBuildings
+            // 
+            this.txtRemoveBuildings.Location = new System.Drawing.Point(1033, 740);
+            this.txtRemoveBuildings.Name = "txtRemoveBuildings";
+            this.txtRemoveBuildings.Size = new System.Drawing.Size(82, 23);
+            this.txtRemoveBuildings.TabIndex = 205;
+            this.txtRemoveBuildings.Text = "Remove Build Item";
+            this.txtRemoveBuildings.UseVisualStyleBackColor = true;
+            this.txtRemoveBuildings.Click += new System.EventHandler(this.txtRemoveBuildings_Click);
+            // 
             // Map
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.ClientSize = new System.Drawing.Size(1498, 831);
+            this.Controls.Add(this.txtRemoveBuildings);
+            this.Controls.Add(this.LstBuildingsBuildQueue);
             this.Controls.Add(this.button7);
             this.Controls.Add(this.txtReinforceDroneBase);
             this.Controls.Add(this.txtReinforceArtillery);
@@ -2467,6 +2489,8 @@ namespace TerminalDecay5Client
         private TextBox txtReinforceGunner;
         private TextBox txtReinforcePartrol;
         private Button button7;
+        private ListBox LstBuildingsBuildQueue;
+        private Button txtRemoveBuildings;
     }
 }
 
