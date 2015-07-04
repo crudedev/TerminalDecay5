@@ -224,6 +224,8 @@ namespace TerminalDecay5Client
             this.btnRemoveBuildings = new System.Windows.Forms.Button();
             this.btnRemoveOffenceList = new System.Windows.Forms.Button();
             this.LstRemoveOffenceList = new System.Windows.Forms.ListBox();
+            this.btnRemoveDefenceList = new System.Windows.Forms.Button();
+            this.LstRemoveDefenceList = new System.Windows.Forms.ListBox();
             ((System.ComponentModel.ISupportInitialize)(this.MapCanvas)).BeginInit();
             this.SuspendLayout();
             // 
@@ -2120,10 +2122,32 @@ namespace TerminalDecay5Client
             this.LstRemoveOffenceList.TabIndex = 206;
             this.LstRemoveOffenceList.Visible = false;
             // 
+            // btnRemoveDefenceList
+            // 
+            this.btnRemoveDefenceList.Location = new System.Drawing.Point(1061, 730);
+            this.btnRemoveDefenceList.Name = "btnRemoveDefenceList";
+            this.btnRemoveDefenceList.Size = new System.Drawing.Size(149, 23);
+            this.btnRemoveDefenceList.TabIndex = 209;
+            this.btnRemoveDefenceList.Text = "Remove Defence Build Item";
+            this.btnRemoveDefenceList.UseVisualStyleBackColor = true;
+            this.btnRemoveDefenceList.Visible = false;
+            this.btnRemoveDefenceList.Click += new System.EventHandler(this.btnRemoveDefenceList_Click);
+            // 
+            // LstRemoveDefenceList
+            // 
+            this.LstRemoveDefenceList.FormattingEnabled = true;
+            this.LstRemoveDefenceList.Location = new System.Drawing.Point(864, 603);
+            this.LstRemoveDefenceList.Name = "LstRemoveDefenceList";
+            this.LstRemoveDefenceList.Size = new System.Drawing.Size(273, 121);
+            this.LstRemoveDefenceList.TabIndex = 208;
+            this.LstRemoveDefenceList.Visible = false;
+            // 
             // Map
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.ClientSize = new System.Drawing.Size(1498, 831);
+            this.Controls.Add(this.btnRemoveDefenceList);
+            this.Controls.Add(this.LstRemoveDefenceList);
             this.Controls.Add(this.btnRemoveOffenceList);
             this.Controls.Add(this.LstRemoveOffenceList);
             this.Controls.Add(this.btnRemoveBuildings);
@@ -2519,6 +2543,8 @@ namespace TerminalDecay5Client
         private Button btnRemoveBuildings;
         private Button btnRemoveOffenceList;
         private ListBox LstRemoveOffenceList;
+        private Button btnRemoveDefenceList;
+        private ListBox LstRemoveDefenceList;
     }
 }
 

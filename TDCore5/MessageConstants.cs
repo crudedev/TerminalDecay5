@@ -39,6 +39,7 @@ namespace TDCore5
             MessageTypes.Add(22, "SendReinforcements.uym*oD");
             MessageTypes.Add(23, "RemoveBuildQclement198/*/");
             MessageTypes.Add(24, "RemoveOffenceQ%*dd[[[as12");
+            MessageTypes.Add(25, "RemoveDeffence.,.,222saAA");
         }
 
     }

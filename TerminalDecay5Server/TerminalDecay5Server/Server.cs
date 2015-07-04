@@ -832,10 +832,39 @@ namespace TerminalDecay5Server
                 RemoveFromOffQueue(transmissions, tcpClient);
             }
 
+            if (transmissions[0][0] == MessageConstants.MessageTypes[25])
+            {
+                RemoveFromDefQueue(transmissions, tcpClient);
+            }
+
             tcpClient.Close();
             client = null;
 
             #endregion
+        }
+
+
+        private void RemoveFromDefQueue(List<List<string>> transmissions, TcpClient tcpClient)
+        {
+            for (int i = 0; i < universe.DefenceBuildQueue.Count; i++)
+            {
+                if (universe.DefenceBuildQueue[i].BuildQueueID == new Guid(transmissions[0][2]))
+                {
+                    universe.DefenceBuildQueue.Remove(universe.DefenceBuildQueue[i]);
+
+                    string response = MessageConstants.MessageTypes[25] + MessageConstants.nextToken;
+                    response += "success" + MessageConstants.completeToken;
+
+                    NetworkStream clientStream = tcpClient.GetStream();
+                    ASCIIEncoding encoder = new ASCIIEncoding();
+
+                    byte[] buffer = encoder.GetBytes(response);
+
+                    clientStream.Write(buffer, 0, buffer.Length);
+                    clientStream.Flush();
+                    break;
+                }
+            }
         }
 
         private void RemoveFromOffQueue(List<List<string>> transmissions, TcpClient tcpClient)
@@ -860,8 +889,7 @@ namespace TerminalDecay5Server
                 }
             }
         }
-
-
+        
         private void RemoveFromBuildQueue(List<List<string>> transmissions, TcpClient tcpClient)
         {
             for (int i = 0; i < universe.BuildingBuildQueue.Count; i++)
@@ -1891,6 +1919,19 @@ namespace TerminalDecay5Server
             response += SendDefencesOntile(transmissions);
             response += MessageConstants.nextToken;
 
+            int outpostID = -1;
+
+            try
+            {
+                outpostID = getOutpost(transmissions[0][2], transmissions[0][3]).ID;
+            }
+            catch (Exception)
+            {
+                rejectConnection(7, "player token wrong", tcpClient);
+                return;
+            }
+
+
             foreach (List<long> d in Cmn.DefenceCost)
             {
                 foreach (long val in d)
@@ -1918,7 +1959,7 @@ namespace TerminalDecay5Server
 
             foreach (var item in universe.DefenceBuildQueue)
             {
-                if (item.PlayerId == pl.PlayerID)
+                if (item.PlayerId == pl.PlayerID && item.OutpostId == outpostID)
                 {
                     inProgress[item.ItemType] = item.ItemTotal - item.Complete;
                 }
@@ -1929,6 +1970,17 @@ namespace TerminalDecay5Server
                 response += item + MessageConstants.splitToken;
             }
 
+            response += MessageConstants.nextToken;
+
+
+            foreach (var item in universe.DefenceBuildQueue)
+            {
+                if (item.PlayerId == pl.PlayerID && item.OutpostId == outpostID)
+                {
+                    response += Cmn.DefenceName[item.ItemType] + MessageConstants.splitToken + item.ItemTotal + MessageConstants.splitToken + item.Complete + MessageConstants.splitToken + item.BuildQueueID;
+                    response += MessageConstants.nextToken;
+                }
+            }
 
 
             response += MessageConstants.completeToken;

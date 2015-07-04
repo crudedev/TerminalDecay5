@@ -77,6 +77,8 @@ namespace TDCore5
 
         public static List<long> DefenceAttack;
 
+        public static Dictionary<int, string> DefenceName;
+
         public static List<long> OffenceAttack;
 
         public enum MovType
@@ -137,7 +139,7 @@ namespace TDCore5
             OffenceAttack = new List<long>();
             BuildingName = new Dictionary<int, string>();
             OffenceName = new Dictionary<int, string>();
-            
+            DefenceName = new Dictionary<int, string>();
 
             BuildingName.Add(BuildType[BldTenum.Farm], "Farm");
             BuildingName.Add(BuildType[BldTenum.Fabricator], "Fabricator");
@@ -154,6 +156,11 @@ namespace TDCore5
             OffenceName.Add(OffenceType[OffTenum.Gunship], "Gunship");
             OffenceName.Add(OffenceType[OffTenum.Scout], "Scout");
 
+            DefenceName.Add(DefenceType[DefTenum.Artillery], "Artillery");
+            DefenceName.Add(DefenceType[DefTenum.DroneBase], "DroneBase");
+            DefenceName.Add(DefenceType[DefTenum.Gunner], "Gunner");
+            DefenceName.Add(DefenceType[DefTenum.Patrol], "Patrol");
+            DefenceName.Add(DefenceType[DefTenum.Turret], "Turret");
 
             foreach (KeyValuePair<BldTenum, int> build in BuildType)
             {

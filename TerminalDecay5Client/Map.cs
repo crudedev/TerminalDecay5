@@ -769,6 +769,9 @@ namespace TerminalDecay5Client
             BtnDef.Visible = !show;
 
             LblSidePanel.Visible = !show;
+
+            LstRemoveDefenceList.Visible = show;
+            btnRemoveDefenceList.Visible = show;
         }
 
         private void cmdBuild_Click(object sender, EventArgs e)
@@ -845,11 +848,13 @@ namespace TerminalDecay5Client
 
         private void BtnDef_Click(object sender, EventArgs e)
         {
-            //show the build list
+            GetDefenceList();
+        }
+
+        private void GetDefenceList()
+        {
             ServerConnection sc = new ServerConnection();
-            sc.ServerRequest(UpdateBuildDefPanel, 9, MessageConstants.splitToken + Convert.ToString(playerToken) + MessageConstants.splitToken + Convert.ToString(_currentX) + MessageConstants.splitToken + Convert.ToString(_currentY)); ;
-
-
+            sc.ServerRequest(UpdateBuildDefPanel, 9, MessageConstants.splitToken + Convert.ToString(playerToken) + MessageConstants.splitToken + Convert.ToString(_currentX) + MessageConstants.splitToken + Convert.ToString(_currentY));
         }
 
         private void UpdateBuildDefPanel(List<List<string>> transmission)
@@ -913,6 +918,19 @@ namespace TerminalDecay5Client
             lblTurretBuild.Text = transmission[9][2];
             lblArtilleryBuild.Text = transmission[9][3];
             lblDroneBaseBuild.Text = transmission[9][4];
+
+
+            LstRemoveDefenceList.Items.Clear();
+            BuildGuidList = new Dictionary<int, Guid>();
+
+            for (int i = 10; i < transmission.Count; i++)
+            {
+                if (transmission[i].Count == 4)
+                {
+                    LstRemoveDefenceList.Items.Add(transmission[i][0] + "  " + transmission[i][2] + "/" + transmission[i][1]);
+                    BuildGuidList.Add(i - 10, new Guid(transmission[i][3]));
+                }
+            }
 
         }
 
@@ -1731,5 +1749,33 @@ namespace TerminalDecay5Client
             }
             GetoffenceList();
         }
+
+        private void btnRemoveDefenceList_Click(object sender, EventArgs e)
+        {
+
+            if (LstRemoveDefenceList.SelectedIndex != -1)
+            {
+                if (BuildGuidList.ContainsKey(LstRemoveDefenceList.SelectedIndex))
+                {
+                    ServerConnection sc = new ServerConnection();
+                    sc.ServerRequest(RemoveFromQueueDefResponse, 25, MessageConstants.splitToken + Convert.ToString(playerToken) + MessageConstants.splitToken + BuildGuidList[LstRemoveDefenceList.SelectedIndex]);
+                }
+            }
+            else
+            {
+                MessageBox.Show("No selected item");
+            }
+        }
+
+
+        private void RemoveFromQueueDefResponse(List<List<string>> transmission)
+        {
+            if (transmission[1][0] == "success")
+            {
+                MessageBox.Show("Successfully Removed From Queue");
+            }
+            GetDefenceList();
+        }
+
     }
 }
