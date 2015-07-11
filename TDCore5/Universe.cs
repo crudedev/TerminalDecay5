@@ -19,6 +19,7 @@ namespace TDCore5
         public List<Message> Messages;
         public List<TroopMovement> TroopMovements;
         public List<SpecialStructure> SpecialStructures;
+        public List<BaseMovement> BaseMovements;
                 
         public int CurrentTick = 0;
 
@@ -101,7 +102,8 @@ namespace TDCore5
             players = new List<Player>();
             Messages = new List<Message>();
             TroopMovements = new List<TroopMovement>();
-            SpecialStructures = new List<SpecialStructure>();           
+            SpecialStructures = new List<SpecialStructure>();
+            BaseMovements = new List<BaseMovement>();
 
         }
 

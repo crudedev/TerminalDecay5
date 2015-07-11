@@ -85,7 +85,7 @@ namespace TDCore5
         {
             Attack = 0,
             Reinforcement = 1,
-            Loan = 2
+            BaseMove = 2
         }
 
         public static Dictionary<MovType, int> MovementType;

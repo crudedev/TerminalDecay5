@@ -226,6 +226,7 @@ namespace TerminalDecay5Client
             this.LstRemoveOffenceList = new System.Windows.Forms.ListBox();
             this.btnRemoveDefenceList = new System.Windows.Forms.Button();
             this.LstRemoveDefenceList = new System.Windows.Forms.ListBox();
+            this.BtnMoveOutpost = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.MapCanvas)).BeginInit();
             this.SuspendLayout();
             // 
@@ -2143,10 +2144,22 @@ namespace TerminalDecay5Client
             this.LstRemoveDefenceList.TabIndex = 208;
             this.LstRemoveDefenceList.Visible = false;
             // 
+            // BtnMoveOutpost
+            // 
+            this.BtnMoveOutpost.Location = new System.Drawing.Point(1310, 47);
+            this.BtnMoveOutpost.Name = "BtnMoveOutpost";
+            this.BtnMoveOutpost.Size = new System.Drawing.Size(89, 23);
+            this.BtnMoveOutpost.TabIndex = 210;
+            this.BtnMoveOutpost.Text = "Move Outpost";
+            this.BtnMoveOutpost.UseVisualStyleBackColor = true;
+            this.BtnMoveOutpost.Visible = false;
+            this.BtnMoveOutpost.Click += new System.EventHandler(this.BtnMoveOutpost_Click);
+            // 
             // Map
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.ClientSize = new System.Drawing.Size(1498, 831);
+            this.Controls.Add(this.BtnMoveOutpost);
             this.Controls.Add(this.btnRemoveDefenceList);
             this.Controls.Add(this.LstRemoveDefenceList);
             this.Controls.Add(this.btnRemoveOffenceList);
@@ -2349,6 +2362,7 @@ namespace TerminalDecay5Client
             this.PerformLayout();
 
         }
+               
 
         #endregion
 
@@ -2546,6 +2560,7 @@ namespace TerminalDecay5Client
         private ListBox LstRemoveOffenceList;
         private Button btnRemoveDefenceList;
         private ListBox LstRemoveDefenceList;
+        private Button BtnMoveOutpost;
     }
 }
 

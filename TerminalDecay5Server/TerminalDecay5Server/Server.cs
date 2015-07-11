@@ -161,6 +161,8 @@ namespace TerminalDecay5Server
 
             }
             #endregion
+            
+            #region Proccessing Building
 
             List<BuildQueueItem> remove = new List<BuildQueueItem>();
 
@@ -237,6 +239,11 @@ namespace TerminalDecay5Server
                 u.OffenceBuildQueue.Remove(item);
             }
 
+            #endregion
+
+
+            #region movements and attacks
+
             List<TroopMovement> CompleteMovements = new List<TroopMovement>();
 
             foreach (var item in u.TroopMovements)
@@ -303,6 +310,36 @@ namespace TerminalDecay5Server
                 u.TroopMovements.Remove(item);
             }
 
+
+            //basemove
+
+
+            List<BaseMovement> CompleteBaseMovements = new List<BaseMovement>();
+
+            foreach (var item in u.BaseMovements)
+            {
+                if (item.StartTick + item.Duration < u.CurrentTick)
+                {
+                    item.OriginOutpost.Tile = item.DestinationBase;
+                    CompleteBaseMovements.Add(item);
+                }
+            }
+
+            foreach (var item in CompleteBaseMovements)
+            {
+                u.BaseMovements.Remove(item);
+            }
+
+
+
+
+
+
+            #endregion 
+
+            #region SpecialStructures
+
+
             foreach (var item in u.SpecialStructures)
             {
                 if (item.specialType == Cmn.SpecialType.ResourceWell)
@@ -314,6 +351,9 @@ namespace TerminalDecay5Server
                     }
                 }
             }
+
+
+            #endregion
 
         }
 
@@ -837,14 +877,100 @@ namespace TerminalDecay5Server
                 RemoveFromDefQueue(transmissions, tcpClient);
             }
 
+            if (transmissions[0][0] == MessageConstants.MessageTypes[26])
+            {
+                StartMoveBase(transmissions, tcpClient);
+            }
+
             tcpClient.Close();
             client = null;
 
             #endregion
         }
-        
+
+        private void StartMoveBase(List<List<string>> transmissions, TcpClient tcpClient)
+        {
+            Player player;
+            try
+            {
+                player = getPlayer(transmissions[0][1]);
+            }
+            catch (Exception)
+            {
+                rejectConnection(3, "player token wrong", tcpClient);
+                return;
+            }
+
+            //check that there is an out post to move
+            Outpost o = getOutpost(transmissions[1][0], transmissions[1][1]);
+
+            Outpost d = getOutpost(transmissions[1][2], transmissions[1][3]);
+
+            SpecialStructure s = getSpecial(transmissions[1][2], transmissions[1][3]);
+
+            bool clear = true;
+
+            if (d == null && o != null && s == null)
+            {
+
+                BaseMovement b = new BaseMovement();
+                b.OriginOutpost = o;
+                b.DestinationBase = new Position(Convert.ToInt32(transmissions[1][2]), Convert.ToInt32(transmissions[1][3]));
+                b.Duration = 1000;
+                b.StartTick = universe.CurrentTick;
+
+
+
+                foreach (var item in universe.BaseMovements)
+                {
+                    if (b.DestinationBase == item.DestinationBase || item.OriginOutpost == b.OriginOutpost)
+                    {
+                        clear = false;
+                    }
+                }
+
+                if (clear)
+                {
+                    universe.BaseMovements.Add(b);
+                }
+
+            }
+
+            string response = MessageConstants.MessageTypes[26] + MessageConstants.nextToken;
+
+            if (clear)
+            {
+                response += "success" + MessageConstants.completeToken;
+            }
+            else
+            {
+                response += "Not clear or Already Moving" + MessageConstants.completeToken;
+            }
+
+            NetworkStream clientStream = tcpClient.GetStream();
+            ASCIIEncoding encoder = new ASCIIEncoding();
+
+            byte[] buffer = encoder.GetBytes(response);
+
+            clientStream.Write(buffer, 0, buffer.Length);
+            clientStream.Flush();
+
+        }
+
         private void RemoveFromDefQueue(List<List<string>> transmissions, TcpClient tcpClient)
         {
+
+            Player player;
+            try
+            {
+                player = getPlayer(transmissions[0][1]);
+            }
+            catch (Exception)
+            {
+                rejectConnection(3, "player token wrong", tcpClient);
+                return;
+            }
+
             for (int i = 0; i < universe.DefenceBuildQueue.Count; i++)
             {
                 if (universe.DefenceBuildQueue[i].BuildQueueID == new Guid(transmissions[0][2]))
@@ -868,6 +994,17 @@ namespace TerminalDecay5Server
 
         private void RemoveFromOffQueue(List<List<string>> transmissions, TcpClient tcpClient)
         {
+            Player player;
+            try
+            {
+                player = getPlayer(transmissions[0][1]);
+            }
+            catch (Exception)
+            {
+                rejectConnection(3, "player token wrong", tcpClient);
+                return;
+            }
+
             for (int i = 0; i < universe.OffenceBuildQueue.Count; i++)
             {
                 if (universe.OffenceBuildQueue[i].BuildQueueID == new Guid(transmissions[0][2]))
@@ -876,7 +1013,7 @@ namespace TerminalDecay5Server
 
                     string response = MessageConstants.MessageTypes[24] + MessageConstants.nextToken;
                     response += "success" + MessageConstants.completeToken;
-                    
+
                     NetworkStream clientStream = tcpClient.GetStream();
                     ASCIIEncoding encoder = new ASCIIEncoding();
 
@@ -888,19 +1025,19 @@ namespace TerminalDecay5Server
                 }
             }
         }
-        
+
         private void RemoveFromBuildQueue(List<List<string>> transmissions, TcpClient tcpClient)
         {
             for (int i = 0; i < universe.BuildingBuildQueue.Count; i++)
             {
-                if(universe.BuildingBuildQueue[i].BuildQueueID == new Guid(transmissions[0][2]))
+                if (universe.BuildingBuildQueue[i].BuildQueueID == new Guid(transmissions[0][2]))
                 {
                     universe.BuildingBuildQueue.Remove(universe.BuildingBuildQueue[i]);
 
                     string response = MessageConstants.MessageTypes[23] + MessageConstants.nextToken;
                     response += "success" + MessageConstants.completeToken;
 
-                    
+
 
                     NetworkStream clientStream = tcpClient.GetStream();
                     ASCIIEncoding encoder = new ASCIIEncoding();
@@ -914,13 +1051,13 @@ namespace TerminalDecay5Server
             }
         }
 
-        private void SendHomePlanet(List<List<string>> message, TcpClient tcpClient)
+        private void SendHomePlanet(List<List<string>> transmissions, TcpClient tcpClient)
         {
 
             Player player;
             try
             {
-                player = getPlayer(message[0][1]);
+                player = getPlayer(transmissions[0][1]);
             }
             catch (Exception)
             {
@@ -2502,7 +2639,15 @@ namespace TerminalDecay5Server
                 }
             }
 
-
+            // send base movements
+            foreach (var item in universe.BaseMovements)
+            {
+                if (item.OriginOutpost.Address.ClusterID.ToString() == message[0][4] && item.OriginOutpost.Address.SolarSytemID.ToString() == message[0][5] && item.OriginOutpost.Address.PlanetID == planetId)
+                {
+                    response += MessageConstants.nextToken;
+                    response += item.OriginOutpost.Tile.X + MessageConstants.splitToken + item.OriginOutpost.Tile.Y + MessageConstants.splitToken + item.DestinationBase.X + MessageConstants.splitToken + item.DestinationBase.Y + MessageConstants.splitToken + item.StartTick + MessageConstants.splitToken + item.Duration + MessageConstants.splitToken + universe.CurrentTick;
+                }
+            }
 
             response += MessageConstants.completeToken;
 
@@ -2630,6 +2775,19 @@ namespace TerminalDecay5Server
                 if (o.Tile.X == Convert.ToInt32(x) && o.Tile.Y == Convert.ToInt32(y))
                 {
                     return o;
+                }
+            }
+            return null;
+        }
+
+        private SpecialStructure getSpecial(string x, string y)
+        {
+            foreach (var item in universe.SpecialStructures)
+            {
+
+                if (item.Tile.X == Convert.ToInt32(x) && item.Tile.Y == Convert.ToInt32(y))
+                {
+                    return item;
                 }
             }
             return null;

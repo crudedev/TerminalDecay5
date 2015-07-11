@@ -20,6 +20,7 @@ namespace TerminalDecay5Client
         //4 = cluster view
         //5 = universe view
         //6 = reinforce view
+        //7 = move base view
 
         private int _currentX;
         private int _currentY;
@@ -149,6 +150,8 @@ namespace TerminalDecay5Client
 
             CheckLoggedOut(transmission);
 
+            hideMenus();
+            MapCanvas.Show();
 
             CurrentView = 1;
             Bitmap MapImage = new Bitmap(MapCanvas.Width, MapCanvas.Height);
@@ -359,15 +362,100 @@ namespace TerminalDecay5Client
                     mapgraph.DrawImage(maptile, new Point(Convert.ToInt32(l[0]) * 26, Convert.ToInt32(l[1]) * 26));
                 }
             }
+
+
+
+
+            foreach (List<string> l in transmission)
+            {
+                if (l.Count == 7)
+                {
+                    Pen myPen;
+                    myPen = new System.Drawing.Pen(System.Drawing.Color.Blue);
+                    myPen.Width = 2;
+
+
+                    mapgraph.DrawLine(myPen, Convert.ToInt32(l[0]) * 26 + 13, Convert.ToInt32(l[1]) * 26 + 13, Convert.ToInt32(l[2]) * 26 + 13, Convert.ToInt32(l[3]) * 26 + 13);
+
+                    myPen.Color = Color.Yellow;
+                    mapgraph.DrawLine(myPen, Convert.ToInt32(l[2]) * 26, Convert.ToInt32(l[3]) * 26, Convert.ToInt32(l[2]) * 26 + 26, Convert.ToInt32(l[3]) * 26 + 26);
+                    mapgraph.DrawLine(myPen, Convert.ToInt32(l[2]) * 26 + 26, Convert.ToInt32(l[3]) * 26, Convert.ToInt32(l[2]) * 26, Convert.ToInt32(l[3]) * 26 + 26);
+
+                    myPen.Width = 6;
+
+                    float delta = Convert.ToInt32(l[6]) - Convert.ToInt32(l[4]);
+                    float result = delta / Convert.ToInt32(l[5]);
+
+                    if (result > 1)
+                    {
+                        result = 1;
+                    }
+
+                    int origX = Convert.ToInt32(l[0]);
+                    int origY = Convert.ToInt32(l[1]);
+
+                    int destX = Convert.ToInt32(l[2]);
+                    int destY = Convert.ToInt32(l[3]);
+
+                    int x = 0;
+                    int y = 0;
+
+                    float fx = 0;
+                    float fy = 0;
+
+                    if (origX >= destX)
+                    {
+                        x = destX - origX;
+                        x = x * 26;
+                        fx = x * result;
+                        x = (origX) * 26;
+                        x = x + Convert.ToInt32(fx) + 13;
+                    }
+                    else
+                    {
+                        x = destX - origX;
+                        x = x * 26;
+                        fx = x * result;
+                        x = (origX) * 26;
+                        x = x + Convert.ToInt32(fx) + 13;
+                    }
+
+                    if (origY >= destY)
+                    {
+                        y = origY - destY;
+                        y = y * 26;
+                        fy = y * result;
+                        y = (origY) * 26;
+                        y = y - Convert.ToInt32(fy) + 13;
+                    }
+                    else
+                    {
+                        y = origY - destY;
+                        y = y * 26;
+                        fy = y * result;
+                        y = (origY) * 26;
+                        y = y - Convert.ToInt32(fy) + 13;
+                    }
+
+
+                    myPen.Color = Color.Yellow;
+                    mapgraph.DrawLine(myPen, new Point(x - 2, y - 2), new Point(x + 2, y + 2));
+
+
+
+                    myPen.Dispose();
+                }
+            }
+
             mainMapBuffer = MapImage;
             MapCanvas.Image = MapImage;
         }
 
         void MapCanvas_MouseMove(object sender, MouseEventArgs e)
         {
-            if(CurrentView == 2)
+            if (CurrentView == 2)
             {
-                if(mainMapBuffer == null)
+                if (mainMapBuffer == null)
                 {
                     mainMapBuffer = (Bitmap)MapCanvas.Image;
                 }
@@ -380,12 +468,28 @@ namespace TerminalDecay5Client
 
                 Graphics mapgraph = Graphics.FromImage(MapCanvas.Image);
                 Pen myPen;
-                myPen = new System.Drawing.Pen(System.Drawing.Color.Red,2);
+                myPen = new System.Drawing.Pen(System.Drawing.Color.DarkRed, 2);
 
-                int X1 = 0;
-                int Y1 = 0;
+                mapgraph.DrawLine(myPen, new Point(_currentX * 26 + 13, _currentY * 26 + 13), new Point((e.X) - (e.X % 26) + 13, (e.Y) - (e.Y % 26) + 13));
+            }
 
-                mapgraph.DrawLine(myPen, new Point(_currentX * 26 + 13, _currentY * 26 + 13), new Point((e.X) - (e.X % 26) + 13 ,(e.Y)- (e.Y % 26) + 13));
+            if (CurrentView == 7)
+            {
+                if (mainMapBuffer == null)
+                {
+                    mainMapBuffer = (Bitmap)MapCanvas.Image;
+                }
+
+                Bitmap Conduit = new Bitmap(1, 1);
+                Conduit = (Bitmap)mainMapBuffer.Clone();
+
+                MapCanvas.Image = Conduit;
+
+                Graphics mapgraph = Graphics.FromImage(MapCanvas.Image);
+                Pen myPen;
+                myPen = new System.Drawing.Pen(System.Drawing.Color.Green, 2);
+
+                mapgraph.DrawLine(myPen, new Point(_currentX * 26 + 13, _currentY * 26 + 13), new Point((e.X) - (e.X % 26) + 13, (e.Y) - (e.Y % 26) + 13));
             }
         }
 
@@ -444,8 +548,7 @@ namespace TerminalDecay5Client
                 {
                     _currentX = mx;
                     _currentY = my;
-                    ServerConnection sc = new ServerConnection();
-                    sc.ServerRequest(RenderMainMap, 3, MessageConstants.splitToken + Convert.ToString(playerToken) + MessageConstants.splitToken + Convert.ToString(mx) + MessageConstants.splitToken + Convert.ToString(my) + MessageConstants.splitToken + _currentCluster + MessageConstants.splitToken + _currentSolarSystem + MessageConstants.completeToken);
+                    RefreshMainMap();
                 }
             }
 
@@ -483,6 +586,37 @@ namespace TerminalDecay5Client
                 }
             }
 
+            if (CurrentView == 7)
+            {
+                _targetX = mx;
+                _targetY = my;
+                ServerConnection sc = new ServerConnection();
+                sc.ServerRequest(UpdateMoveBase, 26, MessageConstants.splitToken + Convert.ToString(playerToken) + MessageConstants.nextToken + Convert.ToString(_currentX) + MessageConstants.splitToken + Convert.ToString(_currentY) + MessageConstants.splitToken + Convert.ToString(_targetX) + MessageConstants.splitToken + Convert.ToString(_targetY));
+            }
+        }
+
+        private void UpdateMoveBase(List<List<string>> transmission)
+        {
+
+            hideMenus();
+            CurrentView = 1;
+            if (transmission[1][0] == "success")
+            {
+                MessageBox.Show("Base Moving");
+            }
+            else
+            {
+                MessageBox.Show(transmission[1][0]);
+                return;
+            }
+            RefreshMainMap();
+
+        }
+
+        private void RefreshMainMap()
+        {
+                                ServerConnection sc = new ServerConnection();
+                    sc.ServerRequest(RenderMainMap, 3, MessageConstants.splitToken + Convert.ToString(playerToken) + MessageConstants.splitToken + Convert.ToString(_currentX) + MessageConstants.splitToken + Convert.ToString(_currentY) + MessageConstants.splitToken + _currentCluster + MessageConstants.splitToken + _currentSolarSystem + MessageConstants.completeToken);
         }
 
         private void DisplayAttack(List<List<string>> transmission)
@@ -1090,6 +1224,7 @@ namespace TerminalDecay5Client
             BtnDef.Visible = !show;
             BtnOffence.Visible = !show;
             BtnAttack.Visible = !show;
+            BtnMoveOutpost.Visible = !show;
 
             LblSidePanel.Visible = !show;
 
@@ -1286,6 +1421,7 @@ namespace TerminalDecay5Client
             {
                 MessageBox.Show(transmission[0][2]);
             }
+            RefreshMainMap();
         }
 
         private void BtnMessages_Click(object sender, EventArgs e)
@@ -1615,6 +1751,11 @@ namespace TerminalDecay5Client
 
         private void button6_Click(object sender, EventArgs e)
         {
+            GetPlayerHome();
+        }
+
+        private void GetPlayerHome()
+        {
             CurrentView = 3;
             ServerConnection sc = new ServerConnection();
             sc.ServerRequest(renderHome, 20, MessageConstants.splitToken + Convert.ToString(playerToken));
@@ -1821,6 +1962,12 @@ namespace TerminalDecay5Client
                 MessageBox.Show("Successfully Removed From Queue");
             }
             GetDefenceList();
+        }
+
+        private void BtnMoveOutpost_Click(object sender, EventArgs e)
+        {
+            CurrentView = 7;
+            MapCanvas.Show();
         }
 
     }

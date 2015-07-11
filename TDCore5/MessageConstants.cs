@@ -40,6 +40,7 @@ namespace TDCore5
             MessageTypes.Add(23, "RemoveBuildQclement198/*/");
             MessageTypes.Add(24, "RemoveOffenceQ%*dd[[[as12");
             MessageTypes.Add(25, "RemoveDeffence.,.,222saAA");
+            MessageTypes.Add(26, "MoveBase;a/l.47iyhqwp92in");
         }
 
     }
