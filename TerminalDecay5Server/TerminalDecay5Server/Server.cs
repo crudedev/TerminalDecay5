@@ -842,8 +842,7 @@ namespace TerminalDecay5Server
 
             #endregion
         }
-
-
+        
         private void RemoveFromDefQueue(List<List<string>> transmissions, TcpClient tcpClient)
         {
             for (int i = 0; i < universe.DefenceBuildQueue.Count; i++)
@@ -2488,7 +2487,7 @@ namespace TerminalDecay5Server
                 if (item.OriginOutpost.Address.ClusterID.ToString() == message[0][4] && item.OriginOutpost.Address.SolarSytemID.ToString() == message[0][5] && item.OriginOutpost.Address.PlanetID == planetId)
                 {
                     response += MessageConstants.nextToken;
-                    response += item.OriginOutpost.Tile.X + MessageConstants.splitToken + item.OriginOutpost.Tile.Y + MessageConstants.splitToken + item.DestinationOutpost.Tile.X + MessageConstants.splitToken + item.DestinationOutpost.Tile.Y + MessageConstants.splitToken + item.StartTick + MessageConstants.splitToken + item.Duration + MessageConstants.splitToken + universe.CurrentTick;
+                    response += item.OriginOutpost.Tile.X + MessageConstants.splitToken + item.OriginOutpost.Tile.Y + MessageConstants.splitToken + item.DestinationOutpost.Tile.X + MessageConstants.splitToken + item.DestinationOutpost.Tile.Y + MessageConstants.splitToken + item.StartTick + MessageConstants.splitToken + item.Duration + MessageConstants.splitToken + universe.CurrentTick + MessageConstants.splitToken + item.MovementType;
                 }
             }
 

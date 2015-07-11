@@ -249,6 +249,7 @@ namespace TerminalDecay5Client
             this.MapCanvas.TabIndex = 1;
             this.MapCanvas.TabStop = false;
             this.MapCanvas.Click += new System.EventHandler(this.MapCanvas_Click);
+            this.MapCanvas.MouseMove += MapCanvas_MouseMove;
             // 
             // button2
             // 

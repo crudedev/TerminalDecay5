@@ -33,6 +33,8 @@ namespace TerminalDecay5Client
 
         Messages frmMessage = new Messages();
 
+        private Bitmap mainMapBuffer;
+
         public Dictionary<int, Guid> BuildGuidList;
 
         public Map()
@@ -215,11 +217,27 @@ namespace TerminalDecay5Client
 
             foreach (List<string> l in transmission)
             {
-                if (l.Count == 7)
+                if (l.Count == 8)
                 {
                     Pen myPen;
                     myPen = new System.Drawing.Pen(System.Drawing.Color.Yellow);
+                    myPen.Width = 2;
+                    if(l[7] == "Attack")
+                    {
+                        myPen.Color = Color.Tomato;
+                    }
+
+                    if (l[7] == "Reinforcement")
+                    {
+                        myPen.Color = Color.Green;
+                    }
+
                     mapgraph.DrawLine(myPen, Convert.ToInt32(l[0]) * 26 + 13, Convert.ToInt32(l[1]) * 26 + 13, Convert.ToInt32(l[2]) * 26 + 13, Convert.ToInt32(l[3]) * 26 + 13);
+
+                    myPen.Color = Color.Yellow;
+                    mapgraph.DrawLine(myPen, Convert.ToInt32(l[2]) * 26 , Convert.ToInt32(l[3]) * 26 , Convert.ToInt32(l[2]) * 26 + 26, Convert.ToInt32(l[3]) * 26 + 26);
+                    mapgraph.DrawLine(myPen, Convert.ToInt32(l[2]) * 26 + 26, Convert.ToInt32(l[3]) * 26, Convert.ToInt32(l[2]) * 26 , Convert.ToInt32(l[3]) * 26 + 26);
+
                     myPen.Width = 6;
 
                     float delta = Convert.ToInt32(l[6]) - Convert.ToInt32(l[4]);
@@ -277,8 +295,10 @@ namespace TerminalDecay5Client
                     }
 
 
-
+                    myPen.Color = Color.Yellow;
                     mapgraph.DrawLine(myPen, new Point(x - 2, y - 2), new Point(x + 2, y + 2));
+
+
 
                     myPen.Dispose();
                 }
@@ -339,8 +359,34 @@ namespace TerminalDecay5Client
                     mapgraph.DrawImage(maptile, new Point(Convert.ToInt32(l[0]) * 26, Convert.ToInt32(l[1]) * 26));
                 }
             }
-
+            mainMapBuffer = MapImage;
             MapCanvas.Image = MapImage;
+        }
+
+        void MapCanvas_MouseMove(object sender, MouseEventArgs e)
+        {
+            if(CurrentView == 2)
+            {
+                if(mainMapBuffer == null)
+                {
+                    mainMapBuffer = (Bitmap)MapCanvas.Image;
+                }
+
+                Bitmap Conduit = new Bitmap(1, 1);
+                Conduit = (Bitmap)mainMapBuffer.Clone();
+
+
+                MapCanvas.Image = Conduit;
+
+                Graphics mapgraph = Graphics.FromImage(MapCanvas.Image);
+                Pen myPen;
+                myPen = new System.Drawing.Pen(System.Drawing.Color.Red,2);
+
+                int X1 = 0;
+                int Y1 = 0;
+
+                mapgraph.DrawLine(myPen, new Point(_currentX * 26 + 13, _currentY * 26 + 13), new Point((e.X) - (e.X % 26) + 13 ,(e.Y)- (e.Y % 26) + 13));
+            }
         }
 
         private void MapCanvas_Click(object sender, EventArgs e)
