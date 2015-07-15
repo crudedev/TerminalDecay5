@@ -901,10 +901,12 @@ namespace TerminalDecay5Server
                 return;
             }
 
-            //check that there is an out post to move
-            Outpost o = getOutpost(transmissions[1][0], transmissions[1][1]);
+            UniversalAddress address = fetchAddress(transmissions, 2);
 
-            Outpost d = getOutpost(transmissions[1][2], transmissions[1][3]);
+            //check that there is an out post to move
+            Outpost o = getOutpost(transmissions[1][0], transmissions[1][1],address);
+
+            Outpost d = getOutpost(transmissions[1][2], transmissions[1][3], address);
 
             SpecialStructure s = getSpecial(transmissions[1][2], transmissions[1][3]);
 
@@ -1471,6 +1473,11 @@ namespace TerminalDecay5Server
         public static void CalculateBattle(TroopMovement t, Universe u)
         {
 
+            if(getOutpost(t.DestinationOutpost.))
+            {
+
+            }
+
             //find out if the players have any offence or defence strucutres
 
             float OffenceOffenceBoost = 0;
@@ -1773,10 +1780,10 @@ namespace TerminalDecay5Server
 
             if (basedeath)
             {
-                AttackerMessage += Environment.NewLine + " Base Destroyed Shard Retrieved";
+                AttackerMessage += Environment.NewLine + " Base Destroyed, Shard Retrieved";
                 DeffenceMessage += Environment.NewLine + "Our Base Was Lost";
                 t.OriginOutpost.CoreShards++;
-
+                u.outposts.Remove(t.DestinationOutpost);
             }
 
             Message tempMessage = new Message(-1, t.OriginOutpost.OwnerID, "Attacking Another Player", AttackerMessage);
@@ -2476,9 +2483,6 @@ namespace TerminalDecay5Server
 
                 }
                 o.Tile = v;
-                //fortest
-                o.CoreShards = 5;
-                //fortest
 
                 newp.home = new UniversalAddress();
 
@@ -2768,11 +2772,11 @@ namespace TerminalDecay5Server
             return null;
         }
 
-        private Outpost getOutpost(string x, string y)
+        private Outpost getOutpost(string x, string y, UniversalAddress a)
         {
             foreach (Outpost o in universe.outposts)
             {
-                if (o.Tile.X == Convert.ToInt32(x) && o.Tile.Y == Convert.ToInt32(y))
+                if (o.Tile.X == Convert.ToInt32(x) && o.Tile.Y == Convert.ToInt32(y) && a == o.Address)
                 {
                     return o;
                 }
@@ -2960,6 +2964,16 @@ namespace TerminalDecay5Server
             clientStream.Write(buffer, 0, buffer.Length);
             clientStream.Flush();
 
+        }
+
+        private UniversalAddress fetchAddress(List<List<string>> transmissions, int mes)
+        {
+            var ad = new UniversalAddress();
+            ad.ClusterID = Convert.ToInt32(transmissions[mes][0]);
+            ad.SolarSytemID = Convert.ToInt32(transmissions[mes][1]);
+            ad.PlanetID = Convert.ToInt32(transmissions[mes][2]);
+
+            return ad;
         }
     }
 }

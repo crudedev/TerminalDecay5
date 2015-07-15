@@ -591,7 +591,7 @@ namespace TerminalDecay5Client
                 _targetX = mx;
                 _targetY = my;
                 ServerConnection sc = new ServerConnection();
-                sc.ServerRequest(UpdateMoveBase, 26, MessageConstants.splitToken + Convert.ToString(playerToken) + MessageConstants.nextToken + Convert.ToString(_currentX) + MessageConstants.splitToken + Convert.ToString(_currentY) + MessageConstants.splitToken + Convert.ToString(_targetX) + MessageConstants.splitToken + Convert.ToString(_targetY));
+                sc.ServerRequest(UpdateMoveBase, 26, MessageConstants.splitToken + Convert.ToString(playerToken) + MessageConstants.nextToken + Convert.ToString(_currentX) + MessageConstants.splitToken + Convert.ToString(_currentY) + MessageConstants.splitToken + Convert.ToString(_targetX) + MessageConstants.splitToken + Convert.ToString(_targetY) + MessageConstants.nextToken + SendAddress(new UniversalAddress(_currentCluster,_currentSolarSystem,_currentPlanet)));
             }
         }
 
@@ -1953,8 +1953,7 @@ namespace TerminalDecay5Client
                 MessageBox.Show("No selected item");
             }
         }
-
-
+        
         private void RemoveFromQueueDefResponse(List<List<string>> transmission)
         {
             if (transmission[1][0] == "success")
@@ -1968,6 +1967,11 @@ namespace TerminalDecay5Client
         {
             CurrentView = 7;
             MapCanvas.Show();
+        }
+
+        private string SendAddress(UniversalAddress ad)
+        {
+            return ad.ClusterID + MessageConstants.splitToken + ad.SolarSytemID + MessageConstants.splitToken + ad.PlanetID + MessageConstants.splitToken;
         }
 
     }

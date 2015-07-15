@@ -12,5 +12,16 @@ namespace TDCore5
         public int SolarSytemID;
         public int PlanetID;
         int tickNumber;
+        public UniversalAddress()
+        {
+
+        }
+
+        public UniversalAddress(int clust,int solar,int planet)
+        {
+            ClusterID = clust;
+            SolarSytemID = solar;
+            PlanetID = planet;
+        }
     }
 }
