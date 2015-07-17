@@ -14,5 +14,7 @@ namespace TDCore5
         public float BuffSize;
         public UniversalAddress Address;
         public Position Tile;
+        public UniversalAddress DestinationAddress;
+        public Position DestinationTile;
     }
 }

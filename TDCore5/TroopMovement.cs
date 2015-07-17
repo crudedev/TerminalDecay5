@@ -16,6 +16,8 @@ namespace TDCore5
         public Outpost OriginOutpost;
         public Outpost DestinationOutpost;
 
+        UniversalAddress Address;
+
         public int StartTick;        
         public int Duration;
 

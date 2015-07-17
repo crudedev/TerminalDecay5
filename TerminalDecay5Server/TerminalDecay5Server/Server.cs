@@ -161,7 +161,7 @@ namespace TerminalDecay5Server
 
             }
             #endregion
-            
+
             #region Proccessing Building
 
             List<BuildQueueItem> remove = new List<BuildQueueItem>();
@@ -254,6 +254,8 @@ namespace TerminalDecay5Server
                     {
                         case Cmn.MovType.Reinforcement:
                             //dump the troops in the base and add the troop movement to a temp remove list
+
+                            
                             for (int def = 0; def < item.Defence.Count; def++)
                             {
                                 item.DestinationOutpost.Defence[def] += item.Defence[def];
@@ -269,12 +271,19 @@ namespace TerminalDecay5Server
                             break;
                         case Cmn.MovType.Attack:
                             CalculateBattle(item, u);
+                            if(u.outposts.Contains(item.OriginOutpost))
+                            { 
                             Outpost orig = item.OriginOutpost;
                             item.OriginOutpost = item.DestinationOutpost;
                             item.DestinationOutpost = orig;
                             item.StartTick = u.CurrentTick;
                             item.MovementType = Cmn.MovType.Reinforcement;
                             //send it back change it to a reinforcement
+                            }
+                            else
+                            {
+                                CompleteMovements.Add(item);
+                            }
                             break;
                         default:
                             break;
@@ -335,7 +344,7 @@ namespace TerminalDecay5Server
 
 
 
-            #endregion 
+            #endregion
 
             #region SpecialStructures
 
@@ -901,10 +910,10 @@ namespace TerminalDecay5Server
                 return;
             }
 
-            UniversalAddress address = fetchAddress(transmissions, 2);
+            UniversalAddress address = getAddress(transmissions, 2);
 
             //check that there is an out post to move
-            Outpost o = getOutpost(transmissions[1][0], transmissions[1][1],address);
+            Outpost o = getOutpost(transmissions[1][0], transmissions[1][1], address);
 
             Outpost d = getOutpost(transmissions[1][2], transmissions[1][3], address);
 
@@ -1303,8 +1312,8 @@ namespace TerminalDecay5Server
             string response = MessageConstants.MessageTypes[14] + MessageConstants.nextToken;
 
             Player Attacker = getPlayer(transmissions[0][1]);
-            Outpost AttackOp = getOutpost(transmissions[1][0], transmissions[1][1]);
-            Outpost DeffenceOp = getOutpost(transmissions[1][2], transmissions[1][3]);
+            Outpost AttackOp = getOutpost(transmissions[1][0], transmissions[1][1], getAddress(transmissions, 3));
+            Outpost DeffenceOp = getOutpost(transmissions[1][2], transmissions[1][3], getAddress(transmissions, 3));
 
             string ErrorResponse = "";
 
@@ -1395,8 +1404,8 @@ namespace TerminalDecay5Server
             string response = MessageConstants.MessageTypes[14] + MessageConstants.nextToken;
 
             Player Attacker = getPlayer(transmissions[0][1]);
-            Outpost AttackOp = getOutpost(transmissions[1][0], transmissions[1][1]);
-            Outpost DeffenceOp = getOutpost(transmissions[1][2], transmissions[1][3]);
+            Outpost AttackOp = getOutpost(transmissions[1][0], transmissions[1][1], getAddress(transmissions, 3));
+            Outpost DeffenceOp = getOutpost(transmissions[1][2], transmissions[1][3], getAddress(transmissions, 3));
 
             string ErrorResponse = "";
 
@@ -1473,324 +1482,332 @@ namespace TerminalDecay5Server
         public static void CalculateBattle(TroopMovement t, Universe u)
         {
 
-            if(getOutpost(t.DestinationOutpost.))
-            {
-
-            }
-
             //find out if the players have any offence or defence strucutres
-
-            float OffenceOffenceBoost = 0;
-            float DefenceOffenceBoost = 0;
-            float DefenceDefenceBoost = 0;
-
-            List<SpecialStructure> DefenceSpecialStructures = FindLocalStructures(t.DestinationOutpost.Address, t.DestinationOutpost.Tile, u);
-            foreach (var special in DefenceSpecialStructures)
-            {
-                if (special.specialType == Cmn.SpecialType.DeffenceBoost)
-                {
-                    DefenceDefenceBoost += special.BuffSize;
-                }
-
-                if (special.specialType == Cmn.SpecialType.OffenceBoost)
-                {
-                    DefenceOffenceBoost += special.BuffSize;
-                }
-            }
-
-            List<SpecialStructure> OffenceSpecialStructures = FindLocalStructures(t.OriginOutpost.Address, t.OriginOutpost.Tile, u);
-            foreach (var special in DefenceSpecialStructures)
-            {
-                if (special.specialType == Cmn.SpecialType.OffenceBoost)
-                {
-                    if (special.specialType == Cmn.SpecialType.OffenceBoost)
-                    {
-                        OffenceOffenceBoost += special.BuffSize;
-                    }
-                }
-            }
-
-
-            long attackOff = 0;
-            long defenceOff = 0;
-
-            for (int i = 0; i < Cmn.DefenceType.Count; i++)
-            {
-                defenceOff += Convert.ToInt64((Cmn.DefenceAttack[i] * t.DestinationOutpost.Defence[i]) * (1 + DefenceDefenceBoost));
-                defenceOff += Convert.ToInt64((Cmn.OffenceAttack[i] * t.DestinationOutpost.Offence[i] / 2) * (1 + DefenceOffenceBoost));
-            }
-
-            for (int i = 0; i < Cmn.OffenceType.Count; i++)
-            {
-                attackOff += Convert.ToInt64((Cmn.OffenceAttack[i] * t.Offence[i]) * (1 + OffenceOffenceBoost));
-            }
-
             string AttackerMessage = "";
             string DeffenceMessage = "";
 
-            float result = defenceOff / attackOff;
 
-            float attackDeath = 0;
-            float deffenceDeath = 0;
-
-            if (result <= 1)
+            if (u.outposts.Contains(t.DestinationOutpost))
             {
+
+                float OffenceOffenceBoost = 0;
+                float DefenceOffenceBoost = 0;
+                float DefenceDefenceBoost = 0;
+
+                List<SpecialStructure> DefenceSpecialStructures = FindLocalStructures(t.DestinationOutpost.Address, t.DestinationOutpost.Tile, u);
+                foreach (var special in DefenceSpecialStructures)
+                {
+                    if (special.specialType == Cmn.SpecialType.DeffenceBoost)
+                    {
+                        DefenceDefenceBoost += special.BuffSize;
+                    }
+
+                    if (special.specialType == Cmn.SpecialType.OffenceBoost)
+                    {
+                        DefenceOffenceBoost += special.BuffSize;
+                    }
+                }
+
+                List<SpecialStructure> OffenceSpecialStructures = FindLocalStructures(t.OriginOutpost.Address, t.OriginOutpost.Tile, u);
+                foreach (var special in DefenceSpecialStructures)
+                {
+                    if (special.specialType == Cmn.SpecialType.OffenceBoost)
+                    {
+                        if (special.specialType == Cmn.SpecialType.OffenceBoost)
+                        {
+                            OffenceOffenceBoost += special.BuffSize;
+                        }
+                    }
+                }
+
+
+                long attackOff = 0;
+                long defenceOff = 0;
+
+                for (int i = 0; i < Cmn.DefenceType.Count; i++)
+                {
+                    defenceOff += Convert.ToInt64((Cmn.DefenceAttack[i] * t.DestinationOutpost.Defence[i]) * (1 + DefenceDefenceBoost));
+                    defenceOff += Convert.ToInt64((Cmn.OffenceAttack[i] * t.DestinationOutpost.Offence[i] / 2) * (1 + DefenceOffenceBoost));
+                }
+
+                for (int i = 0; i < Cmn.OffenceType.Count; i++)
+                {
+                    attackOff += Convert.ToInt64((Cmn.OffenceAttack[i] * t.Offence[i]) * (1 + OffenceOffenceBoost));
+                }
+
+
+
+                float result = defenceOff / attackOff;
+
+                float attackDeath = 0;
+                float deffenceDeath = 0;
+
                 if (result <= 1)
                 {
-                    deffenceDeath = 0.10f;
-                    attackDeath = 0.20f;
-                    AttackerMessage = "A closely faught battle";
-                    DeffenceMessage = "A closely faught battle";
-                }
-
-                if (result < 0.83)
-                {
-                    deffenceDeath = 0.20f;
-                    attackDeath = 0.15f;
-                    AttackerMessage = "A close victory";
-                    DeffenceMessage = "A minor defeat";
-                }
-
-                if (result < 0.66)
-                {
-                    deffenceDeath = 0.3f;
-                    attackDeath = 0.15f;
-                    AttackerMessage = "Victory";
-                    DeffenceMessage = "Defeat";
-                }
-
-                if (result < 0.5)
-                {
-                    deffenceDeath = 0.4f;
-                    attackDeath = 0.1f;
-                    AttackerMessage = "An impressive victiory";
-                    DeffenceMessage = "A miserable defeat";
-                }
-
-                if (result < 0.2)
-                {
-                    deffenceDeath = 0.6f;
-                    attackDeath = 0.1f;
-                    AttackerMessage = "A triumphant victiory";
-                    DeffenceMessage = "A crushing defeat";
-                }
-
-                if (result < 0.1)
-                {
-                    deffenceDeath = 1;
-                    attackDeath = 0.05f;
-                    AttackerMessage = "Total victiory";
-                    DeffenceMessage = "Total defeat";
-                }
-            }
-            else
-            {
-                if (result >= 1)
-                {
-                    attackDeath = 0.10f;
-                    deffenceDeath = 0.20f;
-                    AttackerMessage = "A closely faught battle";
-                    DeffenceMessage = "A closely faught battle";
-                }
-
-                if (result > 1.2)
-                {
-                    attackDeath = 0.25f;
-                    deffenceDeath = 0.15f;
-                    AttackerMessage = "A minor defeat";
-                    DeffenceMessage = "A close victory";
-                }
-
-                if (result > 1.5)
-                {
-                    attackDeath = 0.3f;
-                    deffenceDeath = 0.2f;
-                    AttackerMessage = "Defeat";
-                    DeffenceMessage = "Victory";
-                }
-
-                if (result > 2)
-                {
-                    attackDeath = 0.4f;
-                    deffenceDeath = 0.1f;
-                    AttackerMessage = "A miserable defeat";
-                    DeffenceMessage = "An impressive victiory";
-                }
-
-                if (result > 5)
-                {
-                    attackDeath = 0.8f;
-                    deffenceDeath = 0.05f;
-                    AttackerMessage = "A crushing defeat";
-                    DeffenceMessage = "A triumphant victiory";
-                }
-
-                if (result > 10)
-                {
-                    attackDeath = 1;
-                    deffenceDeath = 0f;
-                    AttackerMessage = "Total defeat";
-                    DeffenceMessage = "Total victiory";
-                }
-            }
-
-            foreach (var item in Cmn.OffenceType)
-            {
-                float death = t.Offence[item.Value];
-                death = death * attackDeath;
-
-                int sign = u.r.Next(1000);
-                float remove = death * 0.3f;
-                remove = u.r.Next(Convert.ToInt32(remove));
-
-                if (sign > 500)
-                {
-                    death = death + remove;
-                }
-                else
-                {
-                    death = death - remove;
-                }
-
-                if (death < 1 && death > 0)
-                {
-                    death = 1;
-                }
-
-                t.Offence[item.Value] = t.Offence[item.Value] - Convert.ToInt64(death);
-                if (t.Offence[item.Value] < 0)
-                {
-                    t.Offence[item.Value] = 0;
-                }
-            }
-
-            foreach (var item in Cmn.DefenceType)
-            {
-                float death = t.DestinationOutpost.Defence[item.Value];
-                death = death * deffenceDeath;
-
-                int sign = u.r.Next(1000);
-                float remove = u.r.Next(Convert.ToInt32(death * 0.3));
-
-                if (sign > 500)
-                {
-                    death += remove;
-                }
-                else
-                {
-                    death -= remove;
-                }
-
-                t.DestinationOutpost.Defence[item.Value] = t.DestinationOutpost.Defence[item.Value] - Convert.ToInt64(death);
-                if (t.DestinationOutpost.Defence[item.Value] < 0)
-                {
-                    t.DestinationOutpost.Defence[item.Value] = 0;
-                }
-            }
-
-            foreach (var item in Cmn.OffenceType)
-            {
-                float death = t.DestinationOutpost.Offence[item.Value];
-                death = death * deffenceDeath;
-
-                int sign = u.r.Next(1000);
-                float remove = u.r.Next(Convert.ToInt32(death * 0.3));
-
-                if (sign > 500)
-                {
-                    death += remove;
-                }
-                else
-                {
-                    death -= remove;
-                }
-
-                t.DestinationOutpost.Offence[item.Value] = t.DestinationOutpost.Offence[item.Value] - Convert.ToInt64(death);
-                if (t.DestinationOutpost.Offence[item.Value] < 0)
-                {
-                    t.DestinationOutpost.Offence[item.Value] = 0;
-                }
-            }
-
-
-            // calculate the damage for buildings
-            long totalbuild = 0;
-            foreach (var item in t.DestinationOutpost.Buildings)
-            {
-                totalbuild += item;
-            }
-
-            float loss = totalbuild * (deffenceDeath / 3);
-
-            if (loss < 1 && totalbuild != 0)
-            {
-                loss = 2;
-            }
-
-            bool basedeath = false;
-
-            for (int i = Convert.ToInt32(loss); i > 0; i--)
-            {
-                int temp = u.r.Next(Cmn.BuildType.Count);
-
-                if (t.DestinationOutpost.Buildings[temp] > 0)
-                {
-                    t.DestinationOutpost.Buildings[temp]--;
-                }
-                else
-                {
-                    i++;
-                    bool empty = true;
-                    foreach (var item in t.DestinationOutpost.Buildings)
+                    if (result <= 1)
                     {
-                        if (item > 0)
+                        deffenceDeath = 0.10f;
+                        attackDeath = 0.20f;
+                        AttackerMessage = "A closely faught battle";
+                        DeffenceMessage = "A closely faught battle";
+                    }
+
+                    if (result < 0.83)
+                    {
+                        deffenceDeath = 0.20f;
+                        attackDeath = 0.15f;
+                        AttackerMessage = "A close victory";
+                        DeffenceMessage = "A minor defeat";
+                    }
+
+                    if (result < 0.66)
+                    {
+                        deffenceDeath = 0.3f;
+                        attackDeath = 0.15f;
+                        AttackerMessage = "Victory";
+                        DeffenceMessage = "Defeat";
+                    }
+
+                    if (result < 0.5)
+                    {
+                        deffenceDeath = 0.4f;
+                        attackDeath = 0.1f;
+                        AttackerMessage = "An impressive victiory";
+                        DeffenceMessage = "A miserable defeat";
+                    }
+
+                    if (result < 0.2)
+                    {
+                        deffenceDeath = 0.6f;
+                        attackDeath = 0.1f;
+                        AttackerMessage = "A triumphant victiory";
+                        DeffenceMessage = "A crushing defeat";
+                    }
+
+                    if (result < 0.1)
+                    {
+                        deffenceDeath = 1;
+                        attackDeath = 0.05f;
+                        AttackerMessage = "Total victiory";
+                        DeffenceMessage = "Total defeat";
+                    }
+                }
+                else
+                {
+                    if (result >= 1)
+                    {
+                        attackDeath = 0.10f;
+                        deffenceDeath = 0.20f;
+                        AttackerMessage = "A closely faught battle";
+                        DeffenceMessage = "A closely faught battle";
+                    }
+
+                    if (result > 1.2)
+                    {
+                        attackDeath = 0.25f;
+                        deffenceDeath = 0.15f;
+                        AttackerMessage = "A minor defeat";
+                        DeffenceMessage = "A close victory";
+                    }
+
+                    if (result > 1.5)
+                    {
+                        attackDeath = 0.3f;
+                        deffenceDeath = 0.2f;
+                        AttackerMessage = "Defeat";
+                        DeffenceMessage = "Victory";
+                    }
+
+                    if (result > 2)
+                    {
+                        attackDeath = 0.4f;
+                        deffenceDeath = 0.1f;
+                        AttackerMessage = "A miserable defeat";
+                        DeffenceMessage = "An impressive victiory";
+                    }
+
+                    if (result > 5)
+                    {
+                        attackDeath = 0.8f;
+                        deffenceDeath = 0.05f;
+                        AttackerMessage = "A crushing defeat";
+                        DeffenceMessage = "A triumphant victiory";
+                    }
+
+                    if (result > 10)
+                    {
+                        attackDeath = 1;
+                        deffenceDeath = 0f;
+                        AttackerMessage = "Total defeat";
+                        DeffenceMessage = "Total victiory";
+                    }
+                }
+
+                foreach (var item in Cmn.OffenceType)
+                {
+                    float death = t.Offence[item.Value];
+                    death = death * attackDeath;
+
+                    int sign = u.r.Next(1000);
+                    float remove = death * 0.3f;
+                    remove = u.r.Next(Convert.ToInt32(remove));
+
+                    if (sign > 500)
+                    {
+                        death = death + remove;
+                    }
+                    else
+                    {
+                        death = death - remove;
+                    }
+
+                    if (death < 1 && death > 0)
+                    {
+                        death = 1;
+                    }
+
+                    t.Offence[item.Value] = t.Offence[item.Value] - Convert.ToInt64(death);
+                    if (t.Offence[item.Value] < 0)
+                    {
+                        t.Offence[item.Value] = 0;
+                    }
+                }
+
+                foreach (var item in Cmn.DefenceType)
+                {
+                    float death = t.DestinationOutpost.Defence[item.Value];
+                    death = death * deffenceDeath;
+
+                    int sign = u.r.Next(1000);
+                    float remove = u.r.Next(Convert.ToInt32(death * 0.3));
+
+                    if (sign > 500)
+                    {
+                        death += remove;
+                    }
+                    else
+                    {
+                        death -= remove;
+                    }
+
+                    t.DestinationOutpost.Defence[item.Value] = t.DestinationOutpost.Defence[item.Value] - Convert.ToInt64(death);
+                    if (t.DestinationOutpost.Defence[item.Value] < 0)
+                    {
+                        t.DestinationOutpost.Defence[item.Value] = 0;
+                    }
+                }
+
+                foreach (var item in Cmn.OffenceType)
+                {
+                    float death = t.DestinationOutpost.Offence[item.Value];
+                    death = death * deffenceDeath;
+
+                    int sign = u.r.Next(1000);
+                    float remove = u.r.Next(Convert.ToInt32(death * 0.3));
+
+                    if (sign > 500)
+                    {
+                        death += remove;
+                    }
+                    else
+                    {
+                        death -= remove;
+                    }
+
+                    t.DestinationOutpost.Offence[item.Value] = t.DestinationOutpost.Offence[item.Value] - Convert.ToInt64(death);
+                    if (t.DestinationOutpost.Offence[item.Value] < 0)
+                    {
+                        t.DestinationOutpost.Offence[item.Value] = 0;
+                    }
+                }
+
+
+                // calculate the damage for buildings
+                long totalbuild = 0;
+                foreach (var item in t.DestinationOutpost.Buildings)
+                {
+                    totalbuild += item;
+                }
+
+                float loss = totalbuild * (deffenceDeath / 3);
+
+                if (loss < 1 && totalbuild != 0)
+                {
+                    loss = 2;
+                }
+
+                bool basedeath = false;
+
+                for (int i = Convert.ToInt32(loss); i > 0; i--)
+                {
+                    int temp = u.r.Next(Cmn.BuildType.Count);
+
+                    if (t.DestinationOutpost.Buildings[temp] > 0)
+                    {
+                        t.DestinationOutpost.Buildings[temp]--;
+                    }
+                    else
+                    {
+                        i++;
+                        bool empty = true;
+                        foreach (var item in t.DestinationOutpost.Buildings)
                         {
-                            empty = false;
+                            if (item > 0)
+                            {
+                                empty = false;
+                                break;
+                            }
+                        }
+                        if (empty)
+                        {
+                            basedeath = true;
                             break;
                         }
                     }
-                    if (empty)
+
+                }
+
+                if (totalbuild <= 0)
+                {
+                    basedeath = true;
+                }
+
+
+                if (result <= 1)
+                {
+                    float removeRes = deffenceDeath / 2;
+
+                    foreach (var item in Cmn.Resource)
                     {
-                        basedeath = true;
-                        break;
+                        u.players[t.OriginOutpost.OwnerID].Resources[item.Value] += Convert.ToInt64(u.players[t.DestinationOutpost.Address.PlanetID].Resources[item.Value] * removeRes);
+
+                        AttackerMessage += " Gained " + item.Key + ": " + Convert.ToString(Convert.ToInt64(u.players[t.DestinationOutpost.OwnerID].Resources[item.Value] * removeRes));
+                        DeffenceMessage += " Lost " + item.Key + ": " + Convert.ToString(Convert.ToInt64(u.players[t.DestinationOutpost.OwnerID].Resources[item.Value] * removeRes));
+                        u.players[t.DestinationOutpost.OwnerID].Resources[item.Value] -= Convert.ToInt64(u.players[t.DestinationOutpost.OwnerID].Resources[item.Value] * removeRes);
                     }
                 }
 
-            }
-
-            if (totalbuild <= 0)
-            {
-                basedeath = true;
-            }
-
-
-            if (result <= 1)
-            {
-                float removeRes = deffenceDeath / 2;
-
-                foreach (var item in Cmn.Resource)
+                if (basedeath)
                 {
-                    u.players[t.OriginOutpost.OwnerID].Resources[item.Value] += Convert.ToInt64(u.players[t.DestinationOutpost.Address.PlanetID].Resources[item.Value] * removeRes);
-
-                    AttackerMessage += " Gained " + item.Key + ": " + Convert.ToString(Convert.ToInt64(u.players[t.DestinationOutpost.OwnerID].Resources[item.Value] * removeRes));
-                    DeffenceMessage += " Lost " + item.Key + ": " + Convert.ToString(Convert.ToInt64(u.players[t.DestinationOutpost.OwnerID].Resources[item.Value] * removeRes));
-                    u.players[t.DestinationOutpost.OwnerID].Resources[item.Value] -= Convert.ToInt64(u.players[t.DestinationOutpost.OwnerID].Resources[item.Value] * removeRes);
+                    AttackerMessage += Environment.NewLine + " Base Destroyed, Shard Retrieved";
+                    DeffenceMessage += Environment.NewLine + "Our Base Was Lost";
+                    t.OriginOutpost.CoreShards++;
+                    u.outposts.Remove(t.DestinationOutpost);
                 }
-            }
 
-            if (basedeath)
+                Message tempMessage = new Message(-1, t.OriginOutpost.OwnerID, "Attacking Another Player", AttackerMessage);
+                u.Messages.Add(tempMessage);
+                tempMessage = new Message(-1, t.DestinationOutpost.OwnerID, "Attacked by Another Player", DeffenceMessage);
+                u.Messages.Add(tempMessage);
+
+            }
+            else
             {
-                AttackerMessage += Environment.NewLine + " Base Destroyed, Shard Retrieved";
-                DeffenceMessage += Environment.NewLine + "Our Base Was Lost";
-                t.OriginOutpost.CoreShards++;
-                u.outposts.Remove(t.DestinationOutpost);
+                Message tempMessage = new Message(-1, t.OriginOutpost.OwnerID, "Attack Failed Base Doesn't exist", AttackerMessage);
+                u.Messages.Add(tempMessage);
+                tempMessage = new Message(-1, t.DestinationOutpost.OwnerID, "Attack Failed Base Doesn't exist", DeffenceMessage);
+                u.Messages.Add(tempMessage);
             }
-
-            Message tempMessage = new Message(-1, t.OriginOutpost.OwnerID, "Attacking Another Player", AttackerMessage);
-            u.Messages.Add(tempMessage);
-            tempMessage = new Message(-1, t.DestinationOutpost.OwnerID, "Attacked by Another Player", DeffenceMessage);
-            u.Messages.Add(tempMessage);
-
             // response = "Success" + MessageConstants.splitMessageToken + AttackerMessage;
 
 
@@ -1814,10 +1831,10 @@ namespace TerminalDecay5Server
 
             try
             {
-                if (getPlayer(transmissions[0][1]).PlayerID == getOutpost(transmissions[0][2], transmissions[0][3]).OwnerID)
+                if (getPlayer(transmissions[0][1]).PlayerID == getOutpost(transmissions[0][2], transmissions[0][3], getAddress(transmissions, 1)).OwnerID)
                 {
                     Player pl = getPlayer(transmissions[0][1]);
-                    response += SendOffenceOntile(transmissions);
+                    response += SendOffenceOntile(transmissions, getAddress(transmissions, 1));
                 }
             }
             catch
@@ -1842,7 +1859,7 @@ namespace TerminalDecay5Server
             try
             {
                 int playerid = getPlayer(transmissions[0][1]).PlayerID;
-                o = getOutpost(transmissions[0][2], transmissions[0][3]);
+                o = getOutpost(transmissions[0][2], transmissions[0][3], getAddress(transmissions, 1));
 
             }
             catch (Exception)
@@ -1857,7 +1874,7 @@ namespace TerminalDecay5Server
             if (getPlayer(transmissions[0][1]).PlayerID == o.OwnerID)
             {
 
-                response += SendOffenceOntile(transmissions);
+                response += SendOffenceOntile(transmissions, getAddress(transmissions, 1));
                 response += MessageConstants.nextToken;
 
                 foreach (List<long> d in Cmn.OffenceCost)
@@ -1941,11 +1958,11 @@ namespace TerminalDecay5Server
             clientStream.Flush();
         }
 
-        private string SendOffenceOntile(List<List<string>> transmissions)
+        private string SendOffenceOntile(List<List<string>> transmissions, UniversalAddress a)
         {
             string response = "";
 
-            Outpost op = getOutpost(transmissions[0][2], transmissions[0][3]);
+            Outpost op = getOutpost(transmissions[0][2], transmissions[0][3], a);
 
             if (op == null)
             {
@@ -1979,14 +1996,14 @@ namespace TerminalDecay5Server
 
             string response = "";
 
-            if (getPlayer(transmissions[0][1]).PlayerID == getOutpost(transmissions[2][0], transmissions[2][1]).OwnerID)
+            if (getPlayer(transmissions[0][1]).PlayerID == getOutpost(transmissions[2][0], transmissions[2][1], getAddress(transmissions, 3)).OwnerID)
             {
 
                 for (int i = 0; i < transmissions[1].Count - 1; i++)
                 {
                     if (Convert.ToInt32(transmissions[1][i]) > 0)
                     {
-                        BuildQueueItem b = new BuildQueueItem(getPlayer(transmissions[0][1]).PlayerID, getOutpost(transmissions[2][0], transmissions[2][1]).ID, Convert.ToInt32(transmissions[1][i]), i, Cmn.DefenceCost[i]);
+                        BuildQueueItem b = new BuildQueueItem(getPlayer(transmissions[0][1]).PlayerID, getOutpost(transmissions[2][0], transmissions[2][1], getAddress(transmissions, 3)).ID, Convert.ToInt32(transmissions[1][i]), i, Cmn.DefenceCost[i]);
                         universe.DefenceBuildQueue.Add(b);
                     }
                 }
@@ -2025,14 +2042,14 @@ namespace TerminalDecay5Server
 
             string response = "";
 
-            if (getPlayer(transmissions[0][1]).PlayerID == getOutpost(transmissions[2][0], transmissions[2][1]).OwnerID)
+            if (getPlayer(transmissions[0][1]).PlayerID == getOutpost(transmissions[2][0], transmissions[2][1], getAddress(transmissions, 3)).OwnerID)
             {
 
                 for (int i = 0; i < transmissions[1].Count - 1; i++)
                 {
                     if (Convert.ToInt32(transmissions[1][i]) > 0)
                     {
-                        BuildQueueItem b = new BuildQueueItem(getPlayer(transmissions[0][1]).PlayerID, getOutpost(transmissions[2][0], transmissions[2][1]).ID, Convert.ToInt32(transmissions[1][i]), i, Cmn.OffenceCost[i]);
+                        BuildQueueItem b = new BuildQueueItem(getPlayer(transmissions[0][1]).PlayerID, getOutpost(transmissions[2][0], transmissions[2][1], getAddress(transmissions, 3)).ID, Convert.ToInt32(transmissions[1][i]), i, Cmn.OffenceCost[i]);
                         universe.OffenceBuildQueue.Add(b);
                     }
                 }
@@ -2059,14 +2076,14 @@ namespace TerminalDecay5Server
         private void SendDefenceBuildList(List<List<string>> transmissions, TcpClient tcpClient)
         {
             string response = MessageConstants.MessageTypes[9] + MessageConstants.nextToken;
-            response += SendDefencesOntile(transmissions);
+            response += SendDefencesOntile(transmissions, getAddress(transmissions, 1));
             response += MessageConstants.nextToken;
 
             int outpostID = -1;
 
             try
             {
-                outpostID = getOutpost(transmissions[0][2], transmissions[0][3]).ID;
+                outpostID = getOutpost(transmissions[0][2], transmissions[0][3], getAddress(transmissions, 1)).ID;
             }
             catch (Exception)
             {
@@ -2136,12 +2153,12 @@ namespace TerminalDecay5Server
             clientStream.Flush();
         }
 
-        private string SendDefencesOntile(List<List<string>> transmissions)
+        private string SendDefencesOntile(List<List<string>> transmissions, UniversalAddress a)
         {
             string response = "";
             bool found = false;
 
-            Outpost op = getOutpost(transmissions[0][2], transmissions[0][3]);
+            Outpost op = getOutpost(transmissions[0][2], transmissions[0][3], a);
 
             if (op == null)
             {
@@ -2172,13 +2189,13 @@ namespace TerminalDecay5Server
 
             string response = "";
 
-            if (getPlayer(transmissions[0][1]).PlayerID == getOutpost(transmissions[2][0], transmissions[2][1]).OwnerID)
+            if (getPlayer(transmissions[0][1]).PlayerID == getOutpost(transmissions[2][0], transmissions[2][1], getAddress(transmissions, 3)).OwnerID)
             {
                 for (int i = 0; i < transmissions[1].Count - 1; i++)
                 {
                     if (Convert.ToInt32(transmissions[1][i]) > 0)
                     {
-                        BuildQueueItem b = new BuildQueueItem(getPlayer(transmissions[0][1]).PlayerID, getOutpost(transmissions[2][0], transmissions[2][1]).ID, Convert.ToInt32(transmissions[1][i]), i, Cmn.BuildCost[i]);
+                        BuildQueueItem b = new BuildQueueItem(getPlayer(transmissions[0][1]).PlayerID, getOutpost(transmissions[2][0], transmissions[2][1], getAddress(transmissions, 3)).ID, Convert.ToInt32(transmissions[1][i]), i, Cmn.BuildCost[i]);
                         universe.BuildingBuildQueue.Add(b);
                     }
                 }
@@ -2218,7 +2235,7 @@ namespace TerminalDecay5Server
 
             try
             {
-                outpostID = getOutpost(transmissions[0][2], transmissions[0][3]).ID;
+                outpostID = getOutpost(transmissions[0][2], transmissions[0][3], getAddress(transmissions, 1)).ID;
             }
             catch (Exception)
             {
@@ -2226,7 +2243,7 @@ namespace TerminalDecay5Server
                 return;
             }
 
-            response += SendBuildingsOntile(transmissions);
+            response += SendBuildingsOntile(transmissions, getAddress(transmissions, 1));
             response += MessageConstants.nextToken;
 
 
@@ -2671,7 +2688,9 @@ namespace TerminalDecay5Server
             //find the tile involved from the message 
             int index = Convert.ToInt32(message[0][2]) * 25 + Convert.ToInt32(message[0][3]);
 
-            string response = MessageConstants.MessageTypes[4] + MessageConstants.nextToken + universe.clusters[0].solarSystems[0].planets[0].mapTiles[index].Resources[Cmn.Resource[Cmn.Renum.Metal]] + MessageConstants.splitToken + universe.clusters[0].solarSystems[0].planets[0].mapTiles[index].Resources[Cmn.Resource[Cmn.Renum.Food]] + MessageConstants.splitToken + universe.clusters[0].solarSystems[0].planets[0].mapTiles[index].Resources[Cmn.Resource[Cmn.Renum.Water]] + MessageConstants.splitToken;
+            UniversalAddress a = getAddress(message, 1);
+
+            string response = MessageConstants.MessageTypes[4] + MessageConstants.nextToken + universe.clusters[a.ClusterID].solarSystems[a.SolarSytemID].planets[a.PlanetID].mapTiles[index].Resources[Cmn.Resource[Cmn.Renum.Metal]] + MessageConstants.splitToken + universe.clusters[a.ClusterID].solarSystems[a.SolarSytemID].planets[a.PlanetID].mapTiles[index].Resources[Cmn.Resource[Cmn.Renum.Food]] + MessageConstants.splitToken + universe.clusters[a.ClusterID].solarSystems[a.SolarSytemID].planets[a.PlanetID].mapTiles[index].Resources[Cmn.Resource[Cmn.Renum.Water]] + MessageConstants.splitToken;
 
             response += MessageConstants.completeToken;
 
@@ -2699,8 +2718,10 @@ namespace TerminalDecay5Server
                 rejectConnection(5, "player token wrong", tcpClient);
             }
 
-            response += SendBuildingsOntile(message);
-            response += SendDefenceOnTile(message);
+            UniversalAddress a = getAddress(message, 1);
+
+            response += SendBuildingsOntile(message, a);
+            response += SendDefenceOnTile(message, a);
             response += MessageConstants.completeToken;
             NetworkStream clientStream = tcpClient.GetStream();
             ASCIIEncoding encoder = new ASCIIEncoding();
@@ -2711,11 +2732,11 @@ namespace TerminalDecay5Server
             clientStream.Flush();
         }
 
-        private string SendDefenceOnTile(List<List<string>> message)
+        private string SendDefenceOnTile(List<List<string>> message, UniversalAddress a)
         {
             string response = "";
 
-            Outpost op = getOutpost(message[0][2], message[0][3]);
+            Outpost op = getOutpost(message[0][2], message[0][3], a);
 
             if (op == null)
             {
@@ -2728,12 +2749,12 @@ namespace TerminalDecay5Server
             return response;
         }
 
-        private string SendBuildingsOntile(List<List<string>> message)
+        private string SendBuildingsOntile(List<List<string>> message, UniversalAddress a)
         {
 
             string response = "";
 
-            Outpost op = getOutpost(message[0][2], message[0][3]);
+            Outpost op = getOutpost(message[0][2], message[0][3], a);
 
             if (op == null)
             {
@@ -2943,11 +2964,11 @@ namespace TerminalDecay5Server
 
             try
             {
-                if (getPlayer(transmissions[0][1]).PlayerID == getOutpost(transmissions[0][2], transmissions[0][3]).OwnerID)
+                if (getPlayer(transmissions[0][1]).PlayerID == getOutpost(transmissions[0][2], transmissions[0][3], getAddress(transmissions, 1)).OwnerID)
                 {
                     Player pl = getPlayer(transmissions[0][1]);
-                    response += SendOffenceOntile(transmissions);
-                    response += SendDefenceOnTile(transmissions);
+                    response += SendOffenceOntile(transmissions, getAddress(transmissions, 1));
+                    response += SendDefenceOnTile(transmissions, getAddress(transmissions, 1));
                 }
             }
             catch
@@ -2966,7 +2987,7 @@ namespace TerminalDecay5Server
 
         }
 
-        private UniversalAddress fetchAddress(List<List<string>> transmissions, int mes)
+        private UniversalAddress getAddress(List<List<string>> transmissions, int mes)
         {
             var ad = new UniversalAddress();
             ad.ClusterID = Convert.ToInt32(transmissions[mes][0]);
