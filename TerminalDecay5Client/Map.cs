@@ -540,8 +540,7 @@ namespace TerminalDecay5Client
 
                 }
             }
-
-
+            
             if (CurrentView == 3)
             {
                 if (m.Button == MouseButtons.Left)

@@ -241,7 +241,6 @@ namespace TerminalDecay5Server
 
             #endregion
 
-
             #region movements and attacks
 
             List<TroopMovement> CompleteMovements = new List<TroopMovement>();
@@ -255,7 +254,7 @@ namespace TerminalDecay5Server
                         case Cmn.MovType.Reinforcement:
                             //dump the troops in the base and add the troop movement to a temp remove list
 
-                            
+
                             for (int def = 0; def < item.Defence.Count; def++)
                             {
                                 item.DestinationOutpost.Defence[def] += item.Defence[def];
@@ -271,14 +270,14 @@ namespace TerminalDecay5Server
                             break;
                         case Cmn.MovType.Attack:
                             CalculateBattle(item, u);
-                            if(u.outposts.Contains(item.OriginOutpost))
-                            { 
-                            Outpost orig = item.OriginOutpost;
-                            item.OriginOutpost = item.DestinationOutpost;
-                            item.DestinationOutpost = orig;
-                            item.StartTick = u.CurrentTick;
-                            item.MovementType = Cmn.MovType.Reinforcement;
-                            //send it back change it to a reinforcement
+                            if (u.outposts.Contains(item.OriginOutpost))
+                            {
+                                Outpost orig = item.OriginOutpost;
+                                item.OriginOutpost = item.DestinationOutpost;
+                                item.DestinationOutpost = orig;
+                                item.StartTick = u.CurrentTick;
+                                item.MovementType = Cmn.MovType.Reinforcement;
+                                //send it back change it to a reinforcement
                             }
                             else
                             {
@@ -348,7 +347,7 @@ namespace TerminalDecay5Server
 
             #region SpecialStructures
 
-
+            //Add the resources special structures
             foreach (var item in u.SpecialStructures)
             {
                 if (item.specialType == Cmn.SpecialType.ResourceWell)
@@ -360,6 +359,9 @@ namespace TerminalDecay5Server
                     }
                 }
             }
+
+            //Find any planets without any AI bases and AI portals 
+
 
 
             #endregion
@@ -1154,17 +1156,22 @@ namespace TerminalDecay5Server
             if (SelectedCluster == null)
             {
                 SelectedCluster = universe.clusters[0];
+                return;
             }
 
             response += SelectedCluster.ClusterID + MessageConstants.nextToken;
 
-
-
-            foreach (SolarSystem s in SelectedCluster.solarSystems)
+            if (SelectedCluster.solarSystems != null)
             {
-                response += s.position.X + MessageConstants.splitToken + s.position.Y + MessageConstants.splitToken + s.SolarSystemType + MessageConstants.nextToken;
+                foreach (SolarSystem s in SelectedCluster.solarSystems)
+                {
+                    response += s.position.X + MessageConstants.splitToken + s.position.Y + MessageConstants.splitToken + s.SolarSystemType + MessageConstants.nextToken;
+                }
             }
-
+            else
+            {
+                return;
+            }
 
 
             response += MessageConstants.completeToken;
@@ -1183,7 +1190,7 @@ namespace TerminalDecay5Server
         {
             long playerid = -1;
             string response = MessageConstants.MessageTypes[17] + MessageConstants.nextToken;
-
+            int clusterid = Convert.ToInt32(message[0][4]);
             try
             {
                 playerid = getPlayer(message[0][1]).PlayerID;
@@ -1194,8 +1201,16 @@ namespace TerminalDecay5Server
                 return;
             }
 
-
-            foreach (Planet p in universe.clusters[0].solarSystems[0].planets)
+            SolarSystem SelectedSolar = new SolarSystem();
+            foreach (SolarSystem item in universe.clusters[clusterid].solarSystems)
+            {
+                if (item.position.X == Convert.ToInt32(message[0][2]) && item.position.Y == Convert.ToInt32(message[0][3]))
+                {
+                    SelectedSolar = item;
+                }
+            }
+            
+            foreach (Planet p in SelectedSolar.planets)
             {
                 response += p.position.X + MessageConstants.splitToken + p.position.Y + MessageConstants.splitToken + p.planetType + MessageConstants.nextToken;
             }
@@ -2857,13 +2872,24 @@ namespace TerminalDecay5Server
 
             universe.players.Add(AIID);
 
-            for (int i = 0; i < 10; i++)
+
+            foreach (var clust in universe.clusters)
             {
-                AddAIOutpost();
+                foreach (var Solar in clust.solarSystems)
+                {
+                    foreach (var planet in Solar.planets)
+                    {
+                        for (int i = 0; i < 10; i++)
+                        {
+                            AddAIOutpost(new UniversalAddress(clust.ClusterID, Solar.SolarSystemID, planet.PlanetID));
+                        }
+                    }
+                }
             }
+
         }
 
-        public void AddAIOutpost()
+        public void AddAIOutpost(UniversalAddress a)
         {
             if (universe.outposts == null)
             {
@@ -2909,28 +2935,14 @@ namespace TerminalDecay5Server
                 }
                 if (tilecount > 700)
                 {
-                    o.Address.PlanetID++;
-                    if (o.Address.PlanetID > universe.clusters[o.Address.ClusterID].solarSystems[o.Address.SolarSytemID].planets.Count)
-                    {
-                        o.Address.PlanetID = 0;
-                        o.Address.SolarSytemID++;
-                        if (o.Address.SolarSytemID > universe.clusters[o.Address.ClusterID].solarSystems.Count)
-                        {
-                            o.Address.PlanetID = 0;
-                            o.Address.SolarSytemID = 0;
-                            o.Address.ClusterID++;
-                        }
-
-                    }
+                    break;
                 }
 
             }
             o.Tile = v;
 
             o.Address = new UniversalAddress();
-            o.Address.ClusterID = 0;
-            o.Address.SolarSytemID = 0;
-            o.Address.PlanetID = 0;
+            o.Address = a;
 
             o.Buildings[Cmn.BuildType[Cmn.BldTenum.Mine]] = 1;
             o.Buildings[Cmn.BuildType[Cmn.BldTenum.Farm]] = 2;

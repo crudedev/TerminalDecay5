@@ -25,6 +25,16 @@ namespace TDCore5
 
         public void InitUniverse()
         {
+
+
+            //map layout
+
+
+
+
+
+            //create the universe
+
             CurrentTick = 0;
 
             r = new Random();
@@ -45,7 +55,7 @@ namespace TDCore5
                     s.SolarSystemType = r.Next(10);
                     s.SolarSystemID = ii;
                         
-                    for (int iii = 0; iii < 1; iii++)
+                    for (int iii = 0; iii < 5; iii++)
                     {
                         Planet p = new Planet();
 
