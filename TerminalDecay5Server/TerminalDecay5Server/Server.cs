@@ -17,7 +17,7 @@ namespace TerminalDecay5Server
         private Timer _serverTick;
         private Timer _serverSave;
 
-        private Player AIID;
+        private static Player AIID;
 
         public void Serve()
         {
@@ -361,7 +361,163 @@ namespace TerminalDecay5Server
             }
 
             //Find any planets without any AI bases and AI portals 
+            foreach (var Clust in u.clusters)
+            {
+                foreach (var Solar in Clust.solarSystems)
+                {
+                    foreach (var planet in Solar.planets)
+                    {
+                        bool ofound = false;
+                        foreach (var o in u.outposts)
+                        {
 
+                            if (o.Address == new UniversalAddress(Clust.ClusterID, Solar.SolarSystemID, planet.PlanetID) && o.OwnerID == AIID.PlayerID)
+                            {
+                                ofound = true;
+                                break;
+                            }
+                        }
+                        if (ofound)
+                        {
+                            break;
+                        }
+                        else
+                        {
+                            bool pfound = false;
+                            foreach (var ss in u.SpecialStructures)
+                            {
+                                if (ss.Address == new UniversalAddress(Clust.ClusterID, Solar.SolarSystemID, planet.PlanetID) && ss.specialType == Cmn.SpecialType.Portal)
+                                {
+                                    pfound = true;
+                                    break;
+                                }
+                            }
+                            if (pfound)
+                            {
+                                break;
+                            }
+                            else
+                            {
+                                //create a mother fucking portal 
+
+                                Position v = new Position();
+                                bool blocked = true;
+                                int tilecount = 0;
+
+                                while (blocked == true)
+                                {
+                                    blocked = false;
+                                    tilecount++;
+
+                                    v.X = u.r.Next(3, 22);
+                                    v.Y = u.r.Next(3, 22);
+
+                                    blocked = IsBlockedTile(u, new UniversalAddress(Clust.ClusterID, Solar.SolarSystemID, planet.PlanetID), v);
+
+                                    if (tilecount > 700)
+                                    {
+                                        break;
+                                    }
+                                }
+
+                                if (!blocked)
+                                {
+                                    SpecialStructure s = new SpecialStructure();
+                                    s.specialType = Cmn.SpecialType.Portal;
+                                    s.Tile = v;
+
+                                    Planet SelectedPlanet = new Planet();
+                                    SelectedPlanet.PlanetID = -1;
+
+                                    UniversalAddress a = new UniversalAddress(Clust.ClusterID, Solar.SolarSystemID, planet.PlanetID);
+
+                                    foreach (var p in Solar.planets)
+                                    {
+                                        if (p.PlanetID == planet.PlanetID + 1)
+                                        {
+                                            SelectedPlanet = p;
+
+                                            break;
+                                        }
+                                    }
+
+                                    if (SelectedPlanet.PlanetID < 0)
+                                    {
+                                        foreach (var sol in Clust.solarSystems)
+                                        {
+                                            if (sol.SolarSystemID == Solar.SolarSystemID + 1)
+                                            {
+                                                SelectedPlanet = sol.planets[0];
+                                                a.SolarSytemID = sol.SolarSystemID;
+
+                                            }
+                                        }
+                                    }
+
+                                    if (SelectedPlanet.planetType < 0)
+                                    {
+                                        foreach (var clu in u.clusters)
+                                        {
+                                            if (clu.ClusterID == Clust.ClusterID + 1)
+                                            {
+                                                SelectedPlanet = clu.solarSystems[0].planets[0];
+                                                a.SolarSytemID = 0;
+                                                a.ClusterID = clu.ClusterID;
+                                            }
+                                        }
+                                    }
+
+                                    if (SelectedPlanet.PlanetID < 0)
+                                    {
+                                        break;
+                                    }
+                                    else
+                                    {
+                                        a.PlanetID = SelectedPlanet.PlanetID;
+
+
+                                        s.DestinationAddress = a;
+
+                                        Position destTile = new Position();
+ 
+
+
+                                        bool destBlocked = true;
+                                        while (destBlocked == true)
+                                        {
+
+                                            tilecount++;
+
+                                            destTile.X = u.r.Next(3, 22);
+                                            destTile.Y = u.r.Next(3, 22);
+
+                                            destBlocked = IsBlockedTile(u, a, destTile);
+
+                                            if (tilecount > 700)
+                                            {
+                                                break;
+                                            }
+                                        }
+
+                                        s.DestinationTile = destTile;
+
+                                        if(!destBlocked)
+                                        {
+                                            u.SpecialStructures.Add(s);
+                                        }
+
+
+                                    }
+                                                                      
+
+                                }
+
+
+                            }
+                        }
+                    }
+                }
+            }
 
 
             #endregion
@@ -500,33 +656,7 @@ namespace TerminalDecay5Server
 
                 if (!blocked)
                 {
-                    foreach (var item in u.outposts)
-                    {
-                        if (item.Address == outpost.Address)
-                        {
-                            if (item.Tile.X == x)
-                            {
-                                if (item.Tile.Y == y)
-                                {
-                                    blocked = true;
-                                }
-                            }
-                        }
-                    }
-
-                    foreach (var item in u.SpecialStructures)
-                    {
-                        if (outpost.Address == item.Address)
-                        {
-                            if (item.Tile.X == x)
-                            {
-                                if (item.Tile.Y == y)
-                                {
-                                    blocked = true;
-                                }
-                            }
-                        }
-                    }
+                    blocked = IsBlockedTile(u, outpost.Address, new Position(x, y));
                 }
 
                 if (blocked == false)
@@ -1209,7 +1339,7 @@ namespace TerminalDecay5Server
                     SelectedSolar = item;
                 }
             }
-            
+
             foreach (Planet p in SelectedSolar.planets)
             {
                 response += p.position.X + MessageConstants.splitToken + p.position.Y + MessageConstants.splitToken + p.planetType + MessageConstants.nextToken;
@@ -2902,8 +3032,7 @@ namespace TerminalDecay5Server
             o.OwnerID = AIID.PlayerID;
 
             Position v = new Position();
-            v.X = universe.r.Next(3, 22);
-            v.Y = universe.r.Next(3, 22);
+
 
             bool blocked = true;
             int tilecount = 0;
@@ -2912,32 +3041,15 @@ namespace TerminalDecay5Server
                 blocked = false;
                 tilecount++;
 
-                foreach (var item in universe.outposts)
-                {
-                    if (item.Address == o.Address)
-                    {
-                        if (item.Tile == v)
-                        {
-                            blocked = true;
-                        }
-                    }
-                }
+                v.X = universe.r.Next(3, 22);
+                v.Y = universe.r.Next(3, 22);
 
-                foreach (var item in universe.SpecialStructures)
-                {
-                    if (item.Address == o.Address)
-                    {
-                        if (item.Tile == v)
-                        {
-                            blocked = true;
-                        }
-                    }
-                }
+                blocked = IsBlockedTile(universe, o.Address, v);
+
                 if (tilecount > 700)
                 {
                     break;
                 }
-
             }
             o.Tile = v;
 
@@ -3008,5 +3120,35 @@ namespace TerminalDecay5Server
 
             return ad;
         }
+
+        private static bool IsBlockedTile(Universe u, UniversalAddress a, Position p)
+        {
+            bool blocked = false;
+            foreach (var item in u.outposts)
+            {
+                if (item.Address == a)
+                {
+                    if (item.Tile == p)
+                    {
+                        blocked = true;
+                    }
+                }
+            }
+
+            foreach (var item in u.SpecialStructures)
+            {
+                if (item.Address == a)
+                {
+                    if (item.Tile == p)
+                    {
+                        blocked = true;
+                    }
+                }
+            }
+
+            return blocked;
+
+        }
+
     }
 }
