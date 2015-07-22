@@ -102,3 +102,17 @@ C:\TerminalDecay5006\TerminalDecay5Client\obj\Debug\TerminalDecay5Client.Propert
 C:\TerminalDecay5006\TerminalDecay5Client\obj\Debug\TerminalDecay5Client.csproj.GenerateResource.Cache
 C:\TerminalDecay5006\TerminalDecay5Client\obj\Debug\TerminalDecay5Client.exe
 C:\TerminalDecay5006\TerminalDecay5Client\obj\Debug\TerminalDecay5Client.pdb
+C:\Users\D\Dropbox\GitHub\TerminalDecay5\TerminalDecay5Client\bin\Debug\TerminalDecay5Client.exe.config
+C:\Users\D\Dropbox\GitHub\TerminalDecay5\TerminalDecay5Client\bin\Debug\TerminalDecay5Client.exe
+C:\Users\D\Dropbox\GitHub\TerminalDecay5\TerminalDecay5Client\bin\Debug\TerminalDecay5Client.pdb
+C:\Users\D\Dropbox\GitHub\TerminalDecay5\TerminalDecay5Client\bin\Debug\TDCore5.dll
+C:\Users\D\Dropbox\GitHub\TerminalDecay5\TerminalDecay5Client\bin\Debug\TDCore5.pdb
+C:\Users\D\Dropbox\GitHub\TerminalDecay5\TerminalDecay5Client\obj\Debug\TerminalDecay5Client.csprojResolveAssemblyReference.cache
+C:\Users\D\Dropbox\GitHub\TerminalDecay5\TerminalDecay5Client\obj\Debug\TerminalDecay5Client.CreateAccount.resources
+C:\Users\D\Dropbox\GitHub\TerminalDecay5\TerminalDecay5Client\obj\Debug\TerminalDecay5Client.Login.resources
+C:\Users\D\Dropbox\GitHub\TerminalDecay5\TerminalDecay5Client\obj\Debug\TerminalDecay5Client.Map.resources
+C:\Users\D\Dropbox\GitHub\TerminalDecay5\TerminalDecay5Client\obj\Debug\TerminalDecay5Client.Messages.resources
+C:\Users\D\Dropbox\GitHub\TerminalDecay5\TerminalDecay5Client\obj\Debug\TerminalDecay5Client.Properties.Resources.resources
+C:\Users\D\Dropbox\GitHub\TerminalDecay5\TerminalDecay5Client\obj\Debug\TerminalDecay5Client.csproj.GenerateResource.Cache
+C:\Users\D\Dropbox\GitHub\TerminalDecay5\TerminalDecay5Client\obj\Debug\TerminalDecay5Client.exe
+C:\Users\D\Dropbox\GitHub\TerminalDecay5\TerminalDecay5Client\obj\Debug\TerminalDecay5Client.pdb

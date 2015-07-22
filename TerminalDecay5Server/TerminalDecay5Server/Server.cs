@@ -319,6 +319,10 @@ namespace TerminalDecay5Server
             }
 
 
+            #endregion
+
+            #region baseMovement
+
             //basemove
 
 
@@ -328,8 +332,66 @@ namespace TerminalDecay5Server
             {
                 if (item.StartTick + item.Duration < u.CurrentTick)
                 {
-                    item.OriginOutpost.Tile = item.DestinationBase;
-                    CompleteBaseMovements.Add(item);
+
+                    SpecialStructure s = getSpecial(Convert.ToString(item.DestinationBase.X), Convert.ToString(item.DestinationBase.Y),u);
+                    if (s != null)
+                    {
+                        if (s.specialType == Cmn.SpecialType.Portal)
+                        {
+
+                            int space = u.r.Next(9);
+                            int tileToTest = 0;
+
+                            
+                            for (int i = 0; i < 9; i++)
+                            {
+                                if (space == 0)
+                                {
+                                    tileToTest = 0;
+                                }
+                                else
+                                {
+                                    tileToTest = 9 % (space + i);
+                                }
+
+                                int x = (tileToTest % 3) - 1;
+                                int y = ((tileToTest - (tileToTest % 3)) / 3) - 1;
+
+                                x = s.DestinationTile.X + x;
+                                y = s.DestinationTile.Y + y;
+
+                                bool blocked = false;
+
+                                if (x < 0 && x > 26)
+                                {
+                                    blocked = true;
+                                }
+
+                                if (y < 0 && y > 26)
+                                {
+                                    blocked = true;
+                                }
+
+                                if (!blocked)
+                                {
+                                    blocked = IsBlockedTile(u, s.DestinationAddress, new Position(x, y));
+                                }
+
+                                if (blocked == false)
+                                {
+                                    item.OriginOutpost.Tile = new Position(x,y);
+                                    item.OriginOutpost.Address = s.DestinationAddress;
+                                }
+                            }
+
+                        }
+                        CompleteBaseMovements.Add(item);
+                    }
+                    else
+                    {
+                        item.OriginOutpost.Tile = item.DestinationBase;
+                        CompleteBaseMovements.Add(item);
+                    }
                 }
             }
 
@@ -479,7 +541,7 @@ namespace TerminalDecay5Server
                                         s.DestinationAddress = a;
 
                                         Position destTile = new Position();
- 
+
 
 
                                         bool destBlocked = true;
@@ -501,14 +563,14 @@ namespace TerminalDecay5Server
 
                                         s.DestinationTile = destTile;
 
-                                        if(!destBlocked)
+                                        if (!destBlocked)
                                         {
                                             u.SpecialStructures.Add(s);
                                         }
 
 
                                     }
-                                                                      
+
 
                                 }
 
@@ -1049,34 +1111,35 @@ namespace TerminalDecay5Server
 
             Outpost d = getOutpost(transmissions[1][2], transmissions[1][3], address);
 
-            SpecialStructure s = getSpecial(transmissions[1][2], transmissions[1][3]);
+            SpecialStructure s = getSpecial(transmissions[1][2], transmissions[1][3],universe);
 
             bool clear = true;
 
-            if (d == null && o != null && s == null)
+            if (d == null && o != null)
             {
-
-                BaseMovement b = new BaseMovement();
-                b.OriginOutpost = o;
-                b.DestinationBase = new Position(Convert.ToInt32(transmissions[1][2]), Convert.ToInt32(transmissions[1][3]));
-                b.Duration = 1000;
-                b.StartTick = universe.CurrentTick;
-
-
-
-                foreach (var item in universe.BaseMovements)
+                if (s == null || s.specialType == Cmn.SpecialType.Portal)
                 {
-                    if (b.DestinationBase == item.DestinationBase || item.OriginOutpost == b.OriginOutpost)
+                    BaseMovement b = new BaseMovement();
+                    b.OriginOutpost = o;
+                    b.DestinationBase = new Position(Convert.ToInt32(transmissions[1][2]), Convert.ToInt32(transmissions[1][3]));
+                    b.Duration = 1000;
+                    b.StartTick = universe.CurrentTick;
+
+
+
+                    foreach (var item in universe.BaseMovements)
                     {
-                        clear = false;
+                        if (b.DestinationBase == item.DestinationBase || item.OriginOutpost == b.OriginOutpost)
+                        {
+                            clear = false;
+                        }
+                    }
+
+                    if (clear)
+                    {
+                        universe.BaseMovements.Add(b);
                     }
                 }
-
-                if (clear)
-                {
-                    universe.BaseMovements.Add(b);
-                }
-
             }
 
             string response = MessageConstants.MessageTypes[26] + MessageConstants.nextToken;
@@ -2950,7 +3013,7 @@ namespace TerminalDecay5Server
             return null;
         }
 
-        private SpecialStructure getSpecial(string x, string y)
+        private static SpecialStructure getSpecial(string x, string y, Universe universe)
         {
             foreach (var item in universe.SpecialStructures)
             {
