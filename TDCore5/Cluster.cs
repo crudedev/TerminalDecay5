@@ -25,14 +25,18 @@ namespace TDCore5
 
         public Cluster(SerializationInfo info, StreamingContext ctxt)
         {
-            this.solarSystems = (List<SolarSystem>)info.GetValue("solarsystem", typeof(List<SolarSystem>));
-            this.position = (Position)info.GetValue("solarposition", typeof(Position));
+            solarSystems = (List<SolarSystem>)info.GetValue("solarsystem", typeof(List<SolarSystem>));
+            position = (Position)info.GetValue("solarposition", typeof(Position));
+            ClusterType = (int)info.GetValue("clusterType", typeof(int));
+            ClusterID = (int)info.GetValue("clusterid", typeof(int));
         }
 
         public void GetObjectData(SerializationInfo info, StreamingContext ctxt)
         {
             info.AddValue("solarsystem", typeof(List<SolarSystem>));
             info.AddValue("solarposition", typeof(Position));
+            info.AddValue("clusterType", typeof(int));
+            info.AddValue("clusterid", typeof(int));
         }
 
     }

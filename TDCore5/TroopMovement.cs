@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Runtime.Serialization;
 
 namespace TDCore5
 {
-    public class TroopMovement
+    [Serializable()]
+    public class TroopMovement : ISerializable
     {
         public Cmn.MovType MovementType;
 
@@ -18,7 +17,7 @@ namespace TDCore5
 
         UniversalAddress Address;
 
-        public int StartTick;        
+        public int StartTick;
         public int Duration;
 
         public TroopMovement()
@@ -35,6 +34,32 @@ namespace TDCore5
             {
                 Offence.Add(0);
             }
+                    }
+
+        public TroopMovement(SerializationInfo info, StreamingContext ctxt)
+        {
+            MovementType = (Cmn.MovType)info.GetValue("movetype", typeof(Cmn.MovType));
+            Defence = (List<long>)info.GetValue("Defence", typeof(List<long>));
+            Offence = (List<long>)info.GetValue("Offence", typeof(List<long>));
+            OriginOutpost = (Outpost)info.GetValue("OriginOutpost", typeof(Outpost));
+            DestinationOutpost = (Outpost)info.GetValue("DestinationOutpost", typeof(Outpost));
+            Address = (UniversalAddress)info.GetValue("Address", typeof(UniversalAddress));
+            StartTick = (int)info.GetValue("StartTick", typeof(int));
+            Duration = (int)info.GetValue("Duration", typeof(int));
+        }
+
+        public void GetObjectData(SerializationInfo info, StreamingContext ctxt)
+        {
+            info.AddValue("movetype", MovementType);
+            info.AddValue("Defence", Defence);
+            info.AddValue("Offence", Offence);
+            info.AddValue("OriginOutpost", OriginOutpost);
+            info.AddValue("DestinationOutpost", DestinationOutpost);
+            info.AddValue("Address", Address);
+            info.AddValue("StartTick", StartTick);
+            info.AddValue("Duration", Duration);
+
         }
     }
 }
+

@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TDCore5
 {
@@ -24,14 +21,18 @@ namespace TDCore5
 
         public SolarSystem(SerializationInfo info, StreamingContext ctxt)
         {
-            this.planets = (List<Planet>)info.GetValue("Planet", typeof(List<Planet>));
-            this.position = (Position)info.GetValue("planetposition", typeof(Position));
+            planets = (List<Planet>)info.GetValue("Planet", typeof(List<Planet>));
+            position = (Position)info.GetValue("planetposition", typeof(Position));
+            SolarSystemType = (int)info.GetValue("solarsystemtype", typeof(int));
+            SolarSystemID = (int)info.GetValue("solarsystemid", typeof(int));
         }
 
         public void GetObjectData(SerializationInfo info, StreamingContext ctxt)
         {
             info.AddValue("Planet", typeof(List<Planet>));
             info.AddValue("planetposition", typeof(Position));
+            info.AddValue("solarsystemtype", typeof(int));
+            info.AddValue("solarsystemid", typeof(int));
         }
     }
 }

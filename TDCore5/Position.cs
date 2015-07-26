@@ -25,14 +25,14 @@ namespace TDCore5
 
         public Position(SerializationInfo info, StreamingContext ctxt)
         {
-            this.X = (int)info.GetValue("px", typeof(int));
-            this.Y = (int)info.GetValue("py", typeof(int));              
+            X = (int)info.GetValue("px", typeof(int));
+            Y = (int)info.GetValue("py", typeof(int));              
         }
 
         public void GetObjectData(SerializationInfo info, StreamingContext ctxt)
         {
-            info.AddValue("px", this.X);
-            info.AddValue("py", this.Y);
+            info.AddValue("px", X);
+            info.AddValue("py", Y);
         }
     }
 }

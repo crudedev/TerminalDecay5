@@ -25,14 +25,18 @@ namespace TDCore5
 
         public Planet(SerializationInfo info, StreamingContext ctxt)
         {
-            this.mapTiles = (List<MapTile>)info.GetValue("mapTiles", typeof(List<MapTile>));
-            this.position = (Position)info.GetValue("planetposition", typeof(Position));
+            mapTiles = (List<MapTile>)info.GetValue("mapTiles", typeof(List<MapTile>));
+            position = (Position)info.GetValue("planetposition", typeof(Position));
+            planetType = (int)info.GetValue("planettype", typeof(int));
+            PlanetID = (int)info.GetValue("planetId", typeof(int));
         }
 
         public void GetObjectData(SerializationInfo info, StreamingContext ctxt)
         {
             info.AddValue("mapTiles", typeof(List<MapTile>));
             info.AddValue("planetposition", typeof(Position));
+            info.AddValue("planettype", typeof(int));
+            info.AddValue("planetId", typeof(int));
         }
 
     }

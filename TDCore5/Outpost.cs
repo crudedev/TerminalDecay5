@@ -44,24 +44,28 @@ namespace TDCore5
 
         public Outpost(SerializationInfo info, StreamingContext ctxt)
         {
-            this.ID = (int)info.GetValue("id", typeof(int));
-            this.OwnerID = (int)info.GetValue("ownerid", typeof(int));
-            this.Capacity = (int)info.GetValue("capacity", typeof(int));
-            this.Tile = (Position)info.GetValue("tile", typeof(Position));
-            this.Buildings = (List<long>)info.GetValue("building", typeof(List<long>));
-            this.Defence = (List<long>)info.GetValue("defence", typeof(List<long>));
-            this.Offence = (List<long>)info.GetValue("offence", typeof(List<long>));                 
+            ID = (int)info.GetValue("id", typeof(int));
+            OwnerID = (int)info.GetValue("ownerid", typeof(int));
+            Capacity = (int)info.GetValue("capacity", typeof(int));
+            Tile = (Position)info.GetValue("tile", typeof(Position));
+            Buildings = (List<long>)info.GetValue("building", typeof(List<long>));
+            Defence = (List<long>)info.GetValue("defence", typeof(List<long>));
+            Offence = (List<long>)info.GetValue("offence", typeof(List<long>));
+            Address = (UniversalAddress)info.GetValue("address", typeof(UniversalAddress));
+            CoreShards = (int)info.GetValue("coreshards", typeof(int));                 
         }
 
         public void GetObjectData(SerializationInfo info, StreamingContext ctxt)
         {
-            info.AddValue("id", this.ID);
-            info.AddValue("ownerid", this.OwnerID);
-            info.AddValue("capacity", this.Capacity);
-            info.AddValue("tile", this.Tile);
-            info.AddValue("building", this.Buildings);
-            info.AddValue("defence", this.Defence);
-            info.AddValue("offence", this.Offence);
+            info.AddValue("id", ID);
+            info.AddValue("ownerid", OwnerID);
+            info.AddValue("capacity", Capacity);
+            info.AddValue("tile", Tile);
+            info.AddValue("building", Buildings);
+            info.AddValue("defence", Defence);
+            info.AddValue("offence", Offence);
+            info.AddValue("address", Address);
+            info.AddValue("coreshards", CoreShards);
         }
     }
 

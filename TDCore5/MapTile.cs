@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
-using System.Runtime.Serialization.Formatters.Binary;
 
 namespace TDCore5
 {    
@@ -29,17 +28,17 @@ namespace TDCore5
         public MapTile(SerializationInfo info, StreamingContext ctxt)
         {
 
-            this.position = (Position)info.GetValue("maptileposition", typeof(Position));
-            this.Resources = (List<long>)info.GetValue("resources", typeof(List<long>));
-            this.MaxResources = (List<long>)info.GetValue("maxresources", typeof(List<long>));
+            position = (Position)info.GetValue("maptileposition", typeof(Position));
+            Resources = (List<long>)info.GetValue("resources", typeof(List<long>));
+            MaxResources = (List<long>)info.GetValue("maxresources", typeof(List<long>));
             
         }
 
         public void GetObjectData(SerializationInfo info, StreamingContext ctxt)
         {
-            info.AddValue("maptileposition", this.position);
-            info.AddValue("resources", this.Resources);
-            info.AddValue("maxresources", this.MaxResources);
+            info.AddValue("maptileposition", position);
+            info.AddValue("resources", Resources);
+            info.AddValue("maxresources", MaxResources);
         }
         
     }

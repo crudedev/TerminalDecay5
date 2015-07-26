@@ -25,14 +25,7 @@ namespace TDCore5
 
         public void InitUniverse()
         {
-
-
-            //map layout
-
-
-
-
-
+        
             //create the universe
 
             CurrentTick = 0;
@@ -126,28 +119,34 @@ namespace TDCore5
         public Universe(SerializationInfo info, StreamingContext ctxt)
         {
 
-            this.clusters = (List<Cluster>)info.GetValue("Cluster", typeof(List<Cluster>));
-            this.outposts = (List<Outpost>)info.GetValue("outposts", typeof(List<Outpost>));
-            this.BuildingBuildQueue = (List<BuildQueueItem>)info.GetValue("buildingqueue", typeof(List<BuildQueueItem>));
-            this.DefenceBuildQueue = (List<BuildQueueItem>)info.GetValue("defencequeue", typeof(List<BuildQueueItem>));
-            this.OffenceBuildQueue = (List<BuildQueueItem>)info.GetValue("offencequeue", typeof(List<BuildQueueItem>));
-            this.players = (List<Player>)info.GetValue("players", typeof(List<Player>));
-            this.r = (Random)info.GetValue("random", typeof(Random));
-            this.Messages = (List<Message>)info.GetValue("messages", typeof(List<Message>));
+            clusters = (List<Cluster>)info.GetValue("Cluster", typeof(List<Cluster>));
+            outposts = (List<Outpost>)info.GetValue("outposts", typeof(List<Outpost>));
+            BuildingBuildQueue = (List<BuildQueueItem>)info.GetValue("buildingqueue", typeof(List<BuildQueueItem>));
+            DefenceBuildQueue = (List<BuildQueueItem>)info.GetValue("defencequeue", typeof(List<BuildQueueItem>));
+            OffenceBuildQueue = (List<BuildQueueItem>)info.GetValue("offencequeue", typeof(List<BuildQueueItem>));
+            players = (List<Player>)info.GetValue("players", typeof(List<Player>));
+            r = (Random)info.GetValue("random", typeof(Random));
+            Messages = (List<Message>)info.GetValue("messages", typeof(List<Message>));
+            TroopMovements = (List<TroopMovement>)info.GetValue("TroopMovement", typeof(List<TroopMovement>));
+            SpecialStructures = (List<SpecialStructure>)info.GetValue("SpecialStructure", typeof(List<SpecialStructure>));
+            BaseMovements = (List<BaseMovement>)info.GetValue("BaseMovement", typeof(List<BaseMovement>));
 
         }
 
         public void GetObjectData(SerializationInfo info, StreamingContext ctxt)
         {
 
-            info.AddValue("Cluster", this.clusters);
-            info.AddValue("outposts", this.outposts);
-            info.AddValue("buildingqueue", this.BuildingBuildQueue);
-            info.AddValue("defencequeue", this.DefenceBuildQueue);
-            info.AddValue("offencequeue", this.OffenceBuildQueue);
-            info.AddValue("players", this.players);
-            info.AddValue("random", this.r);
-            info.AddValue("messages", this.Messages);
+            info.AddValue("Cluster", clusters);
+            info.AddValue("outposts", outposts);
+            info.AddValue("buildingqueue", BuildingBuildQueue);
+            info.AddValue("defencequeue", DefenceBuildQueue);
+            info.AddValue("offencequeue", OffenceBuildQueue);
+            info.AddValue("players", players);
+            info.AddValue("random", r);
+            info.AddValue("messages", Messages);
+            info.AddValue("TroopMovement", TroopMovements);
+            info.AddValue("SpecialStructure", SpecialStructures);
+            info.AddValue("BaseMovement", BaseMovements);
         }
 
 

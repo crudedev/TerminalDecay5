@@ -32,24 +32,24 @@ namespace TDCore5
 
         public Player(SerializationInfo info, StreamingContext ctxt)
         {
-            this.PlayerID = (int)info.GetValue("playerid", typeof(int));
-            this.Name = (string)info.GetValue("name", typeof(string));
-            this.Password = (string)info.GetValue("password", typeof(string));
-            this.EmpireName = (string)info.GetValue("empirename", typeof(string));
-            this.Email = (string)info.GetValue("email", typeof(string));
-            this.Resources = (List<long>)info.GetValue("resources", typeof(List<long>));
-            this.token = (Guid)info.GetValue("token", typeof(Guid));                 
+            PlayerID = (int)info.GetValue("playerid", typeof(int));
+            Name = (string)info.GetValue("name", typeof(string));
+            Password = (string)info.GetValue("password", typeof(string));
+            EmpireName = (string)info.GetValue("empirename", typeof(string));
+            Email = (string)info.GetValue("email", typeof(string));
+            Resources = (List<long>)info.GetValue("resources", typeof(List<long>));
+            token = (Guid)info.GetValue("token", typeof(Guid));                 
         }
 
         public void GetObjectData(SerializationInfo info, StreamingContext ctxt)
         {
-            info.AddValue("playerid", this.PlayerID);
-            info.AddValue("name", this.Name);
-            info.AddValue("password", this.Password);
-            info.AddValue("empirename", this.EmpireName);
-            info.AddValue("email", this.Email);
-            info.AddValue("resources", this.Resources);
-            info.AddValue("token", this.token);
+            info.AddValue("playerid", PlayerID);
+            info.AddValue("name", Name);
+            info.AddValue("password", Password);
+            info.AddValue("empirename", EmpireName);
+            info.AddValue("email", Email);
+            info.AddValue("resources", Resources);
+            info.AddValue("token", token);
         }
 
     }

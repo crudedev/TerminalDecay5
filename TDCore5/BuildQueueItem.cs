@@ -50,23 +50,25 @@ namespace TDCore5
         public BuildQueueItem(SerializationInfo info, StreamingContext ctxt)
         {
             
-            this.resourcesRemaining = (List<long>)info.GetValue("resourcesRemaining",typeof(List<long>));
-            this.PlayerId = (int)info.GetValue("playerid",typeof(int));
-            this.OutpostId = (int)info.GetValue("outpostId", typeof(int));
-            this.ItemType = (int)info.GetValue("itemtype",typeof(int));
-            this.ItemTotal = (int)info.GetValue("itemtotal",typeof(int));
-            this.Complete = (int)info.GetValue("complete",typeof(int));
+            resourcesRemaining = (List<long>)info.GetValue("resourcesRemaining",typeof(List<long>));
+            PlayerId = (int)info.GetValue("playerid",typeof(int));
+            OutpostId = (int)info.GetValue("outpostId", typeof(int));
+            ItemType = (int)info.GetValue("itemtype",typeof(int));
+            ItemTotal = (int)info.GetValue("itemtotal",typeof(int));
+            Complete = (int)info.GetValue("complete",typeof(int));
+            BuildQueueID = (Guid)info.GetValue("BuildQueue", typeof(Guid));
 
-        }
+    }
 
         public void GetObjectData(SerializationInfo info, StreamingContext ctxt)
         {
-            info.AddValue("resourcesRemaining", this.resourcesRemaining);
-            info.AddValue("playerid", this.PlayerId);
-            info.AddValue("outpostId", this.OutpostId);
-            info.AddValue("itemtype", this.ItemType);
-            info.AddValue("itemtotal", this.ItemTotal);
-            info.AddValue("complete", this.Complete);
+            info.AddValue("resourcesRemaining", resourcesRemaining);
+            info.AddValue("playerid", PlayerId);
+            info.AddValue("outpostId", OutpostId);
+            info.AddValue("itemtype", ItemType);
+            info.AddValue("itemtotal", ItemTotal);
+            info.AddValue("complete", Complete);
+            info.AddValue("BuildQueue", BuildQueueID);
         }
 
     }
