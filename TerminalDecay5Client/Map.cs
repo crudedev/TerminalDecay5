@@ -512,7 +512,7 @@ namespace TerminalDecay5Client
                 if (m.Button == MouseButtons.Left)
                 {
                     ServerConnection sc = new ServerConnection();
-                    sc.ServerRequest(UpdateSidePanel, 4, MessageConstants.splitToken + Convert.ToString(playerToken) + MessageConstants.splitToken + Convert.ToString(mx) + MessageConstants.splitToken + Convert.ToString(my) + MessageConstants.nextToken + SendCurrentAddress() +  MessageConstants.completeToken);
+                    sc.ServerRequest(UpdateSidePanel, 4, MessageConstants.splitToken + Convert.ToString(playerToken) + MessageConstants.splitToken + Convert.ToString(mx) + MessageConstants.splitToken + Convert.ToString(my) + MessageConstants.nextToken + SendCurrentAddress() + MessageConstants.completeToken);
                 }
             }
 
@@ -540,7 +540,7 @@ namespace TerminalDecay5Client
 
                 }
             }
-            
+
             if (CurrentView == 3)
             {
                 if (m.Button == MouseButtons.Left)
@@ -1986,5 +1986,27 @@ namespace TerminalDecay5Client
             return SendAddress(new UniversalAddress(_currentCluster, _currentSolarSystem, _currentPlanet));
         }
 
+        private void BtnCreateNewBase_Click(object sender, EventArgs e)
+        {
+            ServerConnection sc = new ServerConnection();
+            sc.ServerRequest(UpdateBuildBasePanel, 27, MessageConstants.splitToken + Convert.ToString(playerToken) + MessageConstants.nextToken + SendCurrentAddress() + MessageConstants.nextToken + _currentX + MessageConstants.splitToken + _currentY);
+             
+        }
+
+        private void UpdateBuildBasePanel(List<List<string>> transmission)
+        {
+
+        }
+
+        private void BtnBuildBase_Click(object sender, EventArgs e)
+        {
+            ServerConnection sc = new ServerConnection();
+            sc.ServerRequest(RemoveFromQueueOffResponse, 28, MessageConstants.splitToken + Convert.ToString(playerToken) + MessageConstants.nextToken + SendCurrentAddress() + MessageConstants.nextToken + _currentX + MessageConstants.splitToken + _currentY);
+        }
+
+        private void BuildBaseResponse(List<List<string>> transmission)
+        {
+
+        }
     }
 }

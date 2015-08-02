@@ -12,21 +12,12 @@ namespace TDCore5
         public string Password;
         public string EmpireName;
         public string Email;
-
         public UniversalAddress home;
-
-        public List<long> Resources;
 
         public Guid token;
 
         public Player()
         {
-            Resources = new List<long>();
-
-                foreach (var r in Cmn.Resource)
-                {
-                    Resources.Add(0);
-                }
        
         }
 
@@ -37,7 +28,6 @@ namespace TDCore5
             Password = (string)info.GetValue("password", typeof(string));
             EmpireName = (string)info.GetValue("empirename", typeof(string));
             Email = (string)info.GetValue("email", typeof(string));
-            Resources = (List<long>)info.GetValue("resources", typeof(List<long>));
             token = (Guid)info.GetValue("token", typeof(Guid));                 
         }
 
@@ -48,7 +38,6 @@ namespace TDCore5
             info.AddValue("password", Password);
             info.AddValue("empirename", EmpireName);
             info.AddValue("email", Email);
-            info.AddValue("resources", Resources);
             info.AddValue("token", token);
         }
 

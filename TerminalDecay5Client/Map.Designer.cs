@@ -227,6 +227,10 @@ namespace TerminalDecay5Client
             this.btnRemoveDefenceList = new System.Windows.Forms.Button();
             this.LstRemoveDefenceList = new System.Windows.Forms.ListBox();
             this.BtnMoveOutpost = new System.Windows.Forms.Button();
+            this.BtnNewBaseMenu = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.BtnBuildBase = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.MapCanvas)).BeginInit();
             this.SuspendLayout();
             // 
@@ -250,7 +254,6 @@ namespace TerminalDecay5Client
             this.MapCanvas.TabIndex = 1;
             this.MapCanvas.TabStop = false;
             this.MapCanvas.Click += new System.EventHandler(this.MapCanvas_Click);
-            this.MapCanvas.MouseMove += MapCanvas_MouseMove;
             // 
             // button2
             // 
@@ -319,7 +322,7 @@ namespace TerminalDecay5Client
             // 
             // BtnBuild
             // 
-            this.BtnBuild.Location = new System.Drawing.Point(864, 47);
+            this.BtnBuild.Location = new System.Drawing.Point(847, 47);
             this.BtnBuild.Name = "BtnBuild";
             this.BtnBuild.Size = new System.Drawing.Size(75, 23);
             this.BtnBuild.TabIndex = 9;
@@ -766,7 +769,7 @@ namespace TerminalDecay5Client
             // 
             // BtnDef
             // 
-            this.BtnDef.Location = new System.Drawing.Point(945, 47);
+            this.BtnDef.Location = new System.Drawing.Point(928, 47);
             this.BtnDef.Name = "BtnDef";
             this.BtnDef.Size = new System.Drawing.Size(100, 23);
             this.BtnDef.TabIndex = 55;
@@ -970,7 +973,7 @@ namespace TerminalDecay5Client
             // label30
             // 
             this.label30.AutoSize = true;
-            this.label30.Location = new System.Drawing.Point(134, 448);
+            this.label30.Location = new System.Drawing.Point(134, 461);
             this.label30.Name = "label30";
             this.label30.Size = new System.Drawing.Size(63, 13);
             this.label30.TabIndex = 75;
@@ -980,7 +983,7 @@ namespace TerminalDecay5Client
             // label31
             // 
             this.label31.AutoSize = true;
-            this.label31.Location = new System.Drawing.Point(134, 402);
+            this.label31.Location = new System.Drawing.Point(135, 412);
             this.label31.Name = "label31";
             this.label31.Size = new System.Drawing.Size(42, 13);
             this.label31.TabIndex = 74;
@@ -990,7 +993,7 @@ namespace TerminalDecay5Client
             // label32
             // 
             this.label32.AutoSize = true;
-            this.label32.Location = new System.Drawing.Point(134, 358);
+            this.label32.Location = new System.Drawing.Point(136, 370);
             this.label32.Name = "label32";
             this.label32.Size = new System.Drawing.Size(34, 13);
             this.label32.TabIndex = 73;
@@ -1000,7 +1003,7 @@ namespace TerminalDecay5Client
             // label33
             // 
             this.label33.AutoSize = true;
-            this.label33.Location = new System.Drawing.Point(134, 312);
+            this.label33.Location = new System.Drawing.Point(134, 322);
             this.label33.Name = "label33";
             this.label33.Size = new System.Drawing.Size(43, 13);
             this.label33.TabIndex = 72;
@@ -1010,7 +1013,7 @@ namespace TerminalDecay5Client
             // label34
             // 
             this.label34.AutoSize = true;
-            this.label34.Location = new System.Drawing.Point(134, 267);
+            this.label34.Location = new System.Drawing.Point(134, 280);
             this.label34.Name = "label34";
             this.label34.Size = new System.Drawing.Size(36, 13);
             this.label34.TabIndex = 71;
@@ -1598,7 +1601,7 @@ namespace TerminalDecay5Client
             // 
             // BtnOffence
             // 
-            this.BtnOffence.Location = new System.Drawing.Point(1051, 47);
+            this.BtnOffence.Location = new System.Drawing.Point(1034, 47);
             this.BtnOffence.Name = "BtnOffence";
             this.BtnOffence.Size = new System.Drawing.Size(100, 23);
             this.BtnOffence.TabIndex = 154;
@@ -1629,7 +1632,7 @@ namespace TerminalDecay5Client
             // 
             // BtnAttack
             // 
-            this.BtnAttack.Location = new System.Drawing.Point(1157, 47);
+            this.BtnAttack.Location = new System.Drawing.Point(1140, 47);
             this.BtnAttack.Name = "BtnAttack";
             this.BtnAttack.Size = new System.Drawing.Size(62, 23);
             this.BtnAttack.TabIndex = 157;
@@ -2075,7 +2078,7 @@ namespace TerminalDecay5Client
             // 
             // button7
             // 
-            this.button7.Location = new System.Drawing.Point(1233, 47);
+            this.button7.Location = new System.Drawing.Point(1216, 47);
             this.button7.Name = "button7";
             this.button7.Size = new System.Drawing.Size(62, 23);
             this.button7.TabIndex = 203;
@@ -2146,7 +2149,7 @@ namespace TerminalDecay5Client
             // 
             // BtnMoveOutpost
             // 
-            this.BtnMoveOutpost.Location = new System.Drawing.Point(1310, 47);
+            this.BtnMoveOutpost.Location = new System.Drawing.Point(1293, 47);
             this.BtnMoveOutpost.Name = "BtnMoveOutpost";
             this.BtnMoveOutpost.Size = new System.Drawing.Size(89, 23);
             this.BtnMoveOutpost.TabIndex = 210;
@@ -2155,10 +2158,56 @@ namespace TerminalDecay5Client
             this.BtnMoveOutpost.Visible = false;
             this.BtnMoveOutpost.Click += new System.EventHandler(this.BtnMoveOutpost_Click);
             // 
+            // BtnNewBaseMenu
+            // 
+            this.BtnNewBaseMenu.Location = new System.Drawing.Point(847, 75);
+            this.BtnNewBaseMenu.Name = "BtnNewBaseMenu";
+            this.BtnNewBaseMenu.Size = new System.Drawing.Size(106, 23);
+            this.BtnNewBaseMenu.TabIndex = 211;
+            this.BtnNewBaseMenu.Text = "Build New Base";
+            this.BtnNewBaseMenu.UseVisualStyleBackColor = true;
+            this.BtnNewBaseMenu.Visible = false;
+            this.BtnNewBaseMenu.Click += new System.EventHandler(this.BtnCreateNewBase_Click);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(332, 216);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(39, 13);
+            this.label1.TabIndex = 213;
+            this.label1.Text = "Empty:";
+            this.label1.Visible = false;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(435, 213);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(39, 13);
+            this.label2.TabIndex = 212;
+            this.label2.Text = "Empty:";
+            this.label2.Visible = false;
+            // 
+            // BtnBuildBase
+            // 
+            this.BtnBuildBase.Location = new System.Drawing.Point(1302, 756);
+            this.BtnBuildBase.Name = "BtnBuildBase";
+            this.BtnBuildBase.Size = new System.Drawing.Size(89, 23);
+            this.BtnBuildBase.TabIndex = 214;
+            this.BtnBuildBase.Text = "Build New Base";
+            this.BtnBuildBase.UseVisualStyleBackColor = true;
+            this.BtnBuildBase.Visible = false;
+            this.BtnBuildBase.Click += new System.EventHandler(this.BtnBuildBase_Click);
+            // 
             // Map
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.ClientSize = new System.Drawing.Size(1498, 831);
+            this.Controls.Add(this.BtnBuildBase);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.BtnNewBaseMenu);
             this.Controls.Add(this.BtnMoveOutpost);
             this.Controls.Add(this.btnRemoveDefenceList);
             this.Controls.Add(this.LstRemoveDefenceList);
@@ -2561,6 +2610,10 @@ namespace TerminalDecay5Client
         private Button btnRemoveDefenceList;
         private ListBox LstRemoveDefenceList;
         private Button BtnMoveOutpost;
+        private Button BtnNewBaseMenu;
+        private Label label1;
+        private Label label2;
+        private Button BtnBuildBase;
     }
 }
 

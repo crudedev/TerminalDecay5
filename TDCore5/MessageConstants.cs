@@ -41,6 +41,8 @@ namespace TDCore5
             MessageTypes.Add(24, "RemoveOffenceQ%*dd[[[as12");
             MessageTypes.Add(25, "RemoveDeffence.,.,222saAA");
             MessageTypes.Add(26, "MoveBase;a/l.47iyhqwp92in");
+            MessageTypes.Add(27, "GetNewBaseMenuAC.,WF7fe45");
+            MessageTypes.Add(28, "BuildNewBaseAJHSDI348.qqs");
         }
 
     }

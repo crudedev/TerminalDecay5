@@ -21,6 +21,8 @@ namespace TDCore5
 
         public int CoreShards;
 
+        public List<long> Resources;
+
         public Outpost()
         {
             Buildings = new List<long>();
@@ -40,6 +42,11 @@ namespace TDCore5
             {
                 Offence.Add(0);
             }
+
+            foreach (var r in Cmn.Resource)
+            {
+                Resources.Add(0);
+            }
         }
 
         public Outpost(SerializationInfo info, StreamingContext ctxt)
@@ -52,7 +59,8 @@ namespace TDCore5
             Defence = (List<long>)info.GetValue("defence", typeof(List<long>));
             Offence = (List<long>)info.GetValue("offence", typeof(List<long>));
             Address = (UniversalAddress)info.GetValue("address", typeof(UniversalAddress));
-            CoreShards = (int)info.GetValue("coreshards", typeof(int));                 
+            CoreShards = (int)info.GetValue("coreshards", typeof(int));
+            Resources = (List<long>)info.GetValue("Resources", typeof(List<long>));
         }
 
         public void GetObjectData(SerializationInfo info, StreamingContext ctxt)
@@ -66,6 +74,7 @@ namespace TDCore5
             info.AddValue("offence", Offence);
             info.AddValue("address", Address);
             info.AddValue("coreshards", CoreShards);
+            info.AddValue("Resources", Resources);
         }
     }
 

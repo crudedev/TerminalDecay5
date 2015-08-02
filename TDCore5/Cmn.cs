@@ -90,6 +90,8 @@ namespace TDCore5
 
         public static Dictionary<MovType, int> MovementType;
 
+        public static List<int> BaseCost;
+
         public static void Init()
         {
             Resource = new Dictionary<Renum, int>
@@ -339,6 +341,17 @@ namespace TDCore5
             OffenceAttack[OffenceType[OffTenum.Destroyer]] = 5;
             OffenceAttack[OffenceType[OffTenum.Carrier]] = 6;
             OffenceAttack[OffenceType[OffTenum.Battleship]] = 7;
+
+            foreach (var item in Resource)
+            {
+                BaseCost.Add(0);
+            }
+            BaseCost[Resource[Renum.Food]] = 1000;
+            BaseCost[Resource[Renum.Metal]] = 1000;
+            BaseCost[Resource[Renum.Population]] = 1000;
+            BaseCost[Resource[Renum.Power]] = 1000;
+            BaseCost[Resource[Renum.Water]] = 1000;
+
         }
     }
 }
