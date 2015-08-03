@@ -68,6 +68,7 @@
             this.Controls.Add(this.comboBox1);
             this.Name = "Outposts";
             this.Text = "Outposts";
+            this.Load += new System.EventHandler(this.Outposts_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
 

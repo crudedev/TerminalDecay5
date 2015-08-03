@@ -87,7 +87,7 @@ namespace TerminalDecay5Server
                         }
                     }
                 }
-                outpost.Resources[Cmn.Resource[Cmn.Renum.Population]] +=outpost.Resources[Cmn.Resource[Cmn.Renum.Population]] / 10;
+                outpost.Resources[Cmn.Resource[Cmn.Renum.Population]] += outpost.Resources[Cmn.Resource[Cmn.Renum.Population]] / 10;
                 outpost.Resources[Cmn.Resource[Cmn.Renum.Population]] += 1;
 
                 while (outpost.CoreShards >= 5)
@@ -99,7 +99,7 @@ namespace TerminalDecay5Server
                 //cost of units
                 for (int i = 0; i < outpost.Offence.Count; i++)
                 {
-                   outpost.Resources[Cmn.Resource[Cmn.Renum.Food]] -= outpost.Offence[i];
+                    outpost.Resources[Cmn.Resource[Cmn.Renum.Food]] -= outpost.Offence[i];
                     outpost.Resources[Cmn.Resource[Cmn.Renum.Power]] -= outpost.Offence[i];
 
                     if (outpost.Resources[Cmn.Resource[Cmn.Renum.Food]] <= 0)
@@ -117,14 +117,14 @@ namespace TerminalDecay5Server
                         outpost.Defence[i] = Convert.ToInt64(outpost.Defence[i] * 0.95f);
                     }
                 }
-           
-                
+
+
                 if (outpost.Resources[Cmn.Resource[Cmn.Renum.Population]] > outpost.Buildings[Cmn.BuildType[Cmn.BldTenum.Habitat]] * 100)
                 {
                     outpost.Resources[Cmn.Resource[Cmn.Renum.Population]] -= outpost.Resources[Cmn.Resource[Cmn.Renum.Population]] / 10;
                     outpost.Resources[Cmn.Resource[Cmn.Renum.Food]] -= outpost.Resources[Cmn.Resource[Cmn.Renum.Population]] / 10;
                 }
-             }
+            }
 
             #endregion
 
@@ -318,7 +318,7 @@ namespace TerminalDecay5Server
                 if (item.StartTick + item.Duration < u.CurrentTick)
                 {
 
-                    SpecialStructure s = getSpecial(Convert.ToString(item.DestinationBase.X), Convert.ToString(item.DestinationBase.Y),u);
+                    SpecialStructure s = getSpecial(Convert.ToString(item.DestinationBase.X), Convert.ToString(item.DestinationBase.Y), u);
                     if (s != null)
                     {
                         if (s.specialType == Cmn.SpecialType.Portal)
@@ -327,7 +327,7 @@ namespace TerminalDecay5Server
                             int space = u.r.Next(9);
                             int tileToTest = 0;
 
-                            
+
                             for (int i = 0; i < 9; i++)
                             {
                                 if (space == 0)
@@ -364,7 +364,7 @@ namespace TerminalDecay5Server
 
                                 if (blocked == false)
                                 {
-                                    item.OriginOutpost.Tile = new Position(x,y);
+                                    item.OriginOutpost.Tile = new Position(x, y);
                                     item.OriginOutpost.Address = s.DestinationAddress;
                                 }
                             }
@@ -765,7 +765,7 @@ namespace TerminalDecay5Server
 
         private static long UpdateBuildQueue(BuildQueueItem item, Universe u, List<List<long>> cost)
         {
-                        
+
             long FabCapacity = item.Outpost.Buildings[Cmn.BuildType[Cmn.BldTenum.Fabricator]];
 
             float fabBuff = 0;
@@ -1079,10 +1079,56 @@ namespace TerminalDecay5Server
                 BuildNewBase(transmissions, tcpClient);
             }
 
+
+            if (transmissions[0][0] == MessageConstants.MessageTypes[29])
+            {
+                SendBaseList(transmissions, tcpClient);
+            }
+
             tcpClient.Close();
             client = null;
 
             #endregion
+        }
+
+        private void SendBaseList(List<List<string>> transmissions, TcpClient tcpClient)
+        {
+            Player player;
+            try
+            {
+                player = getPlayer(transmissions[0][1]);
+            }
+            catch (Exception)
+            {
+                rejectConnection(3, "player token wrong", tcpClient);
+                return;
+            }
+
+            List<Outpost> OwnedOutposts = new List<Outpost>();
+
+            foreach (var item in universe.outposts)
+            {
+                if (item.OwnerID == player.PlayerID)
+                {
+                    OwnedOutposts.Add(item);
+                }
+            }
+
+            string response = MessageConstants.MessageTypes[29] + MessageConstants.nextToken;
+
+            foreach (var item in OwnedOutposts)
+            {
+                response += SendAddress(item.Address) + MessageConstants.splitToken + item.Tile.X + MessageConstants.splitToken + item.Tile.Y + MessageConstants.splitToken;
+            }
+
+            NetworkStream clientStream = tcpClient.GetStream();
+            ASCIIEncoding encoder = new ASCIIEncoding();
+
+            byte[] buffer = encoder.GetBytes(response);
+
+            clientStream.Write(buffer, 0, buffer.Length);
+            clientStream.Flush();
+
         }
 
         private void BuildNewBase(List<List<string>> transmissions, TcpClient tcpClient)
@@ -1117,7 +1163,7 @@ namespace TerminalDecay5Server
 
             string response = MessageConstants.MessageTypes[28] + MessageConstants.nextToken;
 
-            if(success)
+            if (success)
             {
                 response += "success";
             }
@@ -1156,16 +1202,16 @@ namespace TerminalDecay5Server
             int totalBase = 0;
             foreach (var item in universe.outposts)
             {
-                if(item.OwnerID == player.PlayerID)
+                if (item.OwnerID == player.PlayerID)
                 {
                     totalBase++;
                 }
             }
-            
+
             string response = MessageConstants.MessageTypes[27] + MessageConstants.nextToken;
 
             response += Convert.ToString(Cmn.BaseCost[Cmn.Resource[Cmn.Renum.Food]] * totalBase) + MessageConstants.splitToken + Convert.ToString(Cmn.BaseCost[Cmn.Resource[Cmn.Renum.Metal]] * totalBase) + MessageConstants.splitToken + Convert.ToString(Cmn.BaseCost[Cmn.Resource[Cmn.Renum.Population]] * totalBase) + MessageConstants.splitToken + Convert.ToString(Cmn.BaseCost[Cmn.Resource[Cmn.Renum.Power]] * totalBase) + MessageConstants.splitToken + Convert.ToString(Cmn.BaseCost[Cmn.Resource[Cmn.Renum.Water]] * totalBase);
-            
+
             NetworkStream clientStream = tcpClient.GetStream();
             ASCIIEncoding encoder = new ASCIIEncoding();
 
@@ -1197,7 +1243,7 @@ namespace TerminalDecay5Server
 
             Outpost d = getOutpost(transmissions[1][2], transmissions[1][3], address);
 
-            SpecialStructure s = getSpecial(transmissions[1][2], transmissions[1][3],universe);
+            SpecialStructure s = getSpecial(transmissions[1][2], transmissions[1][3], universe);
 
             bool clear = true;
 
@@ -2450,7 +2496,6 @@ namespace TerminalDecay5Server
         private string SendDefencesOntile(List<List<string>> transmissions, UniversalAddress a)
         {
             string response = "";
-            bool found = false;
 
             Outpost op = getOutpost(transmissions[0][2], transmissions[0][3], a);
 
@@ -2635,7 +2680,7 @@ namespace TerminalDecay5Server
                 }
             }
 
-            
+
             string reply = MessageConstants.MessageTypes[6] + MessageConstants.nextToken;
             reply += tres[Cmn.Resource[Cmn.Renum.Food]] + MessageConstants.splitToken + tres[Cmn.Resource[Cmn.Renum.Metal]] + MessageConstants.splitToken + tres[Cmn.Resource[Cmn.Renum.Population]] + MessageConstants.splitToken + tres[Cmn.Resource[Cmn.Renum.Power]] + MessageConstants.splitToken + tres[Cmn.Resource[Cmn.Renum.Water]] + MessageConstants.splitToken;
 
@@ -3191,7 +3236,7 @@ namespace TerminalDecay5Server
             o.Capacity = 25;
             o.ID = universe.outposts.Count;
             o.OwnerID = AIID.PlayerID;
-            
+
             o.Resources[Cmn.Resource[Cmn.Renum.Food]] = 10000;
             o.Resources[Cmn.Resource[Cmn.Renum.Metal]] = 100000;
             o.Resources[Cmn.Resource[Cmn.Renum.Population]] = 1000;
@@ -3317,5 +3362,9 @@ namespace TerminalDecay5Server
 
         }
 
+        private string SendAddress(UniversalAddress ad)
+        {
+            return ad.ClusterID + MessageConstants.splitToken + ad.SolarSytemID + MessageConstants.splitToken + ad.PlanetID + MessageConstants.splitToken;
+        }
     }
 }

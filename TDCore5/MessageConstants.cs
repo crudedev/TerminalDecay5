@@ -43,6 +43,7 @@ namespace TDCore5
             MessageTypes.Add(26, "MoveBase;a/l.47iyhqwp92in");
             MessageTypes.Add(27, "GetNewBaseMenuAC.,WF7fe45");
             MessageTypes.Add(28, "BuildNewBaseAJHSDI348.qqs");
+            MessageTypes.Add(29, "GetListOfBaseAqz,lP183>??");
         }
 
     }
