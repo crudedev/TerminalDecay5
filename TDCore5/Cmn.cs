@@ -342,6 +342,7 @@ namespace TDCore5
             OffenceAttack[OffenceType[OffTenum.Carrier]] = 6;
             OffenceAttack[OffenceType[OffTenum.Battleship]] = 7;
 
+            BaseCost = new List<int>();
             foreach (var item in Resource)
             {
                 BaseCost.Add(0);

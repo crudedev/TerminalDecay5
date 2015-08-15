@@ -38,7 +38,7 @@ namespace TerminalDecay5Server
             _tcpListener = new TcpListener(IPAddress.Any, 42666);
             _listenThread = new Thread(new ThreadStart(ListenForClients));
             _listenThread.Start();
-            _serverTick = new Timer(RunUniverse, universe, 1600, 3200);
+            _serverTick = new Timer(RunUniverse, universe, 1600, 3200000);
             _serverSave = new Timer(SaveUnivsere, universe, 200000, 400000);
         }
         static void SaveUnivsere(object ob)
@@ -418,32 +418,25 @@ namespace TerminalDecay5Server
                         foreach (var o in u.outposts)
                         {
 
-                            if (o.Address == new UniversalAddress(Clust.ClusterID, Solar.SolarSystemID, planet.PlanetID) && o.OwnerID == AIID.PlayerID)
+                            if (o.Address.Compare(new UniversalAddress(Clust.ClusterID, Solar.SolarSystemID, planet.PlanetID)) && o.OwnerID == AIID.PlayerID)
                             {
                                 ofound = true;
-                                break;
+
                             }
                         }
-                        if (ofound)
-                        {
-                            break;
-                        }
-                        else
+                        if (!ofound)
                         {
                             bool pfound = false;
                             foreach (var ss in u.SpecialStructures)
                             {
-                                if (ss.Address == new UniversalAddress(Clust.ClusterID, Solar.SolarSystemID, planet.PlanetID) && ss.specialType == Cmn.SpecialType.Portal)
+                                if (ss.Address.Compare(new UniversalAddress(Clust.ClusterID, Solar.SolarSystemID, planet.PlanetID)) && ss.specialType == Cmn.SpecialType.Portal)
                                 {
                                     pfound = true;
                                     break;
                                 }
                             }
-                            if (pfound)
-                            {
-                                break;
-                            }
-                            else
+                            if (!pfound)
+
                             {
                                 //create a mother fucking portal 
 
@@ -546,6 +539,7 @@ namespace TerminalDecay5Server
                                             }
                                         }
 
+                                        s.Address = new UniversalAddress(Clust.ClusterID, Solar.SolarSystemID, planet.PlanetID);
                                         s.DestinationTile = destTile;
 
                                         if (!destBlocked)
@@ -557,8 +551,8 @@ namespace TerminalDecay5Server
                                     }
 
 
-                                }
 
+                                }
 
                             }
                         }

@@ -36,5 +36,13 @@ namespace TDCore5
 
         }
 
+        public bool Compare(UniversalAddress a)
+        {
+            if (a.ClusterID == ClusterID && a.SolarSytemID == SolarSytemID && a.PlanetID == PlanetID)
+            { return true; }
+            else
+            { return false; }
+        }
+
     }
 }

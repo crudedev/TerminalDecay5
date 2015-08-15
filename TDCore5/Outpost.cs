@@ -43,6 +43,7 @@ namespace TDCore5
                 Offence.Add(0);
             }
 
+            Resources = new List<long>();
             foreach (var r in Cmn.Resource)
             {
                 Resources.Add(0);
