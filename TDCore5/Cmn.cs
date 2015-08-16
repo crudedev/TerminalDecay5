@@ -92,6 +92,8 @@ namespace TDCore5
 
         public static List<int> BaseCost;
 
+        public static List<int> ExpandOutpostCost;
+
         public static void Init()
         {
             Resource = new Dictionary<Renum, int>
@@ -347,11 +349,23 @@ namespace TDCore5
             {
                 BaseCost.Add(0);
             }
-            BaseCost[Resource[Renum.Food]] = 1000;
-            BaseCost[Resource[Renum.Metal]] = 1000;
-            BaseCost[Resource[Renum.Population]] = 1000;
-            BaseCost[Resource[Renum.Power]] = 1000;
-            BaseCost[Resource[Renum.Water]] = 1000;
+            BaseCost[Resource[Renum.Food]] = 10000;
+            BaseCost[Resource[Renum.Metal]] = 10000;
+            BaseCost[Resource[Renum.Population]] = 10000;
+            BaseCost[Resource[Renum.Power]] = 10000;
+            BaseCost[Resource[Renum.Water]] = 10000;
+
+            ExpandOutpostCost = new List<int>();
+            foreach (var item in Resource)
+            {
+                ExpandOutpostCost.Add(0);
+            }
+
+            ExpandOutpostCost[Resource[Renum.Food]] = 5;
+            ExpandOutpostCost[Resource[Renum.Metal]] = 5;
+            ExpandOutpostCost[Resource[Renum.Population]] = 5;
+            ExpandOutpostCost[Resource[Renum.Power]] = 5;
+            ExpandOutpostCost[Resource[Renum.Water]] = 5;
 
         }
     }

@@ -57,13 +57,6 @@ namespace TerminalDecay5Client
             this.lblExtant = new System.Windows.Forms.Label();
             this.lblFuture = new System.Windows.Forms.Label();
             this.lblEmpty = new System.Windows.Forms.Label();
-            this.label666 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
-            this.label7 = new System.Windows.Forms.Label();
-            this.label8 = new System.Windows.Forms.Label();
-            this.label9 = new System.Windows.Forms.Label();
-            this.label10 = new System.Windows.Forms.Label();
             this.lblBuildFabricator = new System.Windows.Forms.Label();
             this.LblBuildSolarPlant = new System.Windows.Forms.Label();
             this.lblBuildFarm = new System.Windows.Forms.Label();
@@ -106,11 +99,6 @@ namespace TerminalDecay5Client
             this.lblTurretBuild = new System.Windows.Forms.Label();
             this.lblGunnerBuild = new System.Windows.Forms.Label();
             this.lblPatrolBuild = new System.Windows.Forms.Label();
-            this.label30 = new System.Windows.Forms.Label();
-            this.label31 = new System.Windows.Forms.Label();
-            this.label32 = new System.Windows.Forms.Label();
-            this.label33 = new System.Windows.Forms.Label();
-            this.label34 = new System.Windows.Forms.Label();
             this.lblDefFuture = new System.Windows.Forms.Label();
             this.lblDefExtant = new System.Windows.Forms.Label();
             this.txtDroneBase = new System.Windows.Forms.TextBox();
@@ -228,9 +216,10 @@ namespace TerminalDecay5Client
             this.LstRemoveDefenceList = new System.Windows.Forms.ListBox();
             this.BtnMoveOutpost = new System.Windows.Forms.Button();
             this.BtnNewBaseMenu = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
+            this.LblCostEmpty = new System.Windows.Forms.Label();
             this.BtnBuildBase = new System.Windows.Forms.Button();
+            this.label3 = new System.Windows.Forms.Label();
+            this.BtnExpandBase = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.MapCanvas)).BeginInit();
             this.SuspendLayout();
             // 
@@ -468,82 +457,12 @@ namespace TerminalDecay5Client
             // lblEmpty
             // 
             this.lblEmpty.AutoSize = true;
-            this.lblEmpty.Location = new System.Drawing.Point(237, 218);
+            this.lblEmpty.Location = new System.Drawing.Point(226, 216);
             this.lblEmpty.Name = "lblEmpty";
             this.lblEmpty.Size = new System.Drawing.Size(39, 13);
             this.lblEmpty.TabIndex = 24;
             this.lblEmpty.Text = "Empty:";
             this.lblEmpty.Visible = false;
-            // 
-            // label666
-            // 
-            this.label666.AutoSize = true;
-            this.label666.Location = new System.Drawing.Point(134, 221);
-            this.label666.Name = "label666";
-            this.label666.Size = new System.Drawing.Size(39, 13);
-            this.label666.TabIndex = 31;
-            this.label666.Text = "Empty:";
-            this.label666.Visible = false;
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(134, 503);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(51, 13);
-            this.label5.TabIndex = 30;
-            this.label5.Text = "fabricator";
-            this.label5.Visible = false;
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(134, 448);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(55, 13);
-            this.label6.TabIndex = 29;
-            this.label6.Text = "solar plant";
-            this.label6.Visible = false;
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(134, 402);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(30, 13);
-            this.label7.TabIndex = 28;
-            this.label7.Text = "farm:";
-            this.label7.Visible = false;
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(134, 358);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(42, 13);
-            this.label8.TabIndex = 27;
-            this.label8.Text = "habitat:";
-            this.label8.Visible = false;
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(134, 312);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(28, 13);
-            this.label9.TabIndex = 26;
-            this.label9.Text = "well:";
-            this.label9.Visible = false;
-            // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(134, 267);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(32, 13);
-            this.label10.TabIndex = 25;
-            this.label10.Text = "mine:";
-            this.label10.Visible = false;
             // 
             // lblBuildFabricator
             // 
@@ -881,7 +800,7 @@ namespace TerminalDecay5Client
             // lblCostPatrol
             // 
             this.lblCostPatrol.AutoSize = true;
-            this.lblCostPatrol.Location = new System.Drawing.Point(412, 263);
+            this.lblCostPatrol.Location = new System.Drawing.Point(419, 263);
             this.lblCostPatrol.Name = "lblCostPatrol";
             this.lblCostPatrol.Size = new System.Drawing.Size(28, 13);
             this.lblCostPatrol.TabIndex = 87;
@@ -963,62 +882,12 @@ namespace TerminalDecay5Client
             // lblPatrolBuild
             // 
             this.lblPatrolBuild.AutoSize = true;
-            this.lblPatrolBuild.Location = new System.Drawing.Point(315, 263);
+            this.lblPatrolBuild.Location = new System.Drawing.Point(334, 263);
             this.lblPatrolBuild.Name = "lblPatrolBuild";
             this.lblPatrolBuild.Size = new System.Drawing.Size(36, 13);
             this.lblPatrolBuild.TabIndex = 78;
             this.lblPatrolBuild.Text = "patrol:";
             this.lblPatrolBuild.Visible = false;
-            // 
-            // label30
-            // 
-            this.label30.AutoSize = true;
-            this.label30.Location = new System.Drawing.Point(134, 461);
-            this.label30.Name = "label30";
-            this.label30.Size = new System.Drawing.Size(63, 13);
-            this.label30.TabIndex = 75;
-            this.label30.Text = "drone base:";
-            this.label30.Visible = false;
-            // 
-            // label31
-            // 
-            this.label31.AutoSize = true;
-            this.label31.Location = new System.Drawing.Point(135, 412);
-            this.label31.Name = "label31";
-            this.label31.Size = new System.Drawing.Size(42, 13);
-            this.label31.TabIndex = 74;
-            this.label31.Text = "artillery:";
-            this.label31.Visible = false;
-            // 
-            // label32
-            // 
-            this.label32.AutoSize = true;
-            this.label32.Location = new System.Drawing.Point(136, 370);
-            this.label32.Name = "label32";
-            this.label32.Size = new System.Drawing.Size(34, 13);
-            this.label32.TabIndex = 73;
-            this.label32.Text = "turret:";
-            this.label32.Visible = false;
-            // 
-            // label33
-            // 
-            this.label33.AutoSize = true;
-            this.label33.Location = new System.Drawing.Point(134, 322);
-            this.label33.Name = "label33";
-            this.label33.Size = new System.Drawing.Size(43, 13);
-            this.label33.TabIndex = 72;
-            this.label33.Text = "gunner:";
-            this.label33.Visible = false;
-            // 
-            // label34
-            // 
-            this.label34.AutoSize = true;
-            this.label34.Location = new System.Drawing.Point(134, 280);
-            this.label34.Name = "label34";
-            this.label34.Size = new System.Drawing.Size(36, 13);
-            this.label34.TabIndex = 71;
-            this.label34.Text = "patrol:";
-            this.label34.Visible = false;
             // 
             // lblDefFuture
             // 
@@ -1118,7 +987,7 @@ namespace TerminalDecay5Client
             // 
             // txtPatrol
             // 
-            this.txtPatrol.Location = new System.Drawing.Point(920, 256);
+            this.txtPatrol.Location = new System.Drawing.Point(928, 258);
             this.txtPatrol.Name = "txtPatrol";
             this.txtPatrol.Size = new System.Drawing.Size(100, 20);
             this.txtPatrol.TabIndex = 57;
@@ -1299,7 +1168,7 @@ namespace TerminalDecay5Client
             // lblScout
             // 
             this.lblScout.AutoSize = true;
-            this.lblScout.Location = new System.Drawing.Point(329, 236);
+            this.lblScout.Location = new System.Drawing.Point(322, 235);
             this.lblScout.Name = "lblScout";
             this.lblScout.Size = new System.Drawing.Size(36, 13);
             this.lblScout.TabIndex = 117;
@@ -2169,25 +2038,15 @@ namespace TerminalDecay5Client
             this.BtnNewBaseMenu.Visible = false;
             this.BtnNewBaseMenu.Click += new System.EventHandler(this.BtnCreateNewBase_Click);
             // 
-            // label1
+            // LblCostEmpty
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(332, 216);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(39, 13);
-            this.label1.TabIndex = 213;
-            this.label1.Text = "Empty:";
-            this.label1.Visible = false;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(435, 213);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(39, 13);
-            this.label2.TabIndex = 212;
-            this.label2.Text = "Empty:";
-            this.label2.Visible = false;
+            this.LblCostEmpty.AutoSize = true;
+            this.LblCostEmpty.Location = new System.Drawing.Point(404, 213);
+            this.LblCostEmpty.Name = "LblCostEmpty";
+            this.LblCostEmpty.Size = new System.Drawing.Size(39, 13);
+            this.LblCostEmpty.TabIndex = 212;
+            this.LblCostEmpty.Text = "Empty:";
+            this.LblCostEmpty.Visible = false;
             // 
             // BtnBuildBase
             // 
@@ -2200,13 +2059,35 @@ namespace TerminalDecay5Client
             this.BtnBuildBase.Visible = false;
             this.BtnBuildBase.Click += new System.EventHandler(this.BtnBuildBase_Click);
             // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(504, 213);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(39, 13);
+            this.label3.TabIndex = 215;
+            this.label3.Text = "Empty:";
+            this.label3.Visible = false;
+            // 
+            // BtnExpandBase
+            // 
+            this.BtnExpandBase.Location = new System.Drawing.Point(909, 199);
+            this.BtnExpandBase.Name = "BtnExpandBase";
+            this.BtnExpandBase.Size = new System.Drawing.Size(119, 23);
+            this.BtnExpandBase.TabIndex = 217;
+            this.BtnExpandBase.Text = "Expanad Capacity";
+            this.BtnExpandBase.UseVisualStyleBackColor = true;
+            this.BtnExpandBase.Visible = false;
+            this.BtnExpandBase.Click += new System.EventHandler(this.BtnExpandBase_Click);
+            // 
             // Map
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.ClientSize = new System.Drawing.Size(1498, 831);
+            this.Controls.Add(this.BtnExpandBase);
+            this.Controls.Add(this.label3);
             this.Controls.Add(this.BtnBuildBase);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.label2);
+            this.Controls.Add(this.LblCostEmpty);
             this.Controls.Add(this.BtnNewBaseMenu);
             this.Controls.Add(this.BtnMoveOutpost);
             this.Controls.Add(this.btnRemoveDefenceList);
@@ -2331,11 +2212,6 @@ namespace TerminalDecay5Client
             this.Controls.Add(this.lblTurretBuild);
             this.Controls.Add(this.lblGunnerBuild);
             this.Controls.Add(this.lblPatrolBuild);
-            this.Controls.Add(this.label30);
-            this.Controls.Add(this.label31);
-            this.Controls.Add(this.label32);
-            this.Controls.Add(this.label33);
-            this.Controls.Add(this.label34);
             this.Controls.Add(this.lblDefFuture);
             this.Controls.Add(this.lblDefExtant);
             this.Controls.Add(this.txtDroneBase);
@@ -2371,13 +2247,6 @@ namespace TerminalDecay5Client
             this.Controls.Add(this.lblBuildHabitat);
             this.Controls.Add(this.lblBuildWell);
             this.Controls.Add(this.lblBuildMine);
-            this.Controls.Add(this.label666);
-            this.Controls.Add(this.label5);
-            this.Controls.Add(this.label6);
-            this.Controls.Add(this.label7);
-            this.Controls.Add(this.label8);
-            this.Controls.Add(this.label9);
-            this.Controls.Add(this.label10);
             this.Controls.Add(this.lblEmpty);
             this.Controls.Add(this.lblFuture);
             this.Controls.Add(this.lblExtant);
@@ -2440,13 +2309,6 @@ namespace TerminalDecay5Client
         private Label lblExtant;
         private Label lblFuture;
         private Label lblEmpty;
-        private Label label666;
-        private Label label5;
-        private Label label6;
-        private Label label7;
-        private Label label8;
-        private Label label9;
-        private Label label10;
         private Label lblBuildFabricator;
         private Label LblBuildSolarPlant;
         private Label lblBuildFarm;
@@ -2489,11 +2351,6 @@ namespace TerminalDecay5Client
         private Label lblTurretBuild;
         private Label lblGunnerBuild;
         private Label lblPatrolBuild;
-        private Label label30;
-        private Label label31;
-        private Label label32;
-        private Label label33;
-        private Label label34;
         private Label lblDefFuture;
         private Label lblDefExtant;
         private TextBox txtDroneBase;
@@ -2611,9 +2468,10 @@ namespace TerminalDecay5Client
         private ListBox LstRemoveDefenceList;
         private Button BtnMoveOutpost;
         private Button BtnNewBaseMenu;
-        private Label label1;
-        private Label label2;
+        private Label LblCostEmpty;
         private Button BtnBuildBase;
+        private Label label3;
+        private Button BtnExpandBase;
     }
 }
 

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
-using System.Runtime.Serialization.Formatters.Binary;
 
 namespace TDCore5
 {
@@ -10,7 +9,7 @@ namespace TDCore5
     {
         public int ID;
         public int OwnerID;
-        public int Capacity;
+        public long Capacity;
 
         public Position Tile;
         public List<long> Buildings;

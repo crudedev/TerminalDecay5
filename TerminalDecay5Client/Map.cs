@@ -62,6 +62,11 @@ namespace TerminalDecay5Client
 
         private void DrawPlayerResources(List<List<string>> transmission)
         {
+            if (transmission[1][0] == "Logout")
+            {
+                return;
+            }
+
             LblEnergy.Text = "Power: " + transmission[1][3];
             LblFood.Text = "Food: " + transmission[1][0];
             LblMetal.Text = "Metal: " + transmission[1][1];
@@ -797,6 +802,9 @@ namespace TerminalDecay5Client
                     BuildGuidList.Add(i - 16, new Guid(transmission[i][3]));
                 }
             }
+
+            LblCostEmpty.Text = "metal: " + transmission[16][0] + " water: " + transmission[16][1] + " population: " + transmission[16][2] + " food: " + transmission[16][3] + " power: " + transmission[16][4];
+
         }
 
         private string updateBuildPanelCostString(List<List<string>> transmission, int x)
@@ -872,6 +880,7 @@ namespace TerminalDecay5Client
             lblCostSolarPlant.Visible = show;
             lblCostWell.Visible = show;
             lblCost.Visible = show;
+            LblCostEmpty.Visible = show;
 
             lblProduction.Visible = show;
             lblProductionFabricator.Visible = show;
@@ -881,6 +890,7 @@ namespace TerminalDecay5Client
             lblProductionSolar.Visible = show;
             lblProductionWell.Visible = show;
 
+            BtnExpandBase.Visible = show;
 
             cmdBuild.Visible = show;
 
@@ -976,8 +986,11 @@ namespace TerminalDecay5Client
 
                 request += MessageConstants.nextToken + SendCurrentAddress();
 
+
                 ServerConnection sc = new ServerConnection();
                 sc.ServerRequest(ConfirmBuildQueue, 8, request);
+
+
 
             }
             catch (Exception)
@@ -1000,7 +1013,7 @@ namespace TerminalDecay5Client
 
             MessageBox.Show(transmission[0][1]);
 
-            if (transmission[0][0] == MessageConstants.MessageTypes[8])
+            if (transmission[0][0] == MessageConstants.MessageTypes[8] || transmission[0][0] == MessageConstants.MessageTypes[30])
             {
                 ServerConnection sc = new ServerConnection();
                 sc.ServerRequest(UpdateBuildPanel, 7, MessageConstants.splitToken + Convert.ToString(playerToken) + MessageConstants.splitToken + Convert.ToString(_currentX) + MessageConstants.splitToken + Convert.ToString(_currentY) + MessageConstants.nextToken + SendCurrentAddress());
@@ -1990,7 +2003,6 @@ namespace TerminalDecay5Client
         {
             ServerConnection sc = new ServerConnection();
             sc.ServerRequest(UpdateBuildBasePanel, 27, MessageConstants.splitToken + Convert.ToString(playerToken) + MessageConstants.nextToken + SendCurrentAddress() + MessageConstants.nextToken + _currentX + MessageConstants.splitToken + _currentY);
-             
         }
 
         private void UpdateBuildBasePanel(List<List<string>> transmission)
@@ -2001,12 +2013,23 @@ namespace TerminalDecay5Client
         private void BtnBuildBase_Click(object sender, EventArgs e)
         {
             ServerConnection sc = new ServerConnection();
-            sc.ServerRequest(RemoveFromQueueOffResponse, 28, MessageConstants.splitToken + Convert.ToString(playerToken) + MessageConstants.nextToken + SendCurrentAddress() + MessageConstants.nextToken + _currentX + MessageConstants.splitToken + _currentY);
+            sc.ServerRequest(BuildBaseResponse, 28, MessageConstants.splitToken + Convert.ToString(playerToken) + MessageConstants.nextToken + SendCurrentAddress() + MessageConstants.nextToken + _currentX + MessageConstants.splitToken + _currentY);
         }
 
         private void BuildBaseResponse(List<List<string>> transmission)
         {
 
+        }
+
+        private void BtnExpandBase_Click(object sender, EventArgs e)
+        {
+            ServerConnection sc = new ServerConnection();
+            sc.ServerRequest(ExpandBaseResponse, 30, MessageConstants.splitToken + Convert.ToString(playerToken) + MessageConstants.nextToken + SendCurrentAddress() + MessageConstants.nextToken + _currentX + MessageConstants.splitToken + _currentY);
+        }
+
+        private void ExpandBaseResponse(List<List<string>>transmission)
+        {
+            ConfirmBuildQueue(transmission);
         }
     }
 }

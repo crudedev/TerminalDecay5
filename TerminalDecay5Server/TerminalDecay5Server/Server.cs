@@ -1079,10 +1079,72 @@ namespace TerminalDecay5Server
                 SendBaseList(transmissions, tcpClient);
             }
 
+            if (transmissions[0][0] == MessageConstants.MessageTypes[30])
+            {
+                BuildNewLand(transmissions, tcpClient);
+            }
+
             tcpClient.Close();
             client = null;
 
             #endregion
+        }
+
+        private void BuildNewLand(List<List<string>> transmissions, TcpClient tcpClient)
+        {
+            
+            string response = MessageConstants.MessageTypes[30] + MessageConstants.splitToken;
+
+            Player player;
+            try
+            {
+                player = getPlayer(transmissions[0][1]);
+            }
+            catch (Exception)
+            {
+                rejectConnection(3, "player token wrong", tcpClient);
+                return;
+            }
+
+
+            Outpost op = getOutpost(transmissions[2][0], transmissions[2][1], getAddress(transmissions, 1));
+
+            bool hasResource = true;
+
+            for (int i = 0; i < Cmn.ExpandOutpostCost.Count; i++)
+            {
+                if( Cmn.ExpandOutpostCost[i] * op.Capacity * 10 < op.Resources[i])
+                {
+                    hasResource = false;
+                }
+            }
+
+            if (hasResource)
+            {
+                for (int i = 0; i < Cmn.ExpandOutpostCost.Count; i++)
+                {
+                    op.Resources[i] = op.Resources[i] - Cmn.ExpandOutpostCost[i] * op.Capacity * 10;
+
+                }
+
+                op.Capacity = op.Capacity + Convert.ToInt64(op.Capacity / 4);
+
+                response += "Base Expanded by 25%";
+            }
+            else
+            {
+                response += "Not Enough resources";
+            }
+
+            response += MessageConstants.completeToken;
+
+            NetworkStream clientStream = tcpClient.GetStream();
+            ASCIIEncoding encoder = new ASCIIEncoding();
+
+            byte[] buffer = encoder.GetBytes(response);
+
+            clientStream.Write(buffer, 0, buffer.Length);
+            clientStream.Flush();
         }
 
         private void SendBaseList(List<List<string>> transmissions, TcpClient tcpClient)
@@ -1738,8 +1800,8 @@ namespace TerminalDecay5Server
             string response = MessageConstants.MessageTypes[14] + MessageConstants.nextToken;
 
             Player Attacker = getPlayer(transmissions[0][1]);
-            Outpost AttackOp = getOutpost(transmissions[1][0], transmissions[1][1], getAddress(transmissions, 3));
-            Outpost DeffenceOp = getOutpost(transmissions[1][2], transmissions[1][3], getAddress(transmissions, 3));
+            Outpost AttackOp = getOutpost(transmissions[1][0], transmissions[1][1], getAddress(transmissions, 4));
+            Outpost DeffenceOp = getOutpost(transmissions[1][2], transmissions[1][3], getAddress(transmissions, 4));
 
             string ErrorResponse = "";
 
@@ -2632,6 +2694,14 @@ namespace TerminalDecay5Server
                 }
             }
 
+            Outpost op = getOutpost(transmissions[0][2], transmissions[0][3], getAddress(transmissions, 1));
+
+
+            foreach (var item in Cmn.ExpandOutpostCost)
+            {
+                response += item * op.Capacity * 10 + MessageConstants.splitToken;
+            }
+
             response += MessageConstants.completeToken;
             NetworkStream clientStream = tcpClient.GetStream();
             ASCIIEncoding encoder = new ASCIIEncoding();
@@ -2645,11 +2715,16 @@ namespace TerminalDecay5Server
         private void SendPlayerResources(List<List<string>> message, TcpClient tcpClient)
         {
 
-            Player pl = new Player(); ;
+            Player pl = new Player();
 
             try
             {
                 pl = getPlayer(message[0][1]);
+                if (pl == null)
+                {
+                    rejectConnection(6, "player token wrong", tcpClient);
+                    return;
+                }
             }
             catch (Exception)
             {
@@ -2790,11 +2865,11 @@ namespace TerminalDecay5Server
                 o.Address.SolarSytemID = 0;
                 o.Address.PlanetID = 0;
 
-                o.Resources[Cmn.Resource[Cmn.Renum.Food]] = 10000;
-                o.Resources[Cmn.Resource[Cmn.Renum.Metal]] = 100000;
-                o.Resources[Cmn.Resource[Cmn.Renum.Population]] = 1000;
-                o.Resources[Cmn.Resource[Cmn.Renum.Power]] = 30000;
-                o.Resources[Cmn.Resource[Cmn.Renum.Water]] = 10000;
+                o.Resources[Cmn.Resource[Cmn.Renum.Food]] = 1000000;
+                o.Resources[Cmn.Resource[Cmn.Renum.Metal]] = 10000000;
+                o.Resources[Cmn.Resource[Cmn.Renum.Population]] = 100000;
+                o.Resources[Cmn.Resource[Cmn.Renum.Power]] = 3000000;
+                o.Resources[Cmn.Resource[Cmn.Renum.Water]] = 1000000;
 
 
                 Position v = new Position();
@@ -3147,7 +3222,7 @@ namespace TerminalDecay5Server
         {
             foreach (Outpost o in universe.outposts)
             {
-                if (o.Tile.X == Convert.ToInt32(x) && o.Tile.Y == Convert.ToInt32(y) && a == o.Address)
+                if (o.Tile.X == Convert.ToInt32(x) && o.Tile.Y == Convert.ToInt32(y) && a.Compare(o.Address))
                 {
                     return o;
                 }

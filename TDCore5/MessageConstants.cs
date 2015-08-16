@@ -44,6 +44,8 @@ namespace TDCore5
             MessageTypes.Add(27, "GetNewBaseMenuAC.,WF7fe45");
             MessageTypes.Add(28, "BuildNewBaseAJHSDI348.qqs");
             MessageTypes.Add(29, "GetListOfBaseAqz,lP183>??");
+            MessageTypes.Add(30, "BuildEmptyLand,iawz47.nLM");
+        
         }
 
     }
