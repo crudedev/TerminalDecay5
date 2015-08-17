@@ -2035,7 +2035,6 @@ namespace TerminalDecay5Client
             this.BtnNewBaseMenu.TabIndex = 211;
             this.BtnNewBaseMenu.Text = "Build New Base";
             this.BtnNewBaseMenu.UseVisualStyleBackColor = true;
-            this.BtnNewBaseMenu.Visible = false;
             this.BtnNewBaseMenu.Click += new System.EventHandler(this.BtnCreateNewBase_Click);
             // 
             // LblCostEmpty
