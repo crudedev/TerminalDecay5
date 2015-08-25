@@ -143,12 +143,6 @@ namespace TerminalDecay5Client
             MapCanvas.Image = MapImage;
         }
 
-        private void button2_Click(object sender, EventArgs e)
-        {
-            ServerConnection sc = new ServerConnection();
-            sc.ServerRequest(RenderMainMap, 3, MessageConstants.splitToken + Convert.ToString(playerToken));
-            hideMenus();
-        }
 
         private void RenderMainMap(List<List<string>> transmission)
         {
@@ -674,6 +668,8 @@ namespace TerminalDecay5Client
             showOffenceMenu(false);
             showAttackMenu(false);
             showReinforcemenu(false);
+
+            LblNewBaseCost.Visible = false;
 
             if (CurrentView == 3)
             {
@@ -1660,13 +1656,6 @@ namespace TerminalDecay5Client
             MapCanvas.Image = MapImage;
         }
 
-        private void button4_Click(object sender, EventArgs e)
-        {
-            CurrentView = 4;
-            ServerConnection sc = new ServerConnection();
-            sc.ServerRequest(RenderClusterMap, 18, MessageConstants.splitToken + Convert.ToString(playerToken) + MessageConstants.splitToken + _currentX + MessageConstants.splitToken + _currentY);
-            hideMenus();
-        }
 
         private void RenderUniverse(List<List<string>> transmission)
         {
@@ -2007,13 +1996,23 @@ namespace TerminalDecay5Client
 
         private void UpdateBuildBasePanel(List<List<string>> transmission)
         {
+            hideMenus();
+            MapCanvas.Visible = false;
+            LblNewBaseCost.Visible = true;
+            BtnBuildNewBase.Visible = true;
+
+            LblNewBaseCost.Text = "Food: " + transmission[1][0] + " Metal: " + transmission[1][1] + " Population: " + transmission[1][2] + " Power: " + transmission[1][3] + " Water: " + transmission[1][4];
+            
+            if (transmission[1][0] == "-1")
+            {
+                MessageBox.Show("You don't own an outpost here");
+                return;
+            }
 
         }
 
         private void BtnBuildBase_Click(object sender, EventArgs e)
         {
-            ServerConnection sc = new ServerConnection();
-            sc.ServerRequest(BuildBaseResponse, 28, MessageConstants.splitToken + Convert.ToString(playerToken) + MessageConstants.nextToken + SendCurrentAddress() + MessageConstants.nextToken + _currentX + MessageConstants.splitToken + _currentY);
         }
 
         private void BuildBaseResponse(List<List<string>> transmission)
@@ -2030,6 +2029,12 @@ namespace TerminalDecay5Client
         private void ExpandBaseResponse(List<List<string>>transmission)
         {
             ConfirmBuildQueue(transmission);
+        }
+
+        private void BtnBuildNewBase_Click(object sender, EventArgs e)
+        {
+            ServerConnection sc = new ServerConnection();
+            sc.ServerRequest(BuildBaseResponse, 28, MessageConstants.splitToken + Convert.ToString(playerToken) + MessageConstants.nextToken + SendCurrentAddress() + MessageConstants.nextToken + _currentX + MessageConstants.splitToken + _currentY);
         }
     }
 }

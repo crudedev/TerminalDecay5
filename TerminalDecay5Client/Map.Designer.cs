@@ -34,7 +34,6 @@ namespace TerminalDecay5Client
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Map));
             this.button1 = new System.Windows.Forms.Button();
             this.MapCanvas = new System.Windows.Forms.PictureBox();
-            this.button2 = new System.Windows.Forms.Button();
             this.LblSidePanel = new System.Windows.Forms.Label();
             this.LblMetal = new System.Windows.Forms.Label();
             this.LblEnergy = new System.Windows.Forms.Label();
@@ -178,8 +177,6 @@ namespace TerminalDecay5Client
             this.txtAttackScout = new System.Windows.Forms.TextBox();
             this.btnSendAttack = new System.Windows.Forms.Button();
             this.BtnMessages = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
-            this.button4 = new System.Windows.Forms.Button();
             this.button5 = new System.Windows.Forms.Button();
             this.button6 = new System.Windows.Forms.Button();
             this.cmdReinforce = new System.Windows.Forms.Button();
@@ -217,9 +214,10 @@ namespace TerminalDecay5Client
             this.BtnMoveOutpost = new System.Windows.Forms.Button();
             this.BtnNewBaseMenu = new System.Windows.Forms.Button();
             this.LblCostEmpty = new System.Windows.Forms.Label();
-            this.BtnBuildBase = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
             this.BtnExpandBase = new System.Windows.Forms.Button();
+            this.LblNewBaseCost = new System.Windows.Forms.Label();
+            this.BtnBuildNewBase = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.MapCanvas)).BeginInit();
             this.SuspendLayout();
             // 
@@ -243,17 +241,6 @@ namespace TerminalDecay5Client
             this.MapCanvas.TabIndex = 1;
             this.MapCanvas.TabStop = false;
             this.MapCanvas.Click += new System.EventHandler(this.MapCanvas_Click);
-            // 
-            // button2
-            // 
-            this.button2.Location = new System.Drawing.Point(12, 740);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
-            this.button2.TabIndex = 2;
-            this.button2.Text = "button2";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Visible = false;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // LblSidePanel
             // 
@@ -1481,7 +1468,7 @@ namespace TerminalDecay5Client
             // 
             // btnOffenceBuild
             // 
-            this.btnOffenceBuild.Location = new System.Drawing.Point(883, 558);
+            this.btnOffenceBuild.Location = new System.Drawing.Point(892, 559);
             this.btnOffenceBuild.Name = "btnOffenceBuild";
             this.btnOffenceBuild.Size = new System.Drawing.Size(119, 23);
             this.btnOffenceBuild.TabIndex = 155;
@@ -1663,28 +1650,6 @@ namespace TerminalDecay5Client
             this.BtnMessages.Text = "Messages";
             this.BtnMessages.UseVisualStyleBackColor = true;
             this.BtnMessages.Click += new System.EventHandler(this.BtnMessages_Click);
-            // 
-            // button3
-            // 
-            this.button3.Location = new System.Drawing.Point(12, 681);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(75, 23);
-            this.button3.TabIndex = 174;
-            this.button3.Text = "button3";
-            this.button3.UseVisualStyleBackColor = true;
-            this.button3.Visible = false;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
-            // 
-            // button4
-            // 
-            this.button4.Location = new System.Drawing.Point(12, 626);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(75, 23);
-            this.button4.TabIndex = 175;
-            this.button4.Text = "button4";
-            this.button4.UseVisualStyleBackColor = true;
-            this.button4.Visible = false;
-            this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
             // button5
             // 
@@ -2047,17 +2012,6 @@ namespace TerminalDecay5Client
             this.LblCostEmpty.Text = "Empty:";
             this.LblCostEmpty.Visible = false;
             // 
-            // BtnBuildBase
-            // 
-            this.BtnBuildBase.Location = new System.Drawing.Point(1302, 756);
-            this.BtnBuildBase.Name = "BtnBuildBase";
-            this.BtnBuildBase.Size = new System.Drawing.Size(89, 23);
-            this.BtnBuildBase.TabIndex = 214;
-            this.BtnBuildBase.Text = "Build New Base";
-            this.BtnBuildBase.UseVisualStyleBackColor = true;
-            this.BtnBuildBase.Visible = false;
-            this.BtnBuildBase.Click += new System.EventHandler(this.BtnBuildBase_Click);
-            // 
             // label3
             // 
             this.label3.AutoSize = true;
@@ -2079,13 +2033,35 @@ namespace TerminalDecay5Client
             this.BtnExpandBase.Visible = false;
             this.BtnExpandBase.Click += new System.EventHandler(this.BtnExpandBase_Click);
             // 
+            // LblNewBaseCost
+            // 
+            this.LblNewBaseCost.AutoSize = true;
+            this.LblNewBaseCost.Location = new System.Drawing.Point(237, 85);
+            this.LblNewBaseCost.Name = "LblNewBaseCost";
+            this.LblNewBaseCost.Size = new System.Drawing.Size(28, 13);
+            this.LblNewBaseCost.TabIndex = 218;
+            this.LblNewBaseCost.Text = "Cost";
+            this.LblNewBaseCost.Visible = false;
+            // 
+            // BtnBuildNewBase
+            // 
+            this.BtnBuildNewBase.Location = new System.Drawing.Point(619, 151);
+            this.BtnBuildNewBase.Name = "BtnBuildNewBase";
+            this.BtnBuildNewBase.Size = new System.Drawing.Size(119, 23);
+            this.BtnBuildNewBase.TabIndex = 219;
+            this.BtnBuildNewBase.Text = "Found New Base";
+            this.BtnBuildNewBase.UseVisualStyleBackColor = true;
+            this.BtnBuildNewBase.Visible = false;
+            this.BtnBuildNewBase.Click += new System.EventHandler(this.BtnBuildNewBase_Click);
+            // 
             // Map
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.ClientSize = new System.Drawing.Size(1498, 831);
+            this.Controls.Add(this.BtnBuildNewBase);
+            this.Controls.Add(this.LblNewBaseCost);
             this.Controls.Add(this.BtnExpandBase);
             this.Controls.Add(this.label3);
-            this.Controls.Add(this.BtnBuildBase);
             this.Controls.Add(this.LblCostEmpty);
             this.Controls.Add(this.BtnNewBaseMenu);
             this.Controls.Add(this.BtnMoveOutpost);
@@ -2123,8 +2099,6 @@ namespace TerminalDecay5Client
             this.Controls.Add(this.lblReinforceScout);
             this.Controls.Add(this.button6);
             this.Controls.Add(this.button5);
-            this.Controls.Add(this.button4);
-            this.Controls.Add(this.button3);
             this.Controls.Add(this.BtnMessages);
             this.Controls.Add(this.btnSendAttack);
             this.Controls.Add(this.txtAttackBattleship);
@@ -2268,7 +2242,6 @@ namespace TerminalDecay5Client
             this.Controls.Add(this.LblEnergy);
             this.Controls.Add(this.LblMetal);
             this.Controls.Add(this.LblSidePanel);
-            this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.MapCanvas);
             this.Name = "Map";
@@ -2285,7 +2258,6 @@ namespace TerminalDecay5Client
 
         private Button button1;
         private PictureBox MapCanvas;
-        private Button button2;
         private Label LblSidePanel;
         private Label LblMetal;
         private Label LblEnergy;
@@ -2429,8 +2401,6 @@ namespace TerminalDecay5Client
         private TextBox txtAttackScout;
         private Button btnSendAttack;
         private Button BtnMessages;
-        private Button button3;
-        private Button button4;
         private Button button5;
         private Button button6;
         private Button cmdReinforce;
@@ -2468,9 +2438,10 @@ namespace TerminalDecay5Client
         private Button BtnMoveOutpost;
         private Button BtnNewBaseMenu;
         private Label LblCostEmpty;
-        private Button BtnBuildBase;
         private Label label3;
         private Button BtnExpandBase;
+        private Label LblNewBaseCost;
+        private Button BtnBuildNewBase;
     }
 }
 

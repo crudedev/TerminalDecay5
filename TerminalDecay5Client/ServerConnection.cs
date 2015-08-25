@@ -9,7 +9,6 @@ namespace TerminalDecay5Client
 {
     class ServerConnection
     {
-
         private List<List<string>> Decodetransmission(string Message)
         {
             Message = Message.Replace(MessageConstants.completeToken, "");

@@ -1113,7 +1113,7 @@ namespace TerminalDecay5Server
 
             for (int i = 0; i < Cmn.ExpandOutpostCost.Count; i++)
             {
-                if( Cmn.ExpandOutpostCost[i] * op.Capacity * 10 < op.Resources[i])
+                if( Cmn.ExpandOutpostCost[i] * op.Capacity * 10 < op.Resources[i]) 
                 {
                     hasResource = false;
                 }
@@ -1266,7 +1266,7 @@ namespace TerminalDecay5Server
 
             string response = MessageConstants.MessageTypes[27] + MessageConstants.nextToken;
 
-            response += Convert.ToString(Cmn.BaseCost[Cmn.Resource[Cmn.Renum.Food]] * totalBase) + MessageConstants.splitToken + Convert.ToString(Cmn.BaseCost[Cmn.Resource[Cmn.Renum.Metal]] * totalBase) + MessageConstants.splitToken + Convert.ToString(Cmn.BaseCost[Cmn.Resource[Cmn.Renum.Population]] * totalBase) + MessageConstants.splitToken + Convert.ToString(Cmn.BaseCost[Cmn.Resource[Cmn.Renum.Power]] * totalBase) + MessageConstants.splitToken + Convert.ToString(Cmn.BaseCost[Cmn.Resource[Cmn.Renum.Water]] * totalBase);
+            response += Convert.ToString(Cmn.BaseCost[Cmn.Resource[Cmn.Renum.Food]] * totalBase) + MessageConstants.splitToken + Convert.ToString(Cmn.BaseCost[Cmn.Resource[Cmn.Renum.Metal]] * totalBase) + MessageConstants.splitToken + Convert.ToString(Cmn.BaseCost[Cmn.Resource[Cmn.Renum.Population]] * totalBase) + MessageConstants.splitToken + Convert.ToString(Cmn.BaseCost[Cmn.Resource[Cmn.Renum.Power]] * totalBase) + MessageConstants.splitToken + Convert.ToString(Cmn.BaseCost[Cmn.Resource[Cmn.Renum.Water]] * totalBase) + MessageConstants.completeToken;
 
             NetworkStream clientStream = tcpClient.GetStream();
             ASCIIEncoding encoder = new ASCIIEncoding();
