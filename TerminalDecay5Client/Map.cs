@@ -2017,7 +2017,8 @@ namespace TerminalDecay5Client
 
         private void BuildBaseResponse(List<List<string>> transmission)
         {
-
+            MessageBox.Show(transmission[1][0]);
+            hideMenus();
         }
 
         private void BtnExpandBase_Click(object sender, EventArgs e)

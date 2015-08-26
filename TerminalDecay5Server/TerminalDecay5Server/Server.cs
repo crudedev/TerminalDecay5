@@ -1092,7 +1092,7 @@ namespace TerminalDecay5Server
 
         private void BuildNewLand(List<List<string>> transmissions, TcpClient tcpClient)
         {
-            
+
             string response = MessageConstants.MessageTypes[30] + MessageConstants.splitToken;
 
             Player player;
@@ -1113,7 +1113,7 @@ namespace TerminalDecay5Server
 
             for (int i = 0; i < Cmn.ExpandOutpostCost.Count; i++)
             {
-                if( Cmn.ExpandOutpostCost[i] * op.Capacity * 10 < op.Resources[i]) 
+                if (Cmn.ExpandOutpostCost[i] * op.Capacity * 10 < op.Resources[i])
                 {
                     hasResource = false;
                 }
@@ -1213,19 +1213,60 @@ namespace TerminalDecay5Server
                 }
             }
 
-            bool success = false;
 
-            string lel = Convert.ToString(Cmn.BaseCost[Cmn.Resource[Cmn.Renum.Food]] * totalBase) + MessageConstants.splitToken + Convert.ToString(Cmn.BaseCost[Cmn.Resource[Cmn.Renum.Metal]] * totalBase) + MessageConstants.splitToken + Convert.ToString(Cmn.BaseCost[Cmn.Resource[Cmn.Renum.Population]] * totalBase) + MessageConstants.splitToken + Convert.ToString(Cmn.BaseCost[Cmn.Resource[Cmn.Renum.Power]] * totalBase) + MessageConstants.splitToken + Convert.ToString(Cmn.BaseCost[Cmn.Resource[Cmn.Renum.Water]] * totalBase);
+            List<long> newBaseCost = new List<long>();
+            foreach (var item in Cmn.Resource)
+            {
+                newBaseCost.Add(0);
+            }
+
+            newBaseCost[Cmn.Resource[Cmn.Renum.Food]] = Cmn.BaseCost[Cmn.Resource[Cmn.Renum.Food]] * totalBase;
+            newBaseCost[Cmn.Resource[Cmn.Renum.Metal]] = Cmn.BaseCost[Cmn.Resource[Cmn.Renum.Metal]] * totalBase;
+            newBaseCost[Cmn.Resource[Cmn.Renum.Population]] = Cmn.BaseCost[Cmn.Resource[Cmn.Renum.Population]] * totalBase;
+            newBaseCost[Cmn.Resource[Cmn.Renum.Power]] = Cmn.BaseCost[Cmn.Resource[Cmn.Renum.Power]] * totalBase;
+            newBaseCost[Cmn.Resource[Cmn.Renum.Water]] = Cmn.BaseCost[Cmn.Resource[Cmn.Renum.Water]] * totalBase;
+
+
+            bool hasResource = true;
+            for (int i = 0; i < Cmn.Resource.Count; i++)
+            {
+                if (newBaseCost[i] > o.Resources[i])
+                {
+                    hasResource = false;
+                }
+            }
+
+            bool builtBase = false;
+            if (hasResource)
+            {
+                //create a new outpost here for the same player
+
+                Outpost newo = CreatePlayerOutpost(player, o.Address);
+                if (newo != null)
+                {
+                    builtBase = true;
+                }
+                
+            }
+            
 
             string response = MessageConstants.MessageTypes[28] + MessageConstants.nextToken;
 
-            if (success)
+            if (builtBase)
             {
                 response += "success";
+
             }
             else
             {
-                response += "fail";
+                if (hasResource)
+                {
+                    response += "base blocked";
+                }
+                else
+                {
+                    response += "Not enough resources";
+                }
             }
 
             NetworkStream clientStream = tcpClient.GetStream();
@@ -2846,105 +2887,12 @@ namespace TerminalDecay5Server
 
                 universe.players.Add(newp);
 
-                if (universe.outposts == null)
-                {
-                    universe.outposts = new List<Outpost>();
-                }
 
-                Outpost o = new Outpost();
-                o.Capacity = 100;
-                o.ID = universe.outposts.Count;
-                o.OwnerID = newp.PlayerID;
-
-                o.Tile = new Position();
-
-
-
-                o.Address = new UniversalAddress();
-                o.Address.ClusterID = 0;
-                o.Address.SolarSytemID = 0;
-                o.Address.PlanetID = 0;
-
-                o.Resources[Cmn.Resource[Cmn.Renum.Food]] = 1000000;
-                o.Resources[Cmn.Resource[Cmn.Renum.Metal]] = 10000000;
-                o.Resources[Cmn.Resource[Cmn.Renum.Population]] = 100000;
-                o.Resources[Cmn.Resource[Cmn.Renum.Power]] = 3000000;
-                o.Resources[Cmn.Resource[Cmn.Renum.Water]] = 1000000;
-
-
-                Position v = new Position();
-                Random r = new Random();
-
-                bool blocked = true;
-
-                int tilecount = 0;
-
-                while (blocked == true)
-                {
-                    blocked = false;
-                    tilecount++;
-                    v.X = r.Next(3, 22);
-                    v.Y = r.Next(3, 22);
-                    foreach (var item in universe.outposts)
-                    {
-                        if (item.Address == o.Address)
-                        {
-                            if (item.Tile == v)
-                            {
-                                blocked = true;
-                            }
-                        }
-                    }
-
-                    foreach (var item in universe.SpecialStructures)
-                    {
-                        if (item.Address == o.Address)
-                        {
-                            if (item.Tile == v)
-                            {
-                                blocked = true;
-                            }
-                        }
-                    }
-                    if (tilecount > 700)
-                    {
-                        o.Address.PlanetID++;
-                        if (o.Address.PlanetID > universe.clusters[o.Address.ClusterID].solarSystems[o.Address.SolarSytemID].planets.Count)
-                        {
-                            o.Address.PlanetID = 0;
-                            o.Address.SolarSytemID++;
-                            if (o.Address.SolarSytemID > universe.clusters[o.Address.ClusterID].solarSystems.Count)
-                            {
-                                o.Address.PlanetID = 0;
-                                o.Address.SolarSytemID = 0;
-                                o.Address.ClusterID++;
-                            }
-
-                        }
-                    }
-
-                }
-                o.Tile = v;
+                Outpost o = CreatePlayerOutpost(newp, new UniversalAddress(0, 0, 0));
 
                 newp.home = new UniversalAddress();
-
-
                 newp.home = o.Address;
 
-                o.Buildings[Cmn.BuildType[Cmn.BldTenum.Mine]] = 5;
-                o.Buildings[Cmn.BuildType[Cmn.BldTenum.Farm]] = 5;
-                o.Buildings[Cmn.BuildType[Cmn.BldTenum.Habitat]] = 5;
-                o.Buildings[Cmn.BuildType[Cmn.BldTenum.SolarPLant]] = 5;
-                o.Buildings[Cmn.BuildType[Cmn.BldTenum.Well]] = 5;
-                o.Buildings[Cmn.BuildType[Cmn.BldTenum.Fabricator]] = 5;
-
-                o.Defence[Cmn.DefenceType[Cmn.DefTenum.Patrol]] = 10;
-                o.Defence[Cmn.DefenceType[Cmn.DefTenum.Gunner]] = 5;
-
-                o.Offence[Cmn.OffenceType[Cmn.OffTenum.Scout]] = 10;
-                o.Offence[Cmn.OffenceType[Cmn.OffTenum.Battleship]] = 500;
-
-                universe.outposts.Add(o);
 
                 string reply = MessageConstants.MessageTypes[1] + MessageConstants.nextToken + "AccountCreated" + MessageConstants.nextToken;
                 reply += MessageConstants.completeToken;
@@ -2971,7 +2919,113 @@ namespace TerminalDecay5Server
                 clientStream.Write(buffer, 0, buffer.Length);
                 clientStream.Flush();
             }
+
         }
+
+        private Outpost CreatePlayerOutpost(Player p, UniversalAddress u)
+        {
+            if (universe.outposts == null)
+            {
+                universe.outposts = new List<Outpost>();
+            }
+
+            Outpost o = new Outpost();
+            o.Capacity = 100;
+            o.ID = universe.outposts.Count;
+            o.OwnerID = p.PlayerID;
+
+            o.Tile = new Position();
+
+
+
+            o.Address = new UniversalAddress();
+            o.Address.ClusterID = u.ClusterID;
+            o.Address.SolarSytemID = u.SolarSytemID;
+            o.Address.PlanetID = u.PlanetID;
+
+            o.Resources[Cmn.Resource[Cmn.Renum.Food]] = 1000000;
+            o.Resources[Cmn.Resource[Cmn.Renum.Metal]] = 10000000;
+            o.Resources[Cmn.Resource[Cmn.Renum.Population]] = 100000;
+            o.Resources[Cmn.Resource[Cmn.Renum.Power]] = 3000000;
+            o.Resources[Cmn.Resource[Cmn.Renum.Water]] = 1000000;
+
+
+            Position v = new Position();
+            Random r = new Random();
+
+            bool blocked = true;
+
+            int tilecount = 0;
+
+            while (blocked == true)
+            {
+                blocked = false;
+                tilecount++;
+                v.X = r.Next(3, 22);
+                v.Y = r.Next(3, 22);
+                foreach (var item in universe.outposts)
+                {
+                    if (item.Address == o.Address)
+                    {
+                        if (item.Tile == v)
+                        {
+                            blocked = true;
+                        }
+                    }
+                }
+
+                foreach (var item in universe.SpecialStructures)
+                {
+                    if (item.Address == o.Address)
+                    {
+                        if (item.Tile == v)
+                        {
+                            blocked = true;
+                        }
+                    }
+                }
+                if (tilecount > 700)
+                {
+                    o.Address.PlanetID++;
+                    if (o.Address.PlanetID > universe.clusters[o.Address.ClusterID].solarSystems[o.Address.SolarSytemID].planets.Count)
+                    {
+                        o.Address.PlanetID = 0;
+                        o.Address.SolarSytemID++;
+                        if (o.Address.SolarSytemID > universe.clusters[o.Address.ClusterID].solarSystems.Count)
+                        {
+                            o.Address.PlanetID = 0;
+                            o.Address.SolarSytemID = 0;
+                            o.Address.ClusterID++;
+                        }
+
+                    }
+                }
+
+            }
+            o.Tile = v;
+
+
+
+            o.Buildings[Cmn.BuildType[Cmn.BldTenum.Mine]] = 5;
+            o.Buildings[Cmn.BuildType[Cmn.BldTenum.Farm]] = 5;
+            o.Buildings[Cmn.BuildType[Cmn.BldTenum.Habitat]] = 5;
+            o.Buildings[Cmn.BuildType[Cmn.BldTenum.SolarPLant]] = 5;
+            o.Buildings[Cmn.BuildType[Cmn.BldTenum.Well]] = 5;
+            o.Buildings[Cmn.BuildType[Cmn.BldTenum.Fabricator]] = 5;
+
+            o.Defence[Cmn.DefenceType[Cmn.DefTenum.Patrol]] = 10;
+            o.Defence[Cmn.DefenceType[Cmn.DefTenum.Gunner]] = 5;
+
+            o.Offence[Cmn.OffenceType[Cmn.OffTenum.Scout]] = 10;
+            o.Offence[Cmn.OffenceType[Cmn.OffTenum.Battleship]] = 500;
+
+            universe.outposts.Add(o);
+
+            return o;
+
+        }
+
+
 
         private void Login(List<List<string>> message, TcpClient tcpClient)
         {
