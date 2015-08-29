@@ -41,6 +41,7 @@ namespace TerminalDecay5Server
             _serverTick = new Timer(RunUniverse, universe, 1600, 3200000);
             _serverSave = new Timer(SaveUnivsere, universe, 200000, 400000);
         }
+
         static void SaveUnivsere(object ob)
         {
             Universe u = (Universe)ob;
@@ -49,6 +50,7 @@ namespace TerminalDecay5Server
             //   s.SerializeUniverse(path, new Serialised(u));
 
         }
+
         static void RunUniverse(object ob)
         {
 
@@ -563,6 +565,59 @@ namespace TerminalDecay5Server
 
             #endregion
 
+            #region AI
+            RunAI(u);
+            #endregion
+
+        }
+
+        private static void RunAI(Universe u)
+        {
+
+            foreach (var item in u.Ai)
+            {
+                item.ActionDelay--;
+                if(item.ActionDelay < 0)
+                {
+                    //Build Units
+                    //Select which units to build
+
+
+
+
+                }
+
+            }
+
+
+
+
+
+
+//Build Buildings
+//Expand Bases
+//Spread to other bases
+
+//Attack
+//Reinforce
+//Move
+
+            
+
+//Violent
+//Expansive
+
+            //Turtle
+            //Attacking
+
+            //Active
+            //Inactive
+
+            //Help
+            //Selfish
+
+            //Committed
+            //Change
         }
 
         private static List<Outpost> FindLocalOutpost(UniversalAddress a, Position p, Universe u)
@@ -1246,9 +1301,9 @@ namespace TerminalDecay5Server
                 {
                     builtBase = true;
                 }
-                
+
             }
-            
+
 
             string response = MessageConstants.MessageTypes[28] + MessageConstants.nextToken;
 
@@ -3025,8 +3080,6 @@ namespace TerminalDecay5Server
 
         }
 
-
-
         private void Login(List<List<string>> message, TcpClient tcpClient)
         {
 
@@ -3404,6 +3457,20 @@ namespace TerminalDecay5Server
             o.Offence[Cmn.OffenceType[Cmn.OffTenum.Scout]] = 5;
 
             universe.outposts.Add(o);
+
+            if (universe.Ai == null)
+            {
+                universe.Ai = new List<AIController>();
+            }
+
+            AIController ai = new AIController();
+            ai.Outpost = o;
+            ai.ActiveInactive = universe.r.Next(100) / 100;
+            ai.CommittedChange = universe.r.Next(100) / 100;
+            ai.HelpSelfish = universe.r.Next(100) / 100;
+            ai.TurtleAttacking = universe.r.Next(100) / 100;
+            ai.ViolentExpansive = universe.r.Next(100) / 100;
+
         }
 
         private void SendAllUnits(List<List<string>> transmissions, TcpClient tcpClient)

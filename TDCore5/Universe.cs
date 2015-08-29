@@ -20,6 +20,7 @@ namespace TDCore5
         public List<TroopMovement> TroopMovements;
         public List<SpecialStructure> SpecialStructures;
         public List<BaseMovement> BaseMovements;
+        public List<AIController> Ai;
                 
         public int CurrentTick = 0;
 
