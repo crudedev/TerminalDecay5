@@ -579,45 +579,119 @@ namespace TerminalDecay5Server
                 item.ActionDelay--;
                 if(item.ActionDelay < 0)
                 {
-                    //Build Units
-                    //Select which units to build
+                    item.ActionDelay = Convert.ToInt32(u.r.Next(30, 90) * item.ActionDelayMultiplier);
+
+                    //DECIDE WHICH ACTION TO TAKE
+                    float unitorbuild = item.TurtleAttacking * u.r.Next(200);
+
+                    if(unitorbuild > 100)
+                    {//Build Units -> reinforce -> attack
+
+                        float attordeff = item.TurtleAttacking * u.r.Next(200);
+                        if(attordeff > 100)
+                        {
+                            bool foundExisting = false;
+                            foreach (var off in u.OffenceBuildQueue)
+                            {
+                                if(off.Outpost == item.Outpost)
+                                {
+                                    foundExisting = true;
+                                    break;
+                                }
+                            }
+
+                            if(foundExisting == false)
+                            {
+                                long totalres = 0;
+                                foreach (var res in item.Outpost.Resources)
+                                {
+                                    totalres += res;
+                                }
+
+                                for (int offtype = Cmn.OffenceType.Count; offtype > 0; offtype--)
+                                {
+                                    long totaloffcost = 0;
+                                    for (int offcost = 0; offcost < Cmn.OffenceCost[offtype].Count; offcost++)
+                                    {
+                                        totaloffcost += Cmn.OffenceCost[offtype][offcost];
+                                    }
+                                    
+                                    if(totaloffcost * 5 > totalres)
+                                    {
+                                        BuildQueueItem b = new BuildQueueItem(AIID.PlayerID, item.Outpost, u.r.Next(0,10), offtype, Cmn.OffenceCost[offtype]);
+                                        u.OffenceBuildQueue.Add(b);
+                                    }
+                                }
+
+                            }
+                            
+                        }
+                        else
+                        {
+                            bool foundExisting = false;
+                            foreach (var def in u.DefenceBuildQueue)
+                            {
+                                if (def.Outpost == item.Outpost)
+                                {
+                                    foundExisting = true;
+                                    break;
+                                }
+                            }
+
+                            if (foundExisting == false)
+                            {
+                                long totalres = 0;
+                                foreach (var res in item.Outpost.Resources)
+                                {
+                                    totalres += res;
+                                }
+
+                                for (int defType = Cmn.DefenceType.Count; defType > 0; defType--)
+                                {
+                                    long totaldefcost = 0;
+                                    for (int deffcost = 0; deffcost < Cmn.OffenceCost[defType].Count; deffcost++)
+                                    {
+                                        totaldefcost += Cmn.OffenceCost[defType][deffcost];
+                                    }
+
+                                    if (totaldefcost * 5 > totalres)
+                                    {
+                                        BuildQueueItem b = new BuildQueueItem(AIID.PlayerID, item.Outpost, u.r.Next(0, 10), defType, Cmn.DefenceCost[defType]);
+                                        u.OffenceBuildQueue.Add(b);
+                                    }
+                                }
+                            }
+                        }
+
+                    }
+                    else
+                    {//build buildings -> expand base ->expand base
+                        bool foundExisting = false;
+                        foreach (var build in u.BuildingBuildQueue)
+                        {
+                            if (build.Outpost == item.Outpost)
+                            {
+                                foundExisting = true;
+                                break;
+                            }
+                        }
 
 
+                        if(foundExisting == false)
+                        {
+
+                        }
+                        //check to see if ther are any in the build queue atm
+                        //if so quit
+
+
+                    }
 
 
                 }
 
             }
 
-
-
-
-
-
-//Build Buildings
-//Expand Bases
-//Spread to other bases
-
-//Attack
-//Reinforce
-//Move
-
-            
-
-//Violent
-//Expansive
-
-            //Turtle
-            //Attacking
-
-            //Active
-            //Inactive
-
-            //Help
-            //Selfish
-
-            //Committed
-            //Change
         }
 
         private static List<Outpost> FindLocalOutpost(UniversalAddress a, Position p, Universe u)
@@ -3465,11 +3539,9 @@ namespace TerminalDecay5Server
 
             AIController ai = new AIController();
             ai.Outpost = o;
-            ai.ActiveInactive = universe.r.Next(100) / 100;
-            ai.CommittedChange = universe.r.Next(100) / 100;
+            ai.ActionDelayMultiplier = universe.r.Next(100) / 100;
             ai.HelpSelfish = universe.r.Next(100) / 100;
             ai.TurtleAttacking = universe.r.Next(100) / 100;
-            ai.ViolentExpansive = universe.r.Next(100) / 100;
 
         }
 

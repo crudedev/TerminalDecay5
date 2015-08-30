@@ -110,8 +110,7 @@ namespace TDCore5
             BaseMovements = new List<BaseMovement>();
 
         }
-
-
+        
         public Universe()
         {
 
