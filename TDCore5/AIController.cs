@@ -12,6 +12,7 @@ namespace TDCore5
         public float HelpSelfish;
         public Outpost Outpost;
         public int ActionDelay;
+        public int AttackDealy;
         
         public AIController()
         {
@@ -26,6 +27,7 @@ namespace TDCore5
             HelpSelfish = (float)info.GetValue("HelpSelfish", typeof(float));
             Outpost = (Outpost)info.GetValue("AIOutpost", typeof(Outpost));
             ActionDelay = (int)info.GetValue("ActionDelay", typeof(int));
+            AttackDealy = (int)info.GetValue("AttackDealy", typeof(int));
         }
 
         public void GetObjectData(SerializationInfo info, StreamingContext ctxt)
@@ -35,6 +37,7 @@ namespace TDCore5
             info.AddValue("HelpSelfish", HelpSelfish);
             info.AddValue("AIOutpost", Outpost);
             info.AddValue("ActionDelay", ActionDelay);
+            info.AddValue("AttackDelay", AttackDealy);
 
         }
     }

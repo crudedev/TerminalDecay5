@@ -798,11 +798,92 @@ namespace TerminalDecay5Server
 
                     }
 
-
-
-
-                    //end of decision
                 }
+
+
+                item.AttackDealy--;
+                if (item.AttackDealy < 0)
+                {
+                    item.AttackDealy = Convert.ToInt32(u.r.Next(100, 300) * item.ActionDelayMultiplier * item.TurtleAttacking);
+
+                    //find a target
+
+                    List<Outpost> PotentialTargets = new List<Outpost>();
+                    foreach (var o in u.outposts)
+                    {
+                        if (o.OwnerID != AIID.PlayerID)
+                        {
+                            PotentialTargets.Add(o);
+                        }
+                    }
+
+
+
+                    if (PotentialTargets.Count != 0)
+                    {
+
+
+                        Outpost victim = PotentialTargets[u.r.Next(PotentialTargets.Count - 1)];
+
+
+                        long totalunits = 0;
+
+                        foreach (var off in item.Outpost.Offence)
+                        {
+                            totalunits += off;
+                        }
+
+                        if (u.r.Next(10, 100) > 100 * item.TurtleAttacking && u.r.Next(0, 100) > totalunits)
+                        {
+
+                            //do an attack lel
+                            Player Attacker = AIID;
+                            Outpost AttackOp = item.Outpost;
+                            Outpost DeffenceOp = victim;
+
+
+
+                            if (Attacker != null && AttackOp != null && DeffenceOp != null)
+                            {
+                                if (AttackOp.OwnerID == Attacker.PlayerID && DeffenceOp.OwnerID != Attacker.PlayerID)
+                                {
+
+
+                                    TroopMovement t = new TroopMovement();
+                                    t.Offence = new List<long>();
+                                    for (int i = 0; i < Cmn.OffenceType.Count; i++)
+                                    {
+                                        t.Offence.Add(AttackOp.Offence[i]);
+                                        AttackOp.Offence[i] = 0;
+                                    }
+
+                                    t.OriginOutpost = AttackOp;
+                                    t.DestinationOutpost = DeffenceOp;
+                                    t.MovementType = Cmn.MovType.Attack;
+
+                                    t.StartTick = u.CurrentTick;
+
+                                    int dx = DeffenceOp.Tile.X - AttackOp.Tile.X;
+                                    int dy = DeffenceOp.Tile.Y - AttackOp.Tile.Y;
+
+                                    double dist = Math.Sqrt(dx * dx + dy * dy);
+
+                                    t.Duration = Convert.ToInt32(dist) + t.StartTick;
+
+                                    u.TroopMovements.Add(t);
+
+
+                                }
+
+                            }
+                        }
+
+                    }
+
+
+
+                }
+
 
             }
 
