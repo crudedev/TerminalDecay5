@@ -577,30 +577,30 @@ namespace TerminalDecay5Server
             foreach (var item in u.Ai)
             {
                 item.ActionDelay--;
-                if(item.ActionDelay < 0)
+                if (item.ActionDelay < 0)
                 {
                     item.ActionDelay = Convert.ToInt32(u.r.Next(30, 90) * item.ActionDelayMultiplier);
 
                     //DECIDE WHICH ACTION TO TAKE
                     float unitorbuild = item.TurtleAttacking * u.r.Next(200);
 
-                    if(unitorbuild > 100)
+                    if (unitorbuild > 100)
                     {//Build Units -> reinforce -> attack
 
                         float attordeff = item.TurtleAttacking * u.r.Next(200);
-                        if(attordeff > 100)
+                        if (attordeff > 100)
                         {
                             bool foundExisting = false;
                             foreach (var off in u.OffenceBuildQueue)
                             {
-                                if(off.Outpost == item.Outpost)
+                                if (off.Outpost == item.Outpost)
                                 {
                                     foundExisting = true;
                                     break;
                                 }
                             }
 
-                            if(foundExisting == false)
+                            if (foundExisting == false)
                             {
                                 long totalres = 0;
                                 foreach (var res in item.Outpost.Resources)
@@ -615,16 +615,16 @@ namespace TerminalDecay5Server
                                     {
                                         totaloffcost += Cmn.OffenceCost[offtype][offcost];
                                     }
-                                    
-                                    if(totaloffcost * 5 > totalres)
+
+                                    if (totaloffcost * 5 > totalres)
                                     {
-                                        BuildQueueItem b = new BuildQueueItem(AIID.PlayerID, item.Outpost, u.r.Next(0,10), offtype, Cmn.OffenceCost[offtype]);
+                                        BuildQueueItem b = new BuildQueueItem(AIID.PlayerID, item.Outpost, u.r.Next(0, 10), offtype, Cmn.OffenceCost[offtype]);
                                         u.OffenceBuildQueue.Add(b);
                                     }
                                 }
 
                             }
-                            
+
                         }
                         else
                         {
@@ -677,17 +677,131 @@ namespace TerminalDecay5Server
                         }
 
 
-                        if(foundExisting == false)
+                        if (foundExisting == false)
                         {
+                            long totalBuildings = 0;
+                            long lowestBuilt = 0;
+                            int IDofLowestBuilt = 0;
 
+
+                            for (int i = 0; i < Cmn.BuildType.Count; i++)
+                            {
+                                totalBuildings += item.Outpost.Buildings[i];
+                                if (i == 0 || lowestBuilt > item.Outpost.Buildings[i])
+                                {
+                                    lowestBuilt = item.Outpost.Buildings[i];
+                                    IDofLowestBuilt = i;
+                                }
+                            }
+
+
+                            if (totalBuildings == item.Outpost.Capacity)
+                            {
+
+
+
+                                if (u.r.Next(1000) > 50)
+                                {
+
+                                    //expand dat base yo
+
+
+                                    bool hasResource = true;
+
+                                    for (int i = 0; i < Cmn.ExpandOutpostCost.Count; i++)
+                                    {
+                                        if (Cmn.ExpandOutpostCost[i] * item.Outpost.Capacity * 10 < item.Outpost.Resources[i])
+                                        {
+                                            hasResource = false;
+                                        }
+                                    }
+
+                                    if (hasResource)
+                                    {
+                                        for (int i = 0; i < Cmn.ExpandOutpostCost.Count; i++)
+                                        {
+                                            item.Outpost.Resources[i] = item.Outpost.Resources[i] - Cmn.ExpandOutpostCost[i] * item.Outpost.Capacity * 10;
+
+                                        }
+
+                                        item.Outpost.Capacity = item.Outpost.Capacity + Convert.ToInt64(item.Outpost.Capacity / 4);
+
+                                    }
+
+
+                                }
+                                else
+                                {
+                                    //spread to a new base
+                                    List<long> newBaseCost = new List<long>();
+                                    foreach (var res in Cmn.Resource)
+                                    {
+                                        newBaseCost.Add(0);
+                                    }
+
+                                    newBaseCost[Cmn.Resource[Cmn.Renum.Food]] = Cmn.BaseCost[Cmn.Resource[Cmn.Renum.Food]] * 4;
+                                    newBaseCost[Cmn.Resource[Cmn.Renum.Metal]] = Cmn.BaseCost[Cmn.Resource[Cmn.Renum.Metal]] * 4;
+                                    newBaseCost[Cmn.Resource[Cmn.Renum.Population]] = Cmn.BaseCost[Cmn.Resource[Cmn.Renum.Population]] * 4;
+                                    newBaseCost[Cmn.Resource[Cmn.Renum.Power]] = Cmn.BaseCost[Cmn.Resource[Cmn.Renum.Power]] * 4;
+                                    newBaseCost[Cmn.Resource[Cmn.Renum.Water]] = Cmn.BaseCost[Cmn.Resource[Cmn.Renum.Water]] * 4;
+
+
+                                    bool hasResource = true;
+                                    for (int i = 0; i < Cmn.Resource.Count; i++)
+                                    {
+                                        if (newBaseCost[i] > item.Outpost.Resources[i])
+                                        {
+                                            hasResource = false;
+                                        }
+                                    }
+
+
+                                    if (hasResource)
+                                    {
+                                        //create a new outpost here for the same player
+
+                                        AddAIOutpost(item.Outpost.Address, u);
+
+                                    }
+
+
+                                }
+                            }
+                            else
+                            {
+
+                                long totalres = 0;
+                                foreach (var res in item.Outpost.Resources)
+                                {
+                                    totalres += res;
+                                }
+
+                                long totalBuildCost = 0;
+                                for (int buildCost = 0; buildCost < Cmn.BuildCost[IDofLowestBuilt].Count; buildCost++)
+                                {
+                                    totalBuildCost += Cmn.BuildCost[IDofLowestBuilt][buildCost];
+                                }
+
+                                if (totalBuildCost * 5 > totalres)
+                                {
+                                    BuildQueueItem b = new BuildQueueItem(AIID.PlayerID, item.Outpost, u.r.Next(0, 10), IDofLowestBuilt, Cmn.BuildCost[IDofLowestBuilt]);
+                                    u.BuildingBuildQueue.Add(b);
+                                }
+
+
+
+
+                            }
                         }
-                        //check to see if ther are any in the build queue atm
-                        //if so quit
+
 
 
                     }
 
 
+
+
+                    //end of decision
                 }
 
             }
@@ -3467,7 +3581,7 @@ namespace TerminalDecay5Server
                     {
                         for (int i = 0; i < 10; i++)
                         {
-                            AddAIOutpost(new UniversalAddress(clust.ClusterID, Solar.SolarSystemID, planet.PlanetID));
+                            AddAIOutpost(new UniversalAddress(clust.ClusterID, Solar.SolarSystemID, planet.PlanetID), universe);
                         }
                     }
                 }
@@ -3475,7 +3589,7 @@ namespace TerminalDecay5Server
 
         }
 
-        public void AddAIOutpost(UniversalAddress a)
+        public static void AddAIOutpost(UniversalAddress a, Universe universe)
         {
             if (universe.outposts == null)
             {
@@ -3543,6 +3657,7 @@ namespace TerminalDecay5Server
             ai.HelpSelfish = universe.r.Next(100) / 100;
             ai.TurtleAttacking = universe.r.Next(100) / 100;
 
+            universe.Ai.Add(ai);
         }
 
         private void SendAllUnits(List<List<string>> transmissions, TcpClient tcpClient)
